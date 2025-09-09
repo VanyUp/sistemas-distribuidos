@@ -7,6 +7,7 @@ pydantic
 typing
 pymongo
 motor
+spacy
 passlib
 pyjwt
 python-jose
