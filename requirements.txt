@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+mysql-connector-python
+requests
+httpx
+pydantic
+typing
+pymongo
+motor
+passlib
+pyjwt
+python-jose
+python-multipart
+bcrypt
