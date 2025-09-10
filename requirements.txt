@@ -1,0 +1,11 @@
+ fastapi
+ uvicorn
+ passlib
+ pyjwt
+ python-jose
+ python-multipart #form
+ bcrypt #encripcion
+
+
+ #bearer info segura
+ 
