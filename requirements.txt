@@ -1,3 +1,4 @@
+<<<<<<< HEAD
  fastapi
  uvicorn
  passlib
@@ -9,3 +10,24 @@
 
  #bearer info segura
  
+=======
+fastapi
+uvicorn
+mysql-connector-python
+requests
+httpx
+pydantic
+typing
+pymongo
+motor
+spacy
+passlib
+pyjwt
+python-jose
+python-multipart
+bcrypt
+
+#scraping 
+pandas
+
+BeautifulSoup
