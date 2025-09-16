@@ -5,6 +5,7 @@
 - [x] **Actividad 2**: Implementar una API REST con FastAPI que gestione un CRUD de portátiles conectado a MongoDB.
 - [x] **Actividad 3**: Implementar una API REST con FastAPI que gestione un endpoint de procesamiento LLM con GPT.
 - [x] **Actividad 4**: Rest Api con Mysql CRUD
+- [x] **Actividad 5**: Rest Api con MongoDB CRUD + Pydantic
 - [x] **Actividad 6**: Web Crawling y Scraping con Python. 
 
 ---
