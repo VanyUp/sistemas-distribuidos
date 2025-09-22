@@ -3,21 +3,80 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Chat con Tarot IA</title>
-    <link rel="stylesheet" href="/static/css/chat.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - PsyTarot</title>
+    <meta name="description" content="Chat para interactuar con el Tarot AI de PsyTarot.">
+    <link rel="stylesheet" href="/static/css/styles.css">
     <script src="/static/js/chat.js" defer></script>
 </head>
 
 <body>
-    <div class="chat-container">
-        <h1>💫 Tarot AI</h1>
-        <div id="chat-box" class="chat-box"></div>
+    <div class="chat-shell" role="application" aria-label="Interfaz de chat clon">
+        <aside class="sidebar" aria-hidden="false">
+            <div class="brand">
+                <div class="logo">
+                    <img src="/static/img/favicon/favicon.svg" alt="Logo PsyTarot">
+                </div>
+                <div>
+                    <div class="app-name">PsyTarot</div>
+                    <div class="app-sub">Es genial para el tarot de todos los días.</div>
+                </div>
+            </div>
 
-        <div class="chat-input">
-            <input type="text" id="messageInput" placeholder="Escribe tu pregunta...">
-            <button id="sendBtn">Enviar</button>
-        </div>
+            <div class="controls">
+                <button id="newConv" class="btn primary" title="Nueva conversación">➕ Nueva conversación</button>
+                <div style="display:flex;gap:8px">
+                    <button id="clearBtn" class="btn" title="Limpiar mensajes">🧹 Limpiar chat</button>
+                    <button id="downloadBtn" class="btn" title="Descargar conversación">⬇️ Guardar</button>
+                </div>
+            </div>
+
+            <div class="convs" id="convs">
+                <!-- Placeholder Convs -->
+                <div class="conv-item" data-id="1">
+                    <div style="font-weight:600">Chat sin título</div>
+                    <div class="small">1 mensajes — Nuevo</div>
+                </div>
+            </div>
+            <div class="tiny" style="margin-top:8px">Hecho con cariño. Incluye IA de OpenAI.</div>
+        </aside>
+
+        <main class="chat-panel">
+            <div class="header">
+                <div class="avatar" aria-hidden="true">
+                    <img src="/static/img/favicon/favicon.svg" alt="Logo PsyTarot" style="width:40px;height:40px;">
+                </div>
+                <div>
+                    <div class="header-title">PsyTarot AI</div>
+                    <div class="header-sub">PsyTarot puede cometer errores. Comprueba la información importante.</div>
+                </div>
+                <div style="margin-left:auto" class="controls-row">
+                    <div id="status" class="tiny muted">Listo</div>
+                    <button id="backBtn" class="btn" title="Volver">⬅️ Logout</button>
+                </div>
+            </div>
+
+            <section class="messages" id="messages" aria-live="polite" aria-atomic="false">
+                <!-- Los mensaje empiezan aquí -->
+                <div id="welcome" class="msg-row assistant">
+                    <div class="avatar-small">AI</div>
+                    <div>
+                        <div class="bubble assistant content"><strong>Hola.</strong> Soy PsyTarot, ¿En qué te puedo
+                            ayudar hoy?
+
+                        </div>
+                        <div class="meta"><span class="time">Ahora</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="composer" role="form" aria-label="Escribir mensaje">
+                <textarea id="input" class="input"
+                    placeholder="Escribe un mensaje... (Enter para enviar, Shift+Enter para nueva línea)"
+                    rows="1"></textarea>
+                <button id="send" class="send" title="Enviar">Enviar</button>
+            </div>
+        </main>
     </div>
 </body>
 

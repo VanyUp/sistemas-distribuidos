@@ -1,0 +1,13 @@
+@use './variables' as v;
+@use './index';
+@use './registro';
+@use './login';
+@use './chat';
+
+* {
+    box-sizing: border-box
+}
+
+html, body {
+    height: 100%
+}
