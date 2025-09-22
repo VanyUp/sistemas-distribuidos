@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home - PsyTarot</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>Bienvenido a PsyTarot</h1>
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="/register">Registrarse</a>
+            <a href="/login">Iniciar Sesión</a>
+            <a href="/chat">Chat</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="news-section">
+            <h2>Últimas Noticias</h2>
+            <div id="news-container">
+                {% for noticia in noticias %}
+                <article>
+                    <h3>{{ noticia.titulo }}</h3>
+                    <p>{{ noticia.contenido }}</p>
+                    <small>📅 {{ noticia.fecha }}</small>
+                </article>
+                {% else %}
+                <p>No hay noticias disponibles.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 PsyTarot. Todos los derechos reservados.</p>
+    </footer>
+</body>
+
+</html>

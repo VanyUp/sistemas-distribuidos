@@ -8,3 +8,7 @@ class UserRegister(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
+class Message(BaseModel):
+    text: str
+    token: str

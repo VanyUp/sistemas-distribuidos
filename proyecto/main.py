@@ -1,4 +1,4 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends, HTTPException, Request
+from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
 from passlib.context import CryptContext
 from bson.objectid import ObjectId
-from models.models import UserRegister, UserLogin
+from models.models import UserRegister, UserLogin, Message
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 import os
@@ -76,6 +76,11 @@ def decode_token(token: str):
 # =====================
 # Rutas HTML
 # =====================
+@app.get("/", response_class=HTMLResponse)
+async def get_index(request: Request):
+    index = await news_collection.find({}, {"_id": 0}).to_list(length=None)
+    return templates.TemplateResponse("index.html", {"request": request, "index": index})
+
 @app.get("/register", response_class=HTMLResponse)
 async def get_register(request: Request):
     return templates.TemplateResponse("registro.html", {"request": request})
@@ -87,11 +92,6 @@ async def get_login(request: Request):
 @app.get("/chat", response_class=HTMLResponse)
 async def get_chat(request: Request):
     return templates.TemplateResponse("chat.html", {"request": request})
-
-@app.get("/noticias", response_class=HTMLResponse)
-async def get_noticias(request: Request):
-    noticias = list(news_collection.find({}, {"_id": 0}))
-    return templates.TemplateResponse("noticias.html", {"request": request, "noticias": noticias})
 
 # =====================
 # API Endpoints
@@ -117,38 +117,22 @@ async def login(user: UserLogin):
     access_token = create_access_token(data={"sub": str(db_user["_id"])})
     return {"access_token": access_token, "token_type": "bearer"}
 
-# =====================
-# WebSocket protegido con IA
-# =====================
-@app.websocket("/ws/chat")
-async def websocket_endpoint(websocket: WebSocket):
-    # Obtener token manualmente de la query
-    token = websocket.query_params.get("token")
-
-    user_id = decode_token(token)
+@app.post("/api/chat")
+async def chat(message: Message):
+    user_id = decode_token(message.token)
     if not user_id:
-        await websocket.close(code=1008)  # Unauthorized
-        return
-
-    await websocket.accept()
+        raise HTTPException(status_code=401, detail="No autorizado")
+    
     try:
-        while True:
-            user_message = await websocket.receive_text()
-
-            try:
-                completion = await openai_client.chat.completions.create(
-                    model="openai/gpt-oss-120b",
-                    messages=[
-                        {"role": "system", "content": "Eres una IA de tarot que da respuestas claras, místicas y útiles."},
-                        {"role": "user", "content": user_message}
-                    ],
-                    max_tokens=150
-                )
-                ai_response = completion.choices[0].message.content
-            except Exception as e:
-                ai_response = f"❌ Error al conectar con la IA: {str(e)}"
-
-            await websocket.send_text(ai_response)
-
-    except WebSocketDisconnect:
-        print("Cliente desconectado del chat IA")
+        response = await openai_client.chat.completions.create(
+            model="gpt-oss-120b",
+            messages=[
+                {"role": "system", "content": "Eres un asistente directo y con humor Gen Z."},
+                {"role": "user", "content": message.text},
+            ]
+        )
+        return {"reply": response.choices[0].message.content}
+    
+    except Exception as e:
+        print("❌ Error en backend:", e)
+        return {"reply": f"⚠️ Error en el servidor: {str(e)}"}
