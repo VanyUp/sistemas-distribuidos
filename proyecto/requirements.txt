@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+python-jose[cryptography]
+passlib[bcrypt]
+motor
+python-multipart
+pydantic
+requests
+httpx
+typing
+pymongo
+pyjwt
+pandas
+BeautifulSoup
