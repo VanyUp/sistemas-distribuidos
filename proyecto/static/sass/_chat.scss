@@ -1,17 +1,5 @@
 @use './variables' as v;
 
-body {
-    margin: 0;
-    font-family: Inter, Roboto, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial;
-    background: #181818;
-    color: #e6eef8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 28px;
-}
-
 /* Container */
 .chat-shell {
     width: 100%;

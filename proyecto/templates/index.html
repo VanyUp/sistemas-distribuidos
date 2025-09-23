@@ -13,7 +13,6 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/static/css/styles.css">
-    <script src="/static/js/index.js" defer></script>
 </head>
 
 <body>
@@ -58,30 +57,20 @@
                     <p>Mantente al día con las últimas tendencias y descubrimientos</p>
                 </div>
                 <div class="news-grid">
+                    {% for noticia in tarot_news %}
                     <article class="news-card">
-                        <div class="news-image tarot-news"></div>
+                        <div class="news-image tarot-news">
+                            <img src="{{ noticia.imagen_url }}" alt="Imagen de noticia de tarot">
+                        </div>
                         <div class="news-content">
-                            <h4>El significado renovado de los arcanos mayores</h4>
-                            <p>Descubre cómo interpretar los arcanos mayores en el contexto de la vida moderna.</p>
-                            <a href="#" class="read-more">Leer más</a>
+                            <h4>{{ noticia.titulo }}</h4>
+                            <p>{{ noticia.descripcion }}</p>
+                            <a href="#" class="read-more" data-id="{{ noticia._id }}" data-categoria="tarot">
+                                Leer más
+                            </a>
                         </div>
                     </article>
-                    <article class="news-card">
-                        <div class="news-image tarot-news"></div>
-                        <div class="news-content">
-                            <h4>Tarot terapéutico: una herramienta de autoconocimiento</h4>
-                            <p>Explora cómo el tarot puede complementar tu proceso de crecimiento personal.</p>
-                            <a href="#" class="read-more">Leer más</a>
-                        </div>
-                    </article>
-                    <article class="news-card">
-                        <div class="news-image tarot-news"></div>
-                        <div class="news-content">
-                            <h4>Cartas y conexión espiritual en la era digital</h4>
-                            <p>Cómo mantener la esencia del tarot en consultas virtuales.</p>
-                            <a href="#" class="read-more">Leer más</a>
-                        </div>
-                    </article>
+                    {% endfor %}
                 </div>
             </section>
 
@@ -91,30 +80,20 @@
                     <p>Avances y consejos para tu bienestar mental</p>
                 </div>
                 <div class="news-grid">
+                    {% for noticia in psico_news %}
                     <article class="news-card">
-                        <div class="news-image psychology-news"></div>
+                        <div class="news-image psychology-news">
+                            <img src="{{ noticia.imagen_url }}" alt="Imagen de noticia de psicología">
+                        </div>
                         <div class="news-content">
-                            <h4>Mindfulness aplicado a la vida cotidiana</h4>
-                            <p>Técnicas sencillas para incorporar la atención plena en tu día a día.</p>
-                            <a href="#" class="read-more">Leer más</a>
+                            <h4>{{ noticia.titulo }}</h4>
+                            <p>{{ noticia.descripcion }}</p>
+                            <a href="#" class="read-more" data-id="{{ noticia._id }}" data-categoria="tarot">
+                                Leer más
+                            </a>
                         </div>
                     </article>
-                    <article class="news-card">
-                        <div class="news-image psychology-news"></div>
-                        <div class="news-content">
-                            <h4>La importancia de la inteligencia emocional en las relaciones</h4>
-                            <p>Cómo desarrollar habilidades emocionales para mejorar tus conexiones.</p>
-                            <a href="#" class="read-more">Leer más</a>
-                        </div>
-                    </article>
-                    <article class="news-card">
-                        <div class="news-image psychology-news"></div>
-                        <div class="news-content">
-                            <h4>Terapias de tercera generación: más allá del conductismo</h4>
-                            <p>Un vistazo a las nuevas aproximaciones terapéuticas.</p>
-                            <a href="#" class="read-more">Leer más</a>
-                        </div>
-                    </article>
+                    {% endfor %}
                 </div>
             </section>
         </main>
@@ -175,6 +154,7 @@
             </div>
         </footer>
     </div>
+    <script src="/static/js/index.js"></script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
@@ -41,7 +41,8 @@ except Exception as e:
     print("❌ Error al conectar con MongoDB Atlas:", e)
 db = client[DB_NAME]
 users_collection = db["users"]
-news_collection = db["noticias"]
+newstarot_collection = db["noticias_tarot"]
+newspsico_collection = db["noticias_psicologia"]
 
 # JWT
 SECRET_KEY_JWT = SECRET_KEY
@@ -77,9 +78,20 @@ def decode_token(token: str):
 # Rutas HTML
 # =====================
 @app.get("/", response_class=HTMLResponse)
-async def get_index(request: Request):
-    index = await news_collection.find({}, {"_id": 0}).to_list(length=None)
-    return templates.TemplateResponse("index.html", {"request": request, "index": index})
+async def home(request: Request):
+    # Traer noticias desde Mongo
+    tarot_news = await newstarot_collection.find().sort("_id", -1).to_list(length=3)
+    psico_news = await newspsico_collection.find().sort("_id", -1).to_list(length=3)
+
+    # Convertir ObjectId a str para evitar problemas
+    for n in tarot_news + psico_news:
+        n["_id"] = str(n["_id"])
+
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "tarot_news": tarot_news,
+        "psico_news": psico_news
+    })
 
 @app.get("/register", response_class=HTMLResponse)
 async def get_register(request: Request):
@@ -96,6 +108,18 @@ async def get_chat(request: Request):
 # =====================
 # API Endpoints
 # =====================
+@app.get("/api/noticia/{categoria}/{id}")
+async def get_noticia(categoria: str, id: str):
+    collection = newstarot_collection if categoria == "tarot" else newspsico_collection
+    
+    noticia = await collection.find_one({"_id": ObjectId(id)})
+    
+    if noticia:
+        noticia["_id"] = str(noticia["_id"])
+        return JSONResponse(content=noticia)
+
+    return JSONResponse(content={"error": "Noticia no encontrada"}, status_code=404)
+
 @app.post("/api/register")
 async def register(user: UserRegister):
     existing_user = await users_collection.find_one({"email": user.email})
