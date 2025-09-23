@@ -5,9 +5,15 @@
 @use './chat';
 
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box
 }
 
-html, body {
-    height: 100%
+body {
+    font-family: v.$poppins;
+    background-color: v.$bg;
+    color: v.$text-light;
+    line-height: 1.6;
+    padding: 0;
 }
