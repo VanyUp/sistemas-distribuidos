@@ -21,7 +21,7 @@
         <header class="header">
             <div class="brand">
                 <div class="logo">
-                    <span>PT</span>
+                    <img src="/static/img/favicon/favicon.svg" alt="Logo de PsyTarot">
                 </div>
                 <div class="app-name">
                     <h1>PsyTarot</h1>
@@ -51,25 +51,7 @@
                     </div>
                 </div>
             </section>
-
-            <section class="news-section">
-                <div class="section-header">
-                    <h2>Noticias de Tarot</h2>
-                    <p>Mantente al día con las últimas tendencias y descubrimientos.</p>
-                </div>
-                <div class="news-grid">
-                    {% for noticia in noticias %}
-                    <article>
-                        <h3>{{ noticia.titulo }}</h3>
-                        <p>{{ noticia.contenido }}</p>
-                        <small>📅 {{ noticia.fecha }}</small>
-                    </article>
-                    {% else %}
-                    <p>No hay noticias disponibles.</p>
-                    {% endfor %}
-                </div>
-            </section>
-
+            
             <section class="news-section">
                 <div class="section-header">
                     <h3>Noticias de Tarot</h3>
@@ -141,7 +123,7 @@
             <div class="footer-content">
                 <div class="footer-brand">
                     <div class="logo">
-                        <span>PT</span>
+                        <img src="/static/img/favicon/favicon.svg" alt="Logo de PsyTarot">
                     </div>
                     <div class="app-name">
                         <h3>PsyTarot</h3>

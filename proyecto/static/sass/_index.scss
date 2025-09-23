@@ -47,10 +47,14 @@
                 width: 44px;
                 height: 44px;
                 border-radius: 10px;
-                @include gradient-bg;
                 @include flex-center;
                 font-weight: 700;
                 font-size: 18px;
+
+                img {
+                    width: 44px;
+                    height: 44px;
+                }
             }
 
             .app-name {
@@ -281,7 +285,7 @@
     // Footer
     .footer {
         background: v.$panel;
-        padding: 2rem;
+        padding-top: 2rem;
         margin-top: auto;
 
         .footer-content {
@@ -300,10 +304,14 @@
                     width: 50px;
                     height: 50px;
                     border-radius: 10px;
-                    @include gradient-bg;
                     @include flex-center;
                     font-weight: 700;
                     font-size: 20px;
+
+                    img {
+                        width: 50px;
+                        height: 50px;
+                    }
                 }
 
                 .app-name {
@@ -354,8 +362,8 @@
         }
 
         .footer-bottom {
-            max-width: 1200px;
-            margin: 2rem auto 0;
+            width: 100%;
+            margin: 2rem 0;
             padding-top: 2rem;
             border-top: 1px solid v.$border-color;
             display: flex;
@@ -365,11 +373,13 @@
             p {
                 color: v.$muted;
                 font-size: 0.9rem;
+                padding: 0 2rem;
             }
 
             .social-links {
                 display: flex;
                 gap: 1rem;
+                padding: 0 2rem;
 
                 a {
                     width: 36px;

@@ -26,12 +26,15 @@
   width: 44px;
   height: 44px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #883aed, #9a06d4);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 18px;
+}
+.app-container .header .brand .logo img {
+  width: 44px;
+  height: 44px;
 }
 .app-container .header .brand .app-name h1 {
   font-size: 24px;
@@ -219,7 +222,7 @@
 }
 .app-container .footer {
   background: #140b20;
-  padding: 2rem;
+  padding-top: 2rem;
   margin-top: auto;
 }
 .app-container .footer .footer-content {
@@ -238,12 +241,15 @@
   width: 50px;
   height: 50px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #883aed, #9a06d4);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 20px;
+}
+.app-container .footer .footer-content .footer-brand .logo img {
+  width: 50px;
+  height: 50px;
 }
 .app-container .footer .footer-content .footer-brand .app-name h3 {
   font-size: 1.5rem;
@@ -279,8 +285,8 @@
   color: #ffffff;
 }
 .app-container .footer .footer-bottom {
-  max-width: 1200px;
-  margin: 2rem auto 0;
+  width: 100%;
+  margin: 2rem 0;
   padding-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
@@ -290,10 +296,12 @@
 .app-container .footer .footer-bottom p {
   color: #90a0b8;
   font-size: 0.9rem;
+  padding: 0 2rem;
 }
 .app-container .footer .footer-bottom .social-links {
   display: flex;
   gap: 1rem;
+  padding: 0 2rem;
 }
 .app-container .footer .footer-bottom .social-links a {
   width: 36px;
