@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const selectionCards = document.querySelectorAll('.selection-card');
     const cardButtons = document.querySelectorAll('.card-btn');
-    const ghostButtons = document.querySelectorAll('.btn.ghost');
+    const logoutBtn = document.getElementById('logoutBtn');
 
     // Efecto de selección en tarjetas
     selectionCards.forEach(card => {
@@ -28,14 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const path = card.dataset.path;
             
             selectPath(path);
-        });
-    });
-
-    // Botones ghost
-    ghostButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const action = this.textContent.toLowerCase();
-            handleGhostAction(action);
         });
     });
 
@@ -83,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
             notification.className = 'selection-notification';
             notification.style.cssText = `
                 position: fixed;
-                top: 20px;
+                top: 750px;
                 right: 20px;
                 padding: 15px 20px;
                 background: linear-gradient(135deg, #883aed, #9a06d4);
@@ -120,5 +112,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.style.transform = 'translateY(0)';
             }
         });
+    });
+
+    // Manejo de botón de logout
+    logoutBtn.addEventListener('click', function() {
+        showNotification('Cerrando sesión...');
+        setTimeout(() => {
+            window.location.href = '/login'; // Redirigir a la página de login
+        }, 1000);
     });
 });
