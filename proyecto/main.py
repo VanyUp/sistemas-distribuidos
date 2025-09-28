@@ -101,9 +101,17 @@ async def get_register(request: Request):
 async def get_login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
-@app.get("/chat", response_class=HTMLResponse)
+@app.get("/seleccion", response_class=HTMLResponse)
+async def get_seleccion(request: Request):
+    return templates.TemplateResponse("seleccion.html", {"request": request})
+
+@app.get("/chat-tar", response_class=HTMLResponse)
 async def get_chat(request: Request):
-    return templates.TemplateResponse("chat.html", {"request": request})
+    return templates.TemplateResponse("chat-tar.html", {"request": request})
+
+@app.get("/noticias-tar", response_class=HTMLResponse)
+async def get_noticias_tar(request: Request):
+    return templates.TemplateResponse("noticias-tar.html", {"request": request})
 
 # =====================
 # API Endpoints
@@ -151,7 +159,7 @@ async def chat(message: Message):
         response = await openai_client.chat.completions.create(
             model="gpt-oss-120b",
             messages=[
-                {"role": "system", "content": "Eres un asistente directo y con humor Gen Z."},
+                {"role": "system", "content": "Eres un asistente directo de tarot y psicología con respuestas breves y concisas. No brindas otros consejos. Si la consulta no es sobre tarot o psicología, indicas que no puedes ayudar. Humor Gen Z."},
                 {"role": "user", "content": message.text},
             ]
         )

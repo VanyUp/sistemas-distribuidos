@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticias de Tarot - PsyTarot</title>
+    <meta name="description" content="Noticias y actualizaciones sobre el mundo del tarot en PsyTarot.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="/static/img/favicon/favicon.svg" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+
+<body>
+    <div class="newstar-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="brand">
+                <div class="logo">
+                    <img src="/static/img/favicon/favicon.svg" alt="Logo de PsyTarot">
+                </div>
+                <div class="app-name">
+                    <h1>PsyTarot</h1>
+                    <p class="app-sub">Noticias y Actualidad del Tarot</p>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="#hero-news" class="nav-link active">Inicio</a>
+                <a href="#featured-news" class="nav-link">Noticia Destacada</a>
+                <a href="#news-grid" class="nav-link">Últimas Noticias</a>
+                <a href="#newsletter" class="nav-link">Suscribirse</a>
+                <button class="btn secondary" id="chatBtn">Chat</button>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-news" id="hero-news">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h2>Explora el Mundo del Tarot</h2>
+                    <p>Descubre las últimas noticias, tendencias y conocimientos sobre el arte del tarot</p>
+                    <div class="search-bar">
+                        <input type="text" placeholder="Buscar noticias de tarot...">
+                        <button class="search-btn">🔍</button>
+                    </div>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">150+</span>
+                        <span class="stat-label">Artículos</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">78</span>
+                        <span class="stat-label">Cartas Estudiadas</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24</span>
+                        <span class="stat-label">Expertos</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Featured News -->
+            <section class="featured-section" id="featured-news">
+                <div class="section-header">
+                    <h3>Noticia Destacada</h3>
+                    <p>Lo más relevante en el mundo del tarot</p>
+                </div>
+                <article class="featured-article">
+                    <div class="featured-image">
+                        <div class="image-placeholder"></div>
+                        <div class="featured-badge">Destacado</div>
+                    </div>
+                    <div class="featured-content">
+                        <span class="article-category">Arcanos Mayores</span>
+                        <h4>El Renacimiento del Tarot en la Era Digital</h4>
+                        <p>Cómo las nuevas tecnologías están transformando la práctica milenaria del tarot y haciendo
+                            que sea más accesible para las nuevas generaciones.</p>
+                        <button class="btn primary">Leer Artículo Completo</button>
+                    </div>
+                </article>
+            </section>
+
+            <!-- News Grid -->
+            <section class="news-grid-section" id="news-grid">
+                <div class="section-header">
+                    <h3>Últimas Noticias</h3>
+                    <p>Mantente actualizado con lo último en tarot</p>
+                </div>
+                <div class="filter-tabs">
+                    <button class="filter-btn active">Todos</button>
+                    <button class="filter-btn">Arcanos Mayores</button>
+                    <button class="filter-btn">Arcanos Menores</button>
+                    <button class="filter-btn">Tiradas</button>
+                    <button class="filter-btn">Eventos</button>
+                </div>
+                <div class="news-grid">
+                    <!-- Article 1 -->
+                    <article class="news-card">
+                        <div class="card-image arcano-mayor"></div>
+                        <div class="card-content">
+                            <span class="article-category">Arcanos Mayores</span>
+                            <h5>El Mago: Nuevas Interpretaciones Modernas</h5>
+                            <p>Descubre cómo reinterpretar la carta del Mago en el contexto de la sociedad actual y las
+                                nuevas tecnologías.</p>
+                            <div class="card-footer">
+                                <span class="date">Hace 1 día</span>
+                                <button class="read-more">Leer más</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Article 2 -->
+                    <article class="news-card">
+                        <div class="card-image tiradas"></div>
+                        <div class="card-content">
+                            <span class="article-category">Tiradas</span>
+                            <h5>Tirada de la Cruz Celta: Guía Actualizada</h5>
+                            <p>Una guía completa para dominar la tirada de la Cruz Celta con ejemplos prácticos y
+                                consejos expertos.</p>
+                            <div class="card-footer">
+                                <span class="date">Hace 3 días</span>
+                                <button class="read-more">Leer más</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Article 3 -->
+                    <article class="news-card">
+                        <div class="card-image eventos"></div>
+                        <div class="card-content">
+                            <span class="article-category">Eventos</span>
+                            <h5>Conferencia Internacional de Tarot 2024</h5>
+                            <p>Todo lo que necesitas saber sobre el evento más importante del año en el mundo del tarot.
+                            </p>
+                            <div class="card-footer">
+                                <span class="date">Hace 5 días</span>
+                                <button class="read-more">Leer más</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Article 4 -->
+                    <article class="news-card">
+                        <div class="card-image arcano-menor"></div>
+                        <div class="card-content">
+                            <span class="article-category">Arcanos Menores</span>
+                            <h5>Los Palos de la Baraja: Significado Profundo</h5>
+                            <p>Un análisis detallado de los cuatro palos y su relación con los elementos de la
+                                naturaleza.</p>
+                            <div class="card-footer">
+                                <span class="date">Hace 1 semana</span>
+                                <button class="read-more">Leer más</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Article 5 -->
+                    <article class="news-card">
+                        <div class="card-image historia"></div>
+                        <div class="card-content">
+                            <span class="article-category">Historia</span>
+                            <h5>Orígenes del Tarot de Marsella</h5>
+                            <p>Un viaje histórico por los orígenes y evolución del tarot más influyente de todos los
+                                tiempos.</p>
+                            <div class="card-footer">
+                                <span class="date">Hace 2 semanas</span>
+                                <button class="read-more">Leer más</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Article 6 -->
+                    <article class="news-card">
+                        <div class="card-image tecnicas"></div>
+                        <div class="card-content">
+                            <span class="article-category">Técnicas</span>
+                            <h5>Meditación con Cartas de Tarot</h5>
+                            <p>Cómo utilizar las cartas como herramienta de meditación y crecimiento personal.</p>
+                            <div class="card-footer">
+                                <span class="date">Hace 3 semanas</span>
+                                <button class="read-more">Leer más</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <div class="load-more">
+                    <button class="btn secondary">Cargar Más Noticias</button>
+                </div>
+            </section>
+
+            <!-- Newsletter -->
+            <section class="newsletter-section" id="newsletter">
+                <div class="newsletter-content">
+                    <h3>Suscríbete a nuestro Newsletter</h3>
+                    <p>Recibe las últimas noticias y artículos de tarot directamente en tu email</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Tu correo electrónico">
+                        <button class="btn primary">Suscribirse</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <img src="/static/img/favicon/favicon.svg" alt="Logo de PsyTarot">
+                    </div>
+                    <div class="app-name">
+                        <h3>PsyTarot</h3>
+                        <p>Tarot y Psicología para tu bienestar</p>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Explorar</h4>
+                        <ul>
+                            <li><a href="#">Inicio</a></li>
+                            <li><a href="#">Tarot</a></li>
+                            <li><a href="#">Psicología</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h4>Recursos</h4>
+                        <ul>
+                            <li><a href="#">Artículos</a></li>
+                            <li><a href="#">Guías</a></li>
+                            <li><a href="#">Meditaciones</a></li>
+                            <li><a href="#">Podcast</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h4>Compañía</h4>
+                        <ul>
+                            <li><a href="#">Nosotros</a></li>
+                            <li><a href="#">Contacto</a></li>
+                            <li><a href="#">Privacidad</a></li>
+                            <li><a href="#">Términos</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 PsyTarot. Todos los derechos reservados.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" aria-label="X">
+                        <i class="fab fa-x"></i>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/static/js/noticias-tar.js"></script>
+</body>
+
+</html>

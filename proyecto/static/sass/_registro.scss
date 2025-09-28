@@ -1,0 +1,561 @@
+@use './variables' as v;
+
+// Mixins
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin card-shadow {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+@mixin gradient-bg {
+    background: linear-gradient(135deg, v.$accent, v.$accent-2);
+}
+
+@mixin glass-effect {
+    background: v.$glass;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.register-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    // Partículas decorativas
+    .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .particle {
+        position: absolute;
+        background: rgba(136, 58, 237, 0.15);
+        border-radius: 50%;
+        animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0) rotate(0deg) scale(1);
+            opacity: 0.6;
+        }
+
+        50% {
+            transform: translateY(-30px) rotate(180deg) scale(1.2);
+            opacity: 1;
+        }
+    }
+
+    // Contenedor principal
+    main {
+        flex: 1;
+        @include flex-center;
+        padding: 2rem;
+        min-height: calc(100vh - 80px);
+    }
+
+    // Tarjeta de registro
+    main>div {
+        width: 100%;
+        max-width: 480px;
+        padding: 3rem 2.5rem;
+        @include glass-effect;
+        border-radius: v.$radius * 2;
+        @include card-shadow;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(20px);
+    }
+
+    // Efecto de borde decorativo superior
+    main>div::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        @include gradient-bg;
+        border-radius: v.$radius v.$radius 0 0;
+    }
+
+    // Efecto de brillo sutil
+    main>div::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(136, 58, 237, 0.1) 0%, transparent 70%);
+        opacity: 0.3;
+        animation: rotate 20s linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    // Título
+    h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 2.5rem;
+        background: linear-gradient(90deg, v.$accent, v.$accent-2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 2;
+    }
+
+    h2::after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        @include gradient-bg;
+        border-radius: 2px;
+    }
+
+    // Formulario
+    #registerForm {
+        display: flex;
+        flex-direction: column;
+        gap: 1.8rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    // Grupos de formulario
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    // Etiquetas
+    label {
+        font-weight: 500;
+        color: v.$text-light;
+        font-size: 0.95rem;
+        margin-bottom: 0.8rem;
+        display: block;
+        position: relative;
+        padding-left: 8px;
+    }
+
+    label::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3px;
+        height: 16px;
+        @include gradient-bg;
+        border-radius: 2px;
+    }
+
+    // Campos de entrada
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 1.2rem 1.5rem;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1.5px solid v.$border-color;
+        border-radius: v.$radius;
+        color: v.$text-light;
+        font-family: v.$poppins;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    // Placeholder
+    input::placeholder {
+        color: v.$muted;
+        opacity: 0.7;
+        font-weight: 300;
+    }
+
+    // Efectos hover en inputs
+    input[type="text"]:hover,
+    input[type="email"]:hover,
+    input[type="password"]:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-1px);
+    }
+
+    // Efectos focus en inputs
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+        outline: none;
+        border-color: v.$accent;
+        background: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 0 0 4px rgba(136, 58, 237, 0.25);
+        transform: translateY(-2px);
+    }
+
+    // Botón de enviar
+    button[type="submit"] {
+        width: 100%;
+        padding: 1.2rem 2rem;
+        @include gradient-bg;
+        border: none;
+        border-radius: v.$radius;
+        color: v.$text-light;
+        font-family: v.$poppins;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        margin-top: 1rem;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    // Efecto hover del botón
+    button[type="submit"]:hover {
+        transform: translateY(-3px);
+        box-shadow:
+            0 10px 30px rgba(136, 58, 237, 0.5),
+            0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    // Efecto activo del botón
+    button[type="submit"]:active {
+        transform: translateY(-1px);
+    }
+
+    // Efecto de onda en el botón
+    button[type="submit"]::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.6s;
+    }
+
+    button[type="submit"]:hover::before {
+        left: 100%;
+    }
+
+    // Enlace de login
+    p {
+        text-align: center;
+        margin-top: 2.5rem;
+        color: v.$muted;
+        font-size: 0.95rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    a {
+        color: v.$accent;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 0.2rem 0;
+    }
+
+    // Efecto hover del enlace
+    a:hover {
+        color: v.$accent-2;
+    }
+
+    a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        @include gradient-bg;
+        transition: width 0.3s ease;
+    }
+
+    a:hover::after {
+        width: 100%;
+    }
+
+    // Footer
+    footer {
+        background: v.$panel;
+        padding: 1.5rem 2rem;
+        text-align: center;
+        border-top: 1px solid v.$border-color;
+        position: relative;
+        width: 100vw;
+        z-index: 2;
+    }
+
+    footer p {
+        color: v.$muted;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    // Estados de validación
+    input:valid {
+        border-color: rgba(72, 187, 120, 0.4);
+    }
+
+    input:invalid:not(:focus):not(:placeholder-shown) {
+        border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    // Mensajes de error
+    .error-message {
+        color: #f87171;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        display: none;
+        font-weight: 500;
+    }
+
+    input:invalid:not(:focus):not(:placeholder-shown)+.error-message {
+        display: block;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-5px);
+        }
+
+        75% {
+            transform: translateX(5px);
+        }
+    }
+
+    // Loading state del botón
+    button[type="submit"].loading {
+        pointer-events: none;
+        opacity: 0.8;
+    }
+
+    button[type="submit"].loading::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid transparent;
+        border-top: 2px solid v.$text-light;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    // Checkbox de términos (si se añade en el futuro)
+    .terms-checkbox {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        margin: 1rem 0;
+
+        input[type="checkbox"] {
+            margin-top: 0.2rem;
+            accent-color: v.$accent;
+        }
+
+        label {
+            font-size: 0.9rem;
+            margin: 0;
+            padding: 0;
+
+            &::before {
+                display: none;
+            }
+
+            a {
+                color: v.$accent;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    // Responsive Design
+    @media (max-width: 768px) {
+        main {
+            padding: 1rem;
+        }
+
+        main>div {
+            padding: 2.5rem 2rem;
+            margin: 1rem;
+            max-width: 400px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            padding: 1.1rem 1.3rem;
+        }
+
+        button[type="submit"] {
+            padding: 1.1rem 1.8rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        main>div {
+            padding: 2rem 1.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        #registerForm {
+            gap: 1.5rem;
+        }
+
+        footer {
+            padding: 1rem;
+        }
+    }
+
+    // Animaciones de entrada
+    main>div {
+        animation: slideInUp 0.8s ease-out;
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    // Efecto de aparición escalonada para inputs
+    .form-group {
+        animation: fadeIn 0.6s ease-out forwards;
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    .form-group:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .form-group:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .form-group:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    // Personalización del scroll
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: v.$panel;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: v.$accent;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: v.$accent-2;
+    }
+
+    // Selección de texto
+    ::selection {
+        background: rgba(136, 58, 237, 0.3);
+        color: v.$text-light;
+    }
+
+    // Focus visible para accesibilidad
+    button:focus-visible,
+    input:focus-visible {
+        outline: 2px solid v.$accent;
+        outline-offset: 2px;
+    }
+}
+
+// Efecto de fondo decorativo
+.register-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(136, 58, 237, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(154, 6, 212, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(42, 0, 97, 0.08) 0%, transparent 50%);
+    z-index: -1;
+}

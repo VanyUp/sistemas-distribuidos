@@ -42,24 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Enlaces "Leer más" de las noticias
     readMoreLinks.forEach(link => {
         link.addEventListener('click', async function (e) {
-            e.preventDefault();
-
-            const id = this.dataset.id;
-            const categoria = this.dataset.categoria;
-
-            try {
-                const response = await fetch(`/api/noticia/${categoria}/${id}`);
-                const data = await response.json();
-
-                if (data.error) {
-                    showNotification("Error: " + data.error);
-                } else {
-                    showNotification(`${data.contenido}`);
-                }
-            } catch (err) {
-                showNotification("⚠️ Error al cargar la noticia.");
-                console.error(err);
-            }
+            window.location.href = '/login'; // Redirigir a la página de login
         });
     });
 
@@ -84,10 +67,10 @@ document.addEventListener('DOMContentLoaded', function () {
             notification.className = 'notification';
             notification.style.cssText = `
                 position: fixed;
-                top: 20px;
+                top: 750px;
                 right: 20px;
                 padding: 15px 20px;
-                background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+                background: linear-gradient(135deg, #883aed, #9a06d4);
                 color: white;
                 border-radius: 8px;
                 box-shadow: 0 4px 15px rgba(109, 40, 217, 0.4);

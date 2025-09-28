@@ -18,7 +18,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
             // Guardar token en localStorage
             localStorage.setItem("access_token", data.access_token);
             alert("✅ Inicio de sesión exitoso");
-            window.location.href = "/chat"; // redirige al chat
+            window.location.href = "/seleccion";
         } else {
             alert("❌ " + data.detail);
         }

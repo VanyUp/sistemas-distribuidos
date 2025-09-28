@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const clearBtn = document.getElementById("clearBtn");
     const downloadBtn = document.getElementById("downloadBtn");
     const backBtn = document.getElementById("backBtn");
+    const newsBtn = document.getElementById("newsBtn");
     const statusEl = document.getElementById("status");
 
     // =====================
@@ -53,13 +54,27 @@ document.addEventListener("DOMContentLoaded", function () {
             item.className = "conv-item";
             item.dataset.id = id;
             item.innerHTML = `
-                <div style="font-weight:600">${conv.title}</div>
-                <div class="small">${conv.messages.length} mensajes</div>
-                `;
-            item.addEventListener("click", () => {
+            <div style="display:flex;justify-content:space-between;align-items:center">
+                <div>
+                    <div style="font-weight:600">${conv.title}</div>
+                    <div class="small">${conv.messages.length} mensajes</div>
+                </div>
+                <button class="delete-btn" title="Eliminar">❌</button>
+            </div>
+        `;
+
+            // Clic en el bloque → abrir conversación
+            item.querySelector("div").addEventListener("click", (e) => {
+                if (e.target.closest(".delete-btn")) return; // no abrir si clic en ❌
                 currentConvId = id;
                 renderConversation(id);
             });
+
+            // Clic en ❌ → eliminar
+            item.querySelector(".delete-btn").addEventListener("click", () => {
+                deleteConversation(id);
+            });
+
             convsEl.prepend(item);
         });
     }
@@ -156,6 +171,24 @@ document.addEventListener("DOMContentLoaded", function () {
         renderConversation(id);
     }
 
+    function deleteConversation(id) {
+        if (!convos[id]) return;
+        const confirmDelete = confirm("¿Eliminar esta conversación definitivamente?");
+        if (!confirmDelete) return;
+
+        // Borrar del objeto
+        delete convos[id];
+        saveState();
+
+        // Si justo eliminaste la que estaba abierta
+        if (currentConvId === id) {
+            currentConvId = null;
+            messagesEl.innerHTML = "";
+        }
+
+        updateConvList();
+    }
+
     function clearConversation() {
         if (!currentConvId) return;
         convos[currentConvId].messages = [];
@@ -181,6 +214,10 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "/login";
     }
 
+    function goNews() {
+        window.location.href = "/noticias-tar";
+    }
+
     // =====================
     // Eventos
     // =====================
@@ -195,6 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
     clearBtn.addEventListener("click", clearConversation);
     downloadBtn.addEventListener("click", downloadConversation);
     backBtn.addEventListener("click", goBack);
+    newsBtn.addEventListener("click", goNews);
 
     // =====================
     // Init
