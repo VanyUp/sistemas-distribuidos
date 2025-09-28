@@ -2,15 +2,16 @@ from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from jose import JWTError, jwt
-from datetime import datetime, timedelta
+from apscheduler.schedulers.background import BackgroundScheduler
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
-from passlib.context import CryptContext
 from bson.objectid import ObjectId
 from models.models import UserRegister, UserLogin, Message
+from models.functions import get_password_hash, verify_password, create_access_token, decode_token, scrap_tarot
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 import os
+import atexit
+import asyncio
 
 # =====================
 # Configuración general
@@ -21,7 +22,6 @@ load_dotenv()
 
 MONGO_URL = os.getenv("MONGO_URL")
 DB_NAME = os.getenv("DB_NAME")
-SECRET_KEY = os.getenv("SECRET_KEY")
 API_KEY = os.getenv("OPENAI_API_KEY")
 
 openai_client = AsyncOpenAI(
@@ -43,36 +43,6 @@ db = client[DB_NAME]
 users_collection = db["users"]
 newstarot_collection = db["noticias_tarot"]
 newspsico_collection = db["noticias_psicologia"]
-
-# JWT
-SECRET_KEY_JWT = SECRET_KEY
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-# =====================
-# Funciones auxiliares
-# =====================
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
-def get_password_hash(password):
-    return pwd_context.hash(password)
-
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
-    to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-
-def decode_token(token: str):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload.get("sub")
-    except JWTError:
-        return None
 
 # =====================
 # Rutas HTML
@@ -111,7 +81,20 @@ async def get_chat(request: Request):
 
 @app.get("/noticias-tar", response_class=HTMLResponse)
 async def get_noticias_tar(request: Request):
-    return templates.TemplateResponse("noticias-tar.html", {"request": request})
+    tarot_news = await newstarot_collection.find().sort("_id", -1).to_list(length=7)
+
+    for n in tarot_news:
+        n["_id"] = str(n["_id"])
+
+    featured_news = tarot_news[0] if tarot_news else None
+    tarot_news = tarot_news[1:] if len(tarot_news) > 1 else []
+
+    
+    return templates.TemplateResponse("noticias-tar.html", {
+        "request": request,
+        "featured_news": featured_news,
+        "tarot_news": tarot_news
+    })
 
 # =====================
 # API Endpoints
@@ -168,3 +151,20 @@ async def chat(message: Message):
     except Exception as e:
         print("❌ Error en backend:", e)
         return {"reply": f"⚠️ Error en el servidor: {str(e)}"}
+    
+loop = None  # 👈 variable global para guardar el loop principal
+
+@app.on_event("startup")
+async def start_scheduler():
+    global loop
+    loop = asyncio.get_event_loop()  # 👈 guarda el loop principal de FastAPI
+
+    scheduler = BackgroundScheduler()
+
+    def job_wrapper():
+        asyncio.run_coroutine_threadsafe(scrap_tarot(newstarot_collection), loop)
+
+    scheduler.add_job(job_wrapper, "interval", minutes=2)
+    scheduler.start()
+    print("⏳ Scraper automático cada 2 minutos iniciado")
+    atexit.register(lambda: scheduler.shutdown())

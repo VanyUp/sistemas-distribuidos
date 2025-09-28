@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Botón chat
     chatBtn.addEventListener('click', function () {
-        window.location.href = "/chat";
+        window.location.href = "/chat-tar";
     });
 
     // Navegación

@@ -73,19 +73,22 @@
                     <h3>Noticia Destacada</h3>
                     <p>Lo más relevante en el mundo del tarot</p>
                 </div>
+                {% if featured_news %}
                 <article class="featured-article">
                     <div class="featured-image">
-                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder">
+                            <img src="{{ featured_news.imagen_url }}" alt="Banner de noticia">
+                        </div>
                         <div class="featured-badge">Destacado</div>
                     </div>
                     <div class="featured-content">
-                        <span class="article-category">Arcanos Mayores</span>
-                        <h4>El Renacimiento del Tarot en la Era Digital</h4>
-                        <p>Cómo las nuevas tecnologías están transformando la práctica milenaria del tarot y haciendo
-                            que sea más accesible para las nuevas generaciones.</p>
+                        <span class="article-category">{{ featured_news.autor }}</span>
+                        <h4>{{ featured_news.titulo }}</h4>
+                        <p>{{ featured_news.descripcion }}</p>
                         <button class="btn primary">Leer Artículo Completo</button>
                     </div>
                 </article>
+                {% endif %}
             </section>
 
             <!-- News Grid -->
@@ -94,102 +97,23 @@
                     <h3>Últimas Noticias</h3>
                     <p>Mantente actualizado con lo último en tarot</p>
                 </div>
-                <div class="filter-tabs">
-                    <button class="filter-btn active">Todos</button>
-                    <button class="filter-btn">Arcanos Mayores</button>
-                    <button class="filter-btn">Arcanos Menores</button>
-                    <button class="filter-btn">Tiradas</button>
-                    <button class="filter-btn">Eventos</button>
-                </div>
                 <div class="news-grid">
-                    <!-- Article 1 -->
+                    <!-- Articles News -->
+                    {% for noticia in tarot_news %}
                     <article class="news-card">
-                        <div class="card-image arcano-mayor"></div>
+                        <div class="card-image arcano-mayor">
+                            <img src="{{ noticia.imagen_url }}" alt="Banner de noticia">
+                        </div>
                         <div class="card-content">
-                            <span class="article-category">Arcanos Mayores</span>
-                            <h5>El Mago: Nuevas Interpretaciones Modernas</h5>
-                            <p>Descubre cómo reinterpretar la carta del Mago en el contexto de la sociedad actual y las
-                                nuevas tecnologías.</p>
+                            <span class="article-category">{{ noticia.autor }}</span>
+                            <h5>{{ noticia.titulo }}</h5>
+                            <p>{{ noticia.descripcion }}</p>
                             <div class="card-footer">
-                                <span class="date">Hace 1 día</span>
                                 <button class="read-more">Leer más</button>
                             </div>
                         </div>
                     </article>
-
-                    <!-- Article 2 -->
-                    <article class="news-card">
-                        <div class="card-image tiradas"></div>
-                        <div class="card-content">
-                            <span class="article-category">Tiradas</span>
-                            <h5>Tirada de la Cruz Celta: Guía Actualizada</h5>
-                            <p>Una guía completa para dominar la tirada de la Cruz Celta con ejemplos prácticos y
-                                consejos expertos.</p>
-                            <div class="card-footer">
-                                <span class="date">Hace 3 días</span>
-                                <button class="read-more">Leer más</button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Article 3 -->
-                    <article class="news-card">
-                        <div class="card-image eventos"></div>
-                        <div class="card-content">
-                            <span class="article-category">Eventos</span>
-                            <h5>Conferencia Internacional de Tarot 2024</h5>
-                            <p>Todo lo que necesitas saber sobre el evento más importante del año en el mundo del tarot.
-                            </p>
-                            <div class="card-footer">
-                                <span class="date">Hace 5 días</span>
-                                <button class="read-more">Leer más</button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Article 4 -->
-                    <article class="news-card">
-                        <div class="card-image arcano-menor"></div>
-                        <div class="card-content">
-                            <span class="article-category">Arcanos Menores</span>
-                            <h5>Los Palos de la Baraja: Significado Profundo</h5>
-                            <p>Un análisis detallado de los cuatro palos y su relación con los elementos de la
-                                naturaleza.</p>
-                            <div class="card-footer">
-                                <span class="date">Hace 1 semana</span>
-                                <button class="read-more">Leer más</button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Article 5 -->
-                    <article class="news-card">
-                        <div class="card-image historia"></div>
-                        <div class="card-content">
-                            <span class="article-category">Historia</span>
-                            <h5>Orígenes del Tarot de Marsella</h5>
-                            <p>Un viaje histórico por los orígenes y evolución del tarot más influyente de todos los
-                                tiempos.</p>
-                            <div class="card-footer">
-                                <span class="date">Hace 2 semanas</span>
-                                <button class="read-more">Leer más</button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Article 6 -->
-                    <article class="news-card">
-                        <div class="card-image tecnicas"></div>
-                        <div class="card-content">
-                            <span class="article-category">Técnicas</span>
-                            <h5>Meditación con Cartas de Tarot</h5>
-                            <p>Cómo utilizar las cartas como herramienta de meditación y crecimiento personal.</p>
-                            <div class="card-footer">
-                                <span class="date">Hace 3 semanas</span>
-                                <button class="read-more">Leer más</button>
-                            </div>
-                        </div>
-                    </article>
+                    {% endfor %}
                 </div>
                 <div class="load-more">
                     <button class="btn secondary">Cargar Más Noticias</button>
