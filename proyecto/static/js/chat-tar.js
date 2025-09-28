@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function goBack() {
-        window.location.href = "/login";
+        window.location.href = "/seleccion";
     }
 
     function goNews() {
