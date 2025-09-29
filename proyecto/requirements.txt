@@ -21,7 +21,5 @@ jose
 passlib
 bcrypt
 email-validator
-bson 
-atexit
-asyncio
+bson
 jinja2
