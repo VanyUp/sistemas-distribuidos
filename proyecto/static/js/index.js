@@ -1,5 +1,8 @@
 // PsyTarot - Funcionalidades principales
 
+
+    const API = "https://sistemas-distribuidos-lcpe.onrender.com";
+
 document.addEventListener('DOMContentLoaded', function () {
     // Elementos de la interfaz
     const loginBtn = document.querySelector('.btn.secondary');
@@ -7,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const exploreBtn = document.querySelector('.hero-buttons .btn.primary');
     const learnMoreBtn = document.querySelector('.hero-buttons .btn.secondary');
     const readMoreLinks = document.querySelectorAll('.read-more');
+    
 
     // Manejo de botones de autenticación
     if (loginBtn) {

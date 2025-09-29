@@ -1,5 +1,7 @@
 // Noticias de Tarot - Funcionalidades
 
+    const API = "https://sistemas-distribuidos-lcpe.onrender.com";
+
 // Función para mostrar notificaciones
 function showNotification(message) {
     let notification = document.querySelector('.notification');

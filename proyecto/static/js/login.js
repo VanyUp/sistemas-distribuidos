@@ -1,11 +1,15 @@
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    const API = "https://sistemas-distribuidos-lcpe.onrender.com";   
+
+
+
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
     try {
-        const res = await fetch("/api/login", {
+        const res = await fetch("${API}/api/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),

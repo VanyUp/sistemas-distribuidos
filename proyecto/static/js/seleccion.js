@@ -1,5 +1,5 @@
 // Selección de Camino - PsyTarot
-
+    const API = "https://sistemas-distribuidos-lcpe.onrender.com";
 document.addEventListener('DOMContentLoaded', function() {
     const selectionCards = document.querySelectorAll('.selection-card');
     const cardButtons = document.querySelectorAll('.card-btn');

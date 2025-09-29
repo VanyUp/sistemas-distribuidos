@@ -1,3 +1,5 @@
+
+    const API = "https://sistemas-distribuidos-lcpe.onrender.com";
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 

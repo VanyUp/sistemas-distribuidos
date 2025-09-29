@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from apscheduler.schedulers.background import BackgroundScheduler
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
 from bson.objectid import ObjectId
+from fastapi.middleware.cors import CORSMiddleware
 from models.models import UserRegister, UserLogin, Message
 from models.functions import get_password_hash, verify_password, create_access_token, decode_token, scrap_tarot, scrap_psicologia
 from openai import AsyncOpenAI
@@ -17,6 +18,22 @@ import asyncio
 # Configuración general
 # =====================
 app = FastAPI()
+
+
+
+origins = [
+    "https://sistemas-distribuidos-lcpe.onrender.com",  # tu frontend
+    "http://localhost:5500", "http://127.0.0.1:5500"     # si pruebas local
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,          # NO uses "*"
+    allow_credentials=True,         # si usas cookies
+    allow_methods=["*"],
+    allow_headers=["*"],            # incluye Authorization si usas bearer
+)
+
 
 load_dotenv()
 

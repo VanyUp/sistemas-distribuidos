@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const backBtn = document.getElementById("backBtn");
     const newsBtn = document.getElementById("newsBtn");
     const statusEl = document.getElementById("status");
+    const API = "https://sistemas-distribuidos-lcpe.onrender.com";
 
     // =====================
     // Estado
@@ -98,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
             messagesEl.appendChild(typingNode);
 
             // Hacer la petición al backend
-            const res = await fetch("/api/chat", {
+            const res = await fetch("${API}/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
