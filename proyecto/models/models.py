@@ -9,6 +9,7 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
+# Mensaje de la IA
 class Message(BaseModel):
     text: str
     token: str

@@ -17,6 +17,8 @@ mysql-connector-python
 requests
 httpx
 pydantic
+pydantic[email]
+
 typing
 pymongo
 motor
@@ -26,6 +28,8 @@ pyjwt
 python-jose
 python-multipart
 bcrypt
+apscheduler
+
 
 #scraping 
 pandas

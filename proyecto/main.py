@@ -6,7 +6,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
 from bson.objectid import ObjectId
 from models.models import UserRegister, UserLogin, Message
-from models.functions import get_password_hash, verify_password, create_access_token, decode_token, scrap_tarot
+from models.functions import get_password_hash, verify_password, create_access_token, decode_token, scrap_tarot, scrap_psicologia
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 import os
@@ -42,7 +42,7 @@ except Exception as e:
 db = client[DB_NAME]
 users_collection = db["users"]
 newstarot_collection = db["noticias_tarot"]
-newspsico_collection = db["noticias_psicologia"]
+newspsi_collection = db["noticias_psicologia"]
 
 # =====================
 # Rutas HTML
@@ -51,7 +51,7 @@ newspsico_collection = db["noticias_psicologia"]
 async def home(request: Request):
     # Traer noticias desde Mongo
     tarot_news = await newstarot_collection.find().sort("_id", -1).to_list(length=3)
-    psico_news = await newspsico_collection.find().sort("_id", -1).to_list(length=3)
+    psico_news = await newspsi_collection.find().sort("_id", -1).to_list(length=3)
 
     # Convertir ObjectId a str para evitar problemas
     for n in tarot_news + psico_news:
@@ -96,12 +96,30 @@ async def get_noticias_tar(request: Request):
         "tarot_news": tarot_news
     })
 
+@app.get("/noticias-psi", response_class=HTMLResponse)
+async def noticias_psico(request: Request):
+    psico_news = await newspsi_collection.find().sort("_id", -1).to_list(30)
+    for n in psico_news:
+        n["_id"] = str(n["_id"])
+
+    featured = psico_news[0] if psico_news else None
+    return templates.TemplateResponse("noticias-psi.html", {
+        "request": request, 
+        "psico_news": psico_news, 
+        "featured_news": featured}
+    )
+
+@app.get("/chat-psi", response_class=HTMLResponse)
+async def get_chat_psi(request: Request):
+    return templates.TemplateResponse("chat-psi.html", {"request": request})
+    
+
 # =====================
 # API Endpoints
 # =====================
 @app.get("/api/noticia/{categoria}/{id}")
 async def get_noticia(categoria: str, id: str):
-    collection = newstarot_collection if categoria == "tarot" else newspsico_collection
+    collection = newstarot_collection if categoria == "tarot" else newspsi_collection
     
     noticia = await collection.find_one({"_id": ObjectId(id)})
     
@@ -142,7 +160,7 @@ async def chat(message: Message):
         response = await openai_client.chat.completions.create(
             model="gpt-oss-120b",
             messages=[
-                {"role": "system", "content": "Eres un asistente directo de tarot y psicología con respuestas breves y concisas. No brindas otros consejos. Si la consulta no es sobre tarot o psicología, indicas que no puedes ayudar. Humor Gen Z."},
+                {"role": "system", "content": "Eres un asistente directo de tarot con respuestas breves y concisas, brindas otros consejos. Si la consulta no es sobre tarot, indicas como puedes ayudar. Humor Gen Z."},
                 {"role": "user", "content": message.text},
             ]
         )
@@ -154,6 +172,42 @@ async def chat(message: Message):
     
 loop = None  # 👈 variable global para guardar el loop principal
 
+
+#chat psicolo
+# Vista HTML
+
+
+# Endpoint de IA
+@app.post("/api/chat/psi")
+async def chat_psi(message: Message):
+    user_id = decode_token(message.token)
+    if not user_id:
+        raise HTTPException(status_code=401, detail="No autorizado")
+
+    try:
+        resp = await openai_client.chat.completions.create(
+            model="gpt-oss-120b",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "Eres un asistente **psicológico no clínico** en español. "
+                        "Brindas psicoeducación, técnicas de afrontamiento básicas "
+                        "(respiración, journaling, reestructuración cognitiva simple), "
+                        "validas y rediriges a profesionales. No haces diagnósticos ni tratamiento. "
+                        "Si hay riesgo o crisis, indicas contactar líneas de emergencia locales."
+                    ),
+                },
+                {"role": "user", "content": message.text},
+            ],
+            temperature=0.5,
+        )
+        return {"reply": resp.choices[0].message.content}
+    except Exception as e:
+        print("❌ Error chat-psi:", e)
+        return {"reply": "⚠️ Error del servidor"}
+
+
 @app.on_event("startup")
 async def start_scheduler():
     global loop
@@ -164,7 +218,13 @@ async def start_scheduler():
     def job_wrapper():
         asyncio.run_coroutine_threadsafe(scrap_tarot(newstarot_collection), loop)
 
+    def job_psico():
+        asyncio.run_coroutine_threadsafe(scrap_psicologia(newspsi_collection), loop)
+
+
     scheduler.add_job(job_wrapper, "interval", minutes=2)
+    scheduler.add_job(job_psico, "interval", minutes=2)
     scheduler.start()
     print("⏳ Scraper automático cada 2 minutos iniciado")
     atexit.register(lambda: scheduler.shutdown())
+

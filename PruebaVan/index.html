@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat Terapéutico</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="header">
+      <h1>Chat de Apoyo</h1>
+      <p class="note">No reemplaza atención profesional. En emergencia llama 106, 123 o 911.</p>
+    </header>
+
+    <section id="chat" class="chat" aria-live="polite"></section>
+
+    <form id="form" class="composer" autocomplete="off">
+      <input id="msg" class="input" name="mensaje" placeholder="Escribe cómo te sientes" />
+      <button id="send" class="btn" type="submit">Enviar</button>
+    </form>
+
+    <div id="status" class="status"></div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

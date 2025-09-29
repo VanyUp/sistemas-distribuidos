@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
             notification.className = 'notification';
             notification.style.cssText = `
                 position: fixed;
-                top: 750px;
+                top: 20px;
                 right: 20px;
                 padding: 15px 20px;
                 background: linear-gradient(135deg, #883aed, #9a06d4);
