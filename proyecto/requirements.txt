@@ -15,3 +15,4 @@ pandas
 BeautifulSoup4
 apscheduler
 gunicorn
+python-dotenv
