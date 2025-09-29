@@ -17,3 +17,10 @@ apscheduler
 gunicorn
 python-dotenv
 openai
+jose
+passlib
+bcrypt
+email-validator
+bson 
+atexit
+asyncio

@@ -4,7 +4,6 @@ from passlib.context import CryptContext
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 import requests
-import pandas as pd
 import os
 
 load_dotenv()
