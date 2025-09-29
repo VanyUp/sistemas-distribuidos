@@ -5,6 +5,7 @@ passlib[bcrypt]
 motor
 python-multipart
 pydantic
+pydantic[email]
 requests
 httpx
 typing
