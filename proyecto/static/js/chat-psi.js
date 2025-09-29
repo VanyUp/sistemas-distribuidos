@@ -218,6 +218,31 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "/noticias-psi";
     }
 
+    // Manejo del sidebar en móviles
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    if (sidebarToggle && sidebar && sidebarOverlay) {
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.add('sidebar-open');
+            sidebarOverlay.classList.add('overlay-open');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('sidebar-open');
+            sidebarOverlay.classList.remove('overlay-open');
+        });
+
+        // Cerrar sidebar al oprimir ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar.classList.contains('sidebar-open')) {
+                sidebar.classList.remove('sidebar-open');
+                sidebarOverlay.classList.remove('overlay-open');
+            }
+        });
+    }
+
     // =====================
     // Eventos
     // =====================
