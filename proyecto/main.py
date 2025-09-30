@@ -21,19 +21,6 @@ app = FastAPI()
 
 
 
-origins = [
-    "https://sistemas-distribuidos-lcpe.onrender.com",  # tu frontend
-    "http://localhost:5500", "http://127.0.0.1:5500"     # si pruebas local
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,          # NO uses "*"
-    allow_credentials=True,         # si usas cookies
-    allow_methods=["*"],
-    allow_headers=["*"],            # incluye Authorization si usas bearer
-)
-
 
 load_dotenv()
 
