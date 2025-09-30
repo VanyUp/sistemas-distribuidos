@@ -14,12 +14,15 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # Password hashing
-pwd_context = CryptContext(schemes=["bcrypt_sha256"], deprecated="auto")
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+def verify_password(plain: str, hashed: str) -> bool:
+    return pwd_context.verify(plain, hashed)
 
-def get_password_hash(password):
+def get_password_hash(password: str) -> str:
+    # límite razonable para evitar DoS con passwords gigantes
+    if len(password.encode("utf-8")) > 512:
+        raise ValueError("password too long")
     return pwd_context.hash(password)
 
 #ACCESO TOKEN

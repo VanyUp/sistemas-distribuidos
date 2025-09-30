@@ -15,7 +15,7 @@ pymongo[srv]>=4.6,<5
 dnspython>=2.6,<3
 
 # Auth
-passlib[bcrypt]>=1.7,<2
+passlib[argon2]>=1.7.4,<2
 python-jose[cryptography]>=3.3,<4
 
 # Scraping
