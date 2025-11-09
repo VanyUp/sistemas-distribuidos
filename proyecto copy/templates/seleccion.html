@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selecciona tu Camino - PsyTarot</title>
+    <meta name="description" content="Elige entre tarot, psicología o una experiencia combinada para tu crecimiento
+    personal en PsyTarot.">
+    <link rel="icon" href="/static/img/favicon/favicon.svg" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+
+<body>
+    <div class="selection-container">
+        <!-- Partículas decorativas -->
+        <div class="particles">
+            <div class="particle" style="top: 20%; left: 10%; width: 4px; height: 4px; animation-delay: 0s;"></div>
+            <div class="particle" style="top: 60%; left: 85%; width: 6px; height: 6px; animation-delay: 1s;"></div>
+            <div class="particle" style="top: 80%; left: 15%; width: 3px; height: 3px; animation-delay: 2s;"></div>
+            <div class="particle" style="top: 40%; left: 90%; width: 5px; height: 5px; animation-delay: 3s;"></div>
+        </div>
+
+        <!-- Header -->
+        <header class="selection-header">
+            <div class="brand">
+                <div class="logo">
+                    <img src="/static/img/favicon/favicon.svg" alt="Logo PsyTarot">
+                </div>
+                <div class="app-name">
+                    <h1>PsyTarot</h1>
+                    <p class="app-sub">Elige tu camino de crecimiento</p>
+                </div>
+            </div>
+            <nav class="user-nav">
+                <button class="btn secondary" id="logoutBtn">Logout</button>
+            </nav>
+        </header>
+
+        <!-- Contenido Principal -->
+        <main class="selection-main">
+            <div class="selection-hero">
+                <h2>¿Qué camino quieres explorar hoy?</h2>
+                <p>Selecciona entre la sabiduría ancestral del tarot o los principios modernos de la psicología para tu
+                    crecimiento personal</p>
+            </div>
+
+            <div class="selection-cards">
+                <!-- Tarjeta de Tarot -->
+                <div class="selection-card tarot-card" data-path="tarot">
+                    <div class="card-icon">
+                        <div class="icon-circle">
+                            <span>🎴</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Tarot</h3>
+                        <p class="card-subtitle">Sabiduría Ancestral</p>
+                        <ul class="card-features">
+                            <li>🔮 Lecturas personalizadas</li>
+                            <li>📜 Arcanos mayores y menores</li>
+                            <li>💫 Tiradas especializadas</li>
+                            <li>🌙 Meditación con cartas</li>
+                            <li>📈 Seguimiento de progreso</li>
+                        </ul>
+                        <div class="card-stats">
+                            <div class="stat">
+                                <span class="stat-number">78</span>
+                                <span class="stat-label">Cartas</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">12</span>
+                                <span class="stat-label">Tiradas</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">∞</span>
+                                <span class="stat-label">Sabiduría</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="card-btn primary">Explorar Tarot</button>
+                </div>
+
+                <!-- Tarjeta de Psicología -->
+                <div class="selection-card psychology-card" data-path="psychology">
+                    <div class="card-icon">
+                        <div class="icon-circle">
+                            <span>🧠</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Psicología</h3>
+                        <p class="card-subtitle">Ciencia Moderna</p>
+                        <ul class="card-features">
+                            <li>💭 Terapia cognitiva</li>
+                            <li>🎯 Establecimiento de metas</li>
+                            <li>📊 Análisis de patrones</li>
+                            <li>🌱 Crecimiento personal</li>
+                            <li>⚖️ Balance emocional</li>
+                        </ul>
+                        <div class="card-stats">
+                            <div class="stat">
+                                <span class="stat-number">50+</span>
+                                <span class="stat-label">Técnicas</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">24/7</span>
+                                <span class="stat-label">Soporte</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">∞</span>
+                                <span class="stat-label">Crecimiento</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="card-btn primary">Explorar Psicología</button>
+                </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="selection-footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <img src="/static/img/favicon/favicon.svg" alt="Logo PsyTarot">
+                    </div>
+                    <div class="app-name">
+                        <h3>PsyTarot</h3>
+                        <p>Tu camino hacia el autoconocimiento</p>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <a href="#">Ayuda</a>
+                    <a href="#">Términos</a>
+                    <a href="#">Privacidad</a>
+                    <a href="#">Contacto</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 PsyTarot. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="static/js/seleccion.js"></script>
+</body>
+
+</html>

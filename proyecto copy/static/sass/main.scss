@@ -1,0 +1,25 @@
+@use './variables' as v;
+@use './index';
+@use './registro';
+@use './login';
+@use './seleccion';
+@use './chat';
+@use './noticias-tar';
+@use './noticias-psi';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box
+}
+
+body {
+    font-family: v.$poppins;
+    background-color: v.$bg;
+    color: v.$text-light;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}

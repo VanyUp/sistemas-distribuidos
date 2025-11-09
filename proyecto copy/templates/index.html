@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - PsyTarot</title>
+    <meta name="description" content="Bienvenido a PsyTarot, tu plataforma para consultas de tarot y psicología.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="/static/img/favicon/favicon.svg" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+
+<body>
+    <div class="index-container">
+        <header class="header">
+            <div class="brand">
+                <div class="logo">
+                    <img src="/static/img/favicon/favicon.svg" alt="Logo de PsyTarot">
+                </div>
+                <div class="app-name">
+                    <h1>PsyTarot</h1>
+                    <p class="app-sub">Tarot y Psicología para tu bienestar</p>
+                </div>
+            </div>
+            <nav class="nav">
+                <button class="btn secondary">Iniciar Sesión</button>
+                <button class="btn primary">Registrarse</button>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <section class="hero">
+                <div class="hero-content">
+                    <h2>Conecta tu mente y espíritu</h2>
+                    <p>Descubre el equilibrio entre la psicología moderna y la sabiduría ancestral del tarot para tu
+                        crecimiento personal.</p>
+                    <div class="hero-buttons">
+                        <button class="btn primary large">Explorar Ahora</button>
+                        <button class="btn secondary large">Saber más</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="placeholder-image">
+                        <img src="/static/img/banner.png" alt="Imagen de bienvenida a PsyTarot">
+                    </div>
+                </div>
+            </section>
+
+            <section class="news-section">
+                <div class="section-header">
+                    <h3>Noticias de Tarot</h3>
+                    <p>Mantente al día con las últimas tendencias y descubrimientos</p>
+                </div>
+                <div class="news-grid">
+                    {% for noticia in tarot_news %}
+                    <article class="news-card">
+                        <div class="news-image tarot-news">
+                            <img src="{{ noticia.imagen_url }}" alt="Imagen de noticia de tarot">
+                        </div>
+                        <div class="news-content">
+                            <h4>{{ noticia.titulo }}</h4>
+                            <p>{{ noticia.descripcion }}</p>
+                            <a href="#" class="read-more" data-id="{{ noticia._id }}" data-categoria="tarot">
+                                Leer más
+                            </a>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="news-section">
+                <div class="section-header">
+                    <h3>Noticias de Psicología</h3>
+                    <p>Avances y consejos para tu bienestar mental</p>
+                </div>
+                <div class="news-grid">
+                    {% for noticia in psico_news %}
+                    <article class="news-card">
+                        <div class="news-image psychology-news">
+                            <img src="{{ noticia.imagen_url }}" alt="Imagen de noticia de psicología">
+                        </div>
+                        <div class="news-content">
+                            <h4>{{ noticia.titulo }}</h4>
+                            <p>{{ noticia.descripcion }}</p>
+                            <a href="#" class="read-more" data-id="{{ noticia._id }}" data-categoria="psicologia">
+                                Leer más
+                            </a>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <img src="/static/img/favicon/favicon.svg" alt="Logo de PsyTarot">
+                    </div>
+                    <div class="app-name">
+                        <h3>PsyTarot</h3>
+                        <p>Tarot y Psicología para tu bienestar</p>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Explorar</h4>
+                        <ul>
+                            <li><a href="/">Inicio</a></li>
+                            <li><a href="/login">Tarot</a></li>
+                            <li><a href="/login">Psicología</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h4>Recursos</h4>
+                        <ul>
+                            <li><a href="https://www.losarcanos.com/tarot-articulos/categoria-tarot.php">Artículos</a></li>
+                            <li><a href="https://www.youtube.com/watch?v=sdDJLkjJfks&t=3s">Meditaciones</a></li>
+                            <li><a href="https://open.spotify.com/show/1TDJJoHWEq7Nbh3yEBOJOj?si=2aff89474d304c33">Podcast</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h4>Compañía</h4>
+                        <ul>
+                            <li><a href="#">Nosotros</a></li>
+                            <li><a href="#">Contacto</a></li>
+                            <li><a href="#">Privacidad</a></li>
+                            <li><a href="#">Términos</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 PsyTarot. Todos los derechos reservados.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" aria-label="X">
+                        <i class="fab fa-x"></i>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="/static/js/index.js"></script>
+</body>
+
+</html>
