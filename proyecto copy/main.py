@@ -5,13 +5,16 @@ from fastapi.staticfiles import StaticFiles
 from apscheduler.schedulers.background import BackgroundScheduler
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
 from bson.objectid import ObjectId
-from models.models import UserRegister, UserLogin, Message
+from models.models import UserRegister, UserLogin, Message, UsuarioRegistro, UsuarioLogin
+from supabase import create_client, Client
 from models.functions import get_password_hash, verify_password, create_access_token, decode_token, scrap_tarot, scrap_psicologia
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 import os
 import atexit
 import asyncio
+from models import Libro
+from database import supabase
 
 # =====================
 # Configuración general
@@ -20,7 +23,8 @@ app = FastAPI()
 
 load_dotenv()
 
-xMONGO_URL = os.getenv("MONGO_URL")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 DB_NAME = os.getenv("DB_NAME")
 API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -32,17 +36,20 @@ openai_client = AsyncOpenAI(
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Mongo
-client = MongoClient(MONGO_URL)
+# SUPABASE
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 try:
-    client.admin.command("ping")
-    print("✅ Conexión a MongoDB Atlas exitosa")
+    response = supabase.table("libros").select("*").limit(1).execute()
+    print("✅ Conexión a Supabase exitosa")
 except Exception as e:
-    print("❌ Error al conectar con MongoDB Atlas:", e)
-db = client[DB_NAME]
-users_collection = db["users"]
-newstarot_collection = db["noticias_tarot"]
-newspsi_collection = db["noticias_psicologia"]
+    print("❌ Error al conectar con Supabase:", e)
+
+
+usuarios = supabase.table("users")
+noticias_tarot = supabase.table("noticias_tarot") # traer los libros
+
+
 
 # =====================
 # Rutas HTML
@@ -51,16 +58,13 @@ newspsi_collection = db["noticias_psicologia"]
 async def home(request: Request):
     # Traer noticias desde Mongo
     tarot_news = await newstarot_collection.find().sort("_id", -1).to_list(length=3)
-    psico_news = await newspsi_collection.find().sort("_id", -1).to_list(length=3)
-
     # Convertir ObjectId a str para evitar problemas
-    for n in tarot_news + psico_news:
+    for n in tarot_news:
         n["_id"] = str(n["_id"])
 
     return templates.TemplateResponse("index.html", {
         "request": request,
         "tarot_news": tarot_news,
-        "psico_news": psico_news
     })
 
 @app.get("/register", response_class=HTMLResponse)
@@ -96,23 +100,7 @@ async def get_noticias_tar(request: Request):
         "tarot_news": tarot_news
     })
 
-@app.get("/noticias-psi", response_class=HTMLResponse)
-async def noticias_psico(request: Request):
-    psico_news = await newspsi_collection.find().sort("_id", -1).to_list(30)
-    for n in psico_news:
-        n["_id"] = str(n["_id"])
 
-    featured = psico_news[0] if psico_news else None
-    return templates.TemplateResponse("noticias-psi.html", {
-        "request": request, 
-        "psico_news": psico_news, 
-        "featured_news": featured}
-    )
-
-@app.get("/chat-psi", response_class=HTMLResponse)
-async def get_chat_psi(request: Request):
-    return templates.TemplateResponse("chat-psi.html", {"request": request})
-    
 
 # =====================
 # API Endpoints
@@ -129,26 +117,47 @@ async def get_noticia(categoria: str, id: str):
 
     return JSONResponse(content={"error": "Noticia no encontrada"}, status_code=404)
 
-@app.post("/api/register")
-async def register(user: UserRegister):
-    existing_user = await users_collection.find_one({"email": user.email})
-    if existing_user:
-        raise HTTPException(status_code=400, detail="El correo ya está registrado")
-    
-    hashed_pw = get_password_hash(user.password)
-    user_data = {"username": user.username, "email": user.email, "hashed_password": hashed_pw}
-    result = await users_collection.insert_one(user_data)
+#register
+@app.post("/usuarios/register")
+def registrar_usuario(usuario: UsuarioRegistro):
+    try:
+        existente = supabase.table("usuarios").select("*").eq("email", usuario.email).execute()
+        if existente.data:
+            raise HTTPException(status_code=400, detail="El usuario ya existe")
 
-    return {"msg": "Usuario registrado con éxito", "id": str(result.inserted_id)}
+        hashed = bcrypt.hash(usuario.password)
 
-@app.post("/api/login")
-async def login(user: UserLogin):
-    db_user = await users_collection.find_one({"email": user.email})
-    if not db_user or not verify_password(user.password, db_user["hashed_password"]):
-        raise HTTPException(status_code=400, detail="Credenciales inválidas")
-    
-    access_token = create_access_token(data={"sub": str(db_user["_id"])})
-    return {"access_token": access_token, "token_type": "bearer"}
+        nuevo = {
+            "username": usuario.username,
+            "email": usuario.email,
+            "hashed_password": hashed
+        }
+
+        res = supabase.table("usuarios").insert(nuevo).execute()
+        print(res)
+        return {"mensaje": "Usuario registrado correctamente", "debug": res}
+    except Exception as e:
+        print("❌ Error:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+#login
+@app.post("/usuarios/login")
+def login_usuario(usuario: UsuarioLogin):
+    res = supabase.table("usuarios").select("*").eq("email", usuario.email).execute()
+
+    if not res.data:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+    usuario_db = res.data[0]
+    if not bcrypt.verify(usuario.password, usuario_db["hashed_password"]):
+        raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+
+    return {"mensaje": f"Bienvenido {usuario_db['username']}"}
+
+
+
+
 
 @app.post("/api/chat")
 async def chat(message: Message):
@@ -160,7 +169,7 @@ async def chat(message: Message):
         response = await openai_client.chat.completions.create(
             model="gpt-oss-120b",
             messages=[
-                {"role": "system", "content": "Eres un asistente directo de tarot con respuestas breves y concisas, brindas otros consejos. Si la consulta no es sobre tarot, indicas como puedes ayudar. Humor Gen Z."},
+                {"role": "system", "content": "Eres un asistente bibliotecario, puedes dar recomendaciones de cualquier genero que te pregunten. Humor Gen Z."},
                 {"role": "user", "content": message.text},
             ]
         )
@@ -173,39 +182,7 @@ async def chat(message: Message):
 loop = None  # 👈 variable global para guardar el loop principal
 
 
-#chat psicolo
-# Vista HTML
 
-
-# Endpoint de IA
-@app.post("/api/chat/psi")
-async def chat_psi(message: Message):
-    user_id = decode_token(message.token)
-    if not user_id:
-        raise HTTPException(status_code=401, detail="No autorizado")
-
-    try:
-        resp = await openai_client.chat.completions.create(
-            model="gpt-oss-120b",
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "Eres un asistente **psicológico no clínico** en español. "
-                        "Brindas psicoeducación, técnicas de afrontamiento básicas "
-                        "(respiración, journaling, reestructuración cognitiva simple), "
-                        "validas y rediriges a profesionales. No haces diagnósticos ni tratamiento. "
-                        "Si hay riesgo o crisis, indicas contactar líneas de emergencia locales."
-                    ),
-                },
-                {"role": "user", "content": message.text},
-            ],
-            temperature=0.5,
-        )
-        return {"reply": resp.choices[0].message.content}
-    except Exception as e:
-        print("❌ Error chat-psi:", e)
-        return {"reply": "⚠️ Error del servidor"}
 
 
 @app.on_event("startup")

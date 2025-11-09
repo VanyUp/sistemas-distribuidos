@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, Field
 
 class Libro(BaseModel):
     nombre: str
@@ -8,3 +8,11 @@ class Libro(BaseModel):
     precio: float
 
 
+class UsuarioLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class UsuarioRegistro(BaseModel):
+    username: str = Field(..., min_length=3, max_length=20)
+    email: EmailStr
+    password: str = Field(..., min_length=6)
