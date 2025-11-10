@@ -210,9 +210,9 @@
             <div class="modal-content">
                 <span class="close-modal">&times;</span>
                 <h2>Iniciar Sesión</h2>
-                <form class="auth-form">
-                    <input type="email" placeholder="Correo electrónico" required>
-                    <input type="password" placeholder="Contraseña" required>
+                <form class="auth-form" id="loginForm">
+                    <input type="email" id="loginEmail" placeholder="Correo electrónico" required>
+                    <input type="password" id="loginPassword" placeholder="Contraseña" required>
                     <button type="submit" class="btn btn-primary btn-full">Ingresar</button>
                 </form>
             </div>
@@ -222,11 +222,11 @@
             <div class="modal-content">
                 <span class="close-modal">&times;</span>
                 <h2>Crear Cuenta</h2>
-                <form class="auth-form">
-                    <input type="text" placeholder="Username" required>
-                    <input type="email" placeholder="Correo electrónico" required>
-                    <input type="password" placeholder="Contraseña" required>
-                    <input type="password" placeholder="Confirmar contraseña" required>
+                <form class="auth-form" id="registerForm">
+                    <input type="text" id="registerUsername" placeholder="Username" required>
+                    <input type="email" id="registerEmail" placeholder="Correo electrónico" required>
+                    <input type="password" id="registerPassword" placeholder="Contraseña" required>
+                    <input type="password" id="registerPasswordConfirm" placeholder="Confirmar contraseña" required>
                     <button type="submit" class="btn btn-primary btn-full">Registrarse</button>
                 </form>
             </div>

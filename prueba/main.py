@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from models.models import Libro, UsuarioLogin, UsuarioRegistro, Message
@@ -32,16 +32,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
-
-# --- Página de registro ---
-@app.get("/register", response_class=HTMLResponse)
-async def get_register(request):
-    return templates.TemplateResponse("registro.html", {"request": request})
-
-# --- Página de login ---
-@app.get("/login", response_class=HTMLResponse)
-async def get_login(request):
-    return templates.TemplateResponse("login.html", {"request": request})
 
 # --- Inicio/Catálogo de libros ---
 @app.get("/catalogo", response_class=HTMLResponse)
@@ -78,6 +68,10 @@ async def get_perfil(request):
 # --- Dashboard ---
 @app.get("/admin/dashboard", response_class=HTMLResponse)
 async def home(request: Request):
+    session = request.cookies.get("admin_session")
+    if not session:
+        return RedirectResponse("/admin/login")
+    
     return templates.TemplateResponse("admin/dashboard.html", {"request": request})
 
 # --- Login de administradores ---
@@ -122,10 +116,14 @@ def login_usuario(usuario: UsuarioLogin):
         raise HTTPException(status_code=404, detail="Admin no encontrado")
 
     usuario_db = res.data[0]
+
     if not bcrypt.verify(usuario.password, usuario_db["hashed_password"]):
         raise HTTPException(status_code=401, detail="Contraseña incorrecta")
 
-    return {"mensaje": f"Bienvenido {usuario_db['username']}"}
+    # Guardamos sesión en cookie
+    response = RedirectResponse(url="/admin/dashboard", status_code=303)
+    response.set_cookie(key="admin_session", value=usuario_db["id"], httponly=True)
+    return response
 
 # --- Registro ---
 @app.post("/usuarios/register")
@@ -160,10 +158,12 @@ def login_usuario(usuario: UsuarioLogin):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
     usuario_db = res.data[0]
+
     if not bcrypt.verify(usuario.password, usuario_db["hashed_password"]):
         raise HTTPException(status_code=401, detail="Contraseña incorrecta")
 
-    return {"mensaje": f"Bienvenido {usuario_db['username']}"}
+    response = {"mensaje": f"Bienvenido {usuario_db['username']}"}
+    return response
 
 
 # --- Gestión de Libros ---

@@ -232,4 +232,76 @@ document.addEventListener('DOMContentLoaded', function () {
             searchInput.focus();
         }
     });
+
+    // --- LOGIN USUARIO ---
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById("loginEmail").value.trim();
+            const password = document.getElementById("loginPassword").value;
+
+            try {
+                const res = await fetch("/usuarios/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (!res.ok) {
+                    const error = await res.json();
+                    alert(error.detail || "Error al iniciar sesión");
+                    return;
+                }
+
+                window.location.href = "/catalogo";
+
+            } catch (err) {
+                console.error(err);
+                alert("Error en el servidor");
+            }
+        });
+    }
+
+
+    // --- REGISTRO USUARIO ---
+    const registerForm = document.getElementById("registerForm");
+    if (registerForm) {
+        registerForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById("registerUsername").value.trim();
+            const email = document.getElementById("registerEmail").value.trim();
+            const password = document.getElementById("registerPassword").value;
+            const confirm = document.getElementById("registerPasswordConfirm").value;
+
+            if (password !== confirm) {
+                alert("Las contraseñas no coinciden ❌");
+                return;
+            }
+
+            try {
+                const res = await fetch("/usuarios/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                if (!res.ok) {
+                    const error = await res.json();
+                    alert(error.detail || "Error al registrar usuario");
+                    return;
+                }
+
+                alert("Cuenta creada con éxito 🎉");
+                registerModal.style.display = "none";
+                document.body.style.overflow = "auto";
+
+            } catch (err) {
+                console.error(err);
+                alert("Error en el servidor");
+            }
+        });
+    }
 });

@@ -1,5 +1,5 @@
 // Inicialización cuando el DOM está listo
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('Login JS cargado correctamente.');
 
     // Elementos del DOM
@@ -18,12 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelRecoveryBtn = document.getElementById('cancelRecovery');
     const loadingOverlay = document.getElementById('loadingOverlay');
 
-    // Credenciales de ejemplo (en producción esto vendría de una base de datos)
-    const validCredentials = {
-        email: 'admin@vansebook.com',
-        password: 'Admin123!',
-        twoFactorEnabled: true
-    };
 
     // Inicializar funcionalidades
     initializeEventListeners();
@@ -31,45 +25,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function initializeEventListeners() {
         // Toggle password visibility
-        togglePassword.addEventListener('click', function() {
+        togglePassword.addEventListener('click', function () {
             const type = adminPassword.getAttribute('type') === 'password' ? 'text' : 'password';
             adminPassword.setAttribute('type', type);
             this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
         });
 
         // Login form submission
-        loginForm.addEventListener('submit', function(e) {
+        loginForm.addEventListener('submit', function (e) {
             e.preventDefault();
             handleLogin();
         });
 
         // Two Factor Authentication
-        verify2FABtn.addEventListener('click', function() {
+        verify2FABtn.addEventListener('click', function () {
             verifyTwoFactorCode();
         });
 
-        cancel2FABtn.addEventListener('click', function() {
+        cancel2FABtn.addEventListener('click', function () {
             closeTwoFactorModal();
             resetForm();
         });
 
         // Google Authenticator
-        googleAuthBtn.addEventListener('click', function() {
+        googleAuthBtn.addEventListener('click', function () {
             simulateGoogleAuth();
         });
 
         // Forgot password
-        forgotPasswordLink.addEventListener('click', function(e) {
+        forgotPasswordLink.addEventListener('click', function (e) {
             e.preventDefault();
             openForgotPasswordModal();
         });
 
-        cancelRecoveryBtn.addEventListener('click', function() {
+        cancelRecoveryBtn.addEventListener('click', function () {
             closeForgotPasswordModal();
         });
 
         // Cerrar modales al hacer clic fuera
-        window.addEventListener('click', function(event) {
+        window.addEventListener('click', function (event) {
             if (event.target === twoFactorModal) {
                 closeTwoFactorModal();
                 resetForm();
@@ -87,27 +81,27 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeCodeInputs() {
         codeInputs.forEach((input, index) => {
             // Solo permitir números
-            input.addEventListener('input', function(e) {
+            input.addEventListener('input', function (e) {
                 this.value = this.value.replace(/[^0-9]/g, '');
-                
+
                 // Mover al siguiente input si se ingresa un número
                 if (this.value.length === 1 && index < codeInputs.length - 1) {
                     codeInputs[index + 1].focus();
                 }
-                
+
                 // Verificar si todos los campos están llenos
                 checkCodeCompletion();
             });
-            
+
             // Manejar tecla de retroceso
-            input.addEventListener('keydown', function(e) {
+            input.addEventListener('keydown', function (e) {
                 if (e.key === 'Backspace' && this.value === '' && index > 0) {
                     codeInputs[index - 1].focus();
                 }
             });
-            
+
             // Pegar código completo
-            input.addEventListener('paste', function(e) {
+            input.addEventListener('paste', function (e) {
                 e.preventDefault();
                 const pasteData = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
                 if (pasteData.length === 6) {
@@ -124,56 +118,56 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleLogin() {
-        // Validar formulario
-        if (!validateForm()) {
-            return;
-        }
+        showLoading("Verificando credenciales...");
 
-        // Mostrar loading
-        showLoading('Verificando credenciales...');
+        const data = {
+            email: adminEmail.value.trim(),
+            password: adminPassword.value
+        };
 
-        // Simular verificación de credenciales
-        setTimeout(() => {
-            const email = adminEmail.value.trim();
-            const password = adminPassword.value;
-
-            if (email === validCredentials.email && password === validCredentials.password) {
-                if (validCredentials.twoFactorEnabled) {
-                    hideLoading();
-                    openTwoFactorModal();
+        fetch("/admins/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url; // Redirige al dashboard
                 } else {
-                    completeLogin();
+                    hideLoading();
+                    showError("Credenciales incorrectas o usuario no encontrado.");
                 }
-            } else {
+            })
+            .catch(err => {
                 hideLoading();
-                showError('Credenciales incorrectas. Por favor verifica tu email y contraseña.');
-            }
-        }, 2000);
+                showError("Error en el servidor. Intenta nuevamente.");
+                console.error(err);
+            });
     }
 
     function validateForm() {
         let isValid = true;
-        
+
         // Limpiar errores previos
         clearErrors();
-        
+
         // Validar email
         if (!validateEmail()) {
             isValid = false;
         }
-        
+
         // Validar contraseña
         if (!validatePassword()) {
             isValid = false;
         }
-        
+
         return isValid;
     }
 
     function validateEmail() {
         const email = adminEmail.value.trim();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        
+
         if (!email) {
             showFieldError(adminEmail, 'El email es requerido');
             return false;
@@ -188,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validatePassword() {
         const password = adminPassword.value;
-        
+
         if (!password) {
             showFieldError(adminPassword, 'La contraseña es requerida');
             return false;
@@ -203,13 +197,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showFieldError(field, message) {
         field.classList.add('error');
-        
+
         // Remover mensaje de error existente
         const existingError = field.parentNode.parentNode.querySelector('.error-message');
         if (existingError) {
             existingError.remove();
         }
-        
+
         // Agregar nuevo mensaje de error
         const errorElement = document.createElement('div');
         errorElement.className = 'error-message';
@@ -246,10 +240,10 @@ document.addEventListener('DOMContentLoaded', function() {
             gap: 0.5rem;
         `;
         errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
-        
+
         // Insertar antes del formulario
         loginForm.insertBefore(errorElement, loginForm.firstChild);
-        
+
         // Remover después de 5 segundos
         setTimeout(() => {
             if (errorElement.parentNode) {
@@ -274,10 +268,10 @@ document.addEventListener('DOMContentLoaded', function() {
             gap: 0.5rem;
         `;
         successElement.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-        
+
         // Insertar antes del formulario
         loginForm.insertBefore(successElement, loginForm.firstChild);
-        
+
         // Remover después de 3 segundos
         setTimeout(() => {
             if (successElement.parentNode) {
@@ -289,12 +283,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function openTwoFactorModal() {
         twoFactorModal.style.display = 'block';
         document.body.style.overflow = 'hidden';
-        
+
         // Enfocar el primer input
         setTimeout(() => {
             codeInputs[0].focus();
         }, 100);
-        
+
         // Simular envío de código (en producción esto se enviaría por email/SMS)
         console.log('Código 2FA simulado: 123456');
     }
@@ -318,11 +312,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function verifyTwoFactorCode() {
         const enteredCode = Array.from(codeInputs).map(input => input.value).join('');
-        
+
         // En producción, aquí se verificaría contra el servidor
         // Por ahora, usamos un código fijo para la demo
         const validCode = '123456';
-        
+
         if (enteredCode === validCode) {
             completeLogin();
         } else {
@@ -330,20 +324,20 @@ document.addEventListener('DOMContentLoaded', function() {
             codeInputs.forEach(input => {
                 input.style.borderColor = 'var(--error-color)';
             });
-            
+
             // Agregar mensaje de error
             const existingError = document.querySelector('.code-error');
             if (existingError) {
                 existingError.remove();
             }
-            
+
             const errorElement = document.createElement('div');
             errorElement.className = 'error-message code-error';
             errorElement.style.marginTop = '1rem';
             errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> Código incorrecto. Inténtalo de nuevo.`;
-            
+
             twoFactorModal.querySelector('.two-factor-form').appendChild(errorElement);
-            
+
             // Limpiar inputs y volver a enfocar el primero
             resetCodeInputs();
             codeInputs[0].focus();
@@ -352,12 +346,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function completeLogin() {
         showLoading('Accediendo al panel de administración...');
-        
+
         // Simular redirección después del login exitoso
         setTimeout(() => {
             hideLoading();
             showSuccess('¡Acceso concedido! Redirigiendo...');
-            
+
             // En producción, aquí se redirigiría al dashboard
             setTimeout(() => {
                 window.location.href = 'admin.html';
@@ -367,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function simulateGoogleAuth() {
         showLoading('Iniciando autenticación con Google...');
-        
+
         setTimeout(() => {
             hideLoading();
             openTwoFactorModal();
@@ -416,11 +410,11 @@ document.addEventListener('DOMContentLoaded', function() {
     demoAutoFill();
 
     // Prevenir inspección del código (medida básica de seguridad)
-    document.addEventListener('contextmenu', function(e) {
+    document.addEventListener('contextmenu', function (e) {
         e.preventDefault();
     });
 
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
             e.preventDefault();
         }
