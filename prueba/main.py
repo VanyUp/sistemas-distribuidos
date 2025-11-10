@@ -73,7 +73,12 @@ async def get_perfil(request):
 # --- Dashboard ---
 @app.get("/admin/dashboard", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("admin.html", {"request": request})
+    return templates.TemplateResponse("admin/dashboard.html", {"request": request})
+
+# --- Login de administradores ---
+@app.get("/admin/login", response_class=HTMLResponse)
+async def admin_login(request: Request):
+    return templates.TemplateResponse("admin/login.html", {"request": request})
 
 
 # =======================
