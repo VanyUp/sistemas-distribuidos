@@ -1,0 +1,26 @@
+@use './variables' as v;
+@use './index';
+@use './catalogo';
+@use './carrito';
+@use './pago';
+@use './historial';
+@use './perfil';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(v.$text-primary);
+    background-color: var(v.$background-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}

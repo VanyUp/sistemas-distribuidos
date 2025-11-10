@@ -7,14 +7,13 @@ from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
 from bson.objectid import ObjectId
 from models.models import UserRegister, UserLogin, Message, UsuarioRegistro, UsuarioLogin
 from supabase import create_client, Client
-from models.functions import get_password_hash, verify_password, create_access_token, decode_token, scrap_tarot, scrap_psicologia
+from models.functions import get_password_hash, verify_password, create_access_token, scrap_tarot
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 import os
 import atexit
 import asyncio
 from models import Libro
-from database import supabase
 
 # =====================
 # Configuración general

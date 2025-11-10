@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - VanseBook</title>
+    <link rel="icon" type="image/favicon.ico" href="../static/img/favicon/favicon.ico">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <i class="fas fa-book-open"></i>
+                <span>VanseBook</span>
+            </div>
+            <div class="checkout-steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <span>Carrito</span>
+                </div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <span>Envío & Pago</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <span>Confirmación</span>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" id="supportBtn">
+                    <i class="fas fa-headset"></i>
+                </button>
+                <button class="btn btn-secondary" id="loginBtn">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="checkout-main">
+        <div class="container">
+            <div class="checkout-layout">
+                <!-- Left Column - Forms -->
+                <div class="checkout-forms">
+                    <!-- Shipping Address -->
+                    <section class="form-section">
+                        <div class="section-header">
+                            <h2>
+                                <i class="fas fa-map-marker-alt"></i>
+                                Dirección de Envío
+                            </h2>
+                        </div>
+                        
+                        <form class="address-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">Nombre *</label>
+                                    <input type="text" id="firstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Apellido *</label>
+                                    <input type="text" id="lastName" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Correo Electrónico *</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone">Teléfono *</label>
+                                <input type="tel" id="phone" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="address">Dirección *</label>
+                                <input type="text" id="address" placeholder="Calle, número, apartamento" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">Ciudad *</label>
+                                    <input type="text" id="city" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">Departamento *</label>
+                                    <select id="state" required>
+                                        <option value="">Seleccionar</option>
+                                        <option value="bogota">Bogotá D.C.</option>
+                                        <option value="antioquia">Antioquia</option>
+                                        <option value="valle">Valle del Cauca</option>
+                                        <option value="cundinamarca">Cundinamarca</option>
+                                        <option value="atlantico">Atlántico</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="zipCode">Código Postal *</label>
+                                    <input type="text" id="zipCode" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">País *</label>
+                                    <select id="country" required>
+                                        <option value="colombia">Colombia</option>
+                                        <option value="otros">Otros</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="saveAddress">
+                                    <span class="checkmark"></span>
+                                    Guardar esta dirección para futuras compras
+                                </label>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- Shipping Method -->
+                    <section class="form-section">
+                        <div class="section-header">
+                            <h2>
+                                <i class="fas fa-shipping-fast"></i>
+                                Método de Envío
+                            </h2>
+                        </div>
+                        
+                        <div class="shipping-options">
+                            <label class="shipping-option">
+                                <input type="radio" name="shipping" value="standard" checked>
+                                <div class="option-content">
+                                    <div class="option-header">
+                                        <span class="option-title">Envío Estándar</span>
+                                        <span class="option-price">Gratis</span>
+                                    </div>
+                                    <span class="option-description">Entrega en 5-7 días hábiles</span>
+                                </div>
+                                <span class="radiomark"></span>
+                            </label>
+                            
+                            <label class="shipping-option">
+                                <input type="radio" name="shipping" value="express">
+                                <div class="option-content">
+                                    <div class="option-header">
+                                        <span class="option-title">Envío Express</span>
+                                        <span class="option-price">$12.900</span>
+                                    </div>
+                                    <span class="option-description">Entrega en 2-3 días hábiles</span>
+                                </div>
+                                <span class="radiomark"></span>
+                            </label>
+                            
+                            <label class="shipping-option">
+                                <input type="radio" name="shipping" value="next-day">
+                                <div class="option-content">
+                                    <div class="option-header">
+                                        <span class="option-title">Envío Next Day</span>
+                                        <span class="option-price">$24.900</span>
+                                    </div>
+                                    <span class="option-description">Entrega al día siguiente hábil</span>
+                                </div>
+                                <span class="radiomark"></span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <!-- Payment Method -->
+                    <section class="form-section">
+                        <div class="section-header">
+                            <h2>
+                                <i class="fas fa-credit-card"></i>
+                                Método de Pago
+                            </h2>
+                        </div>
+                        
+                        <div class="payment-tabs">
+                            <div class="tab-headers">
+                                <button class="tab-header active" data-tab="card">
+                                    <i class="fas fa-credit-card"></i>
+                                    Tarjeta
+                                </button>
+                                <button class="tab-header" data-tab="paypal">
+                                    <i class="fab fa-paypal"></i>
+                                    PayPal
+                                </button>
+                                <button class="tab-header" data-tab="pse">
+                                    <i class="fas fa-university"></i>
+                                    PSE
+                                </button>
+                            </div>
+                            
+                            <div class="tab-content active" id="card-tab">
+                                <form class="payment-form">
+                                    <div class="form-group">
+                                        <label for="cardNumber">Número de Tarjeta *</label>
+                                        <div class="card-input-wrapper">
+                                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                                            <div class="card-icons">
+                                                <i class="fab fa-cc-visa"></i>
+                                                <i class="fab fa-cc-mastercard"></i>
+                                                <i class="fab fa-cc-amex"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="cardName">Nombre en la Tarjeta *</label>
+                                            <input type="text" id="cardName" placeholder="Como aparece en la tarjeta" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="expiryDate">Fecha de Vencimiento *</label>
+                                            <input type="text" id="expiryDate" placeholder="MM/AA" maxlength="5" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cvv">CVV *</label>
+                                            <div class="cvv-input-wrapper">
+                                                <input type="text" id="cvv" placeholder="123" maxlength="4" required>
+                                                <button type="button" class="cvv-help" title="Los 3 o 4 dígitos en el reverso de tu tarjeta">
+                                                    <i class="fas fa-question-circle"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="saveCard">
+                                            <span class="checkmark"></span>
+                                            Guardar tarjeta para futuras compras
+                                        </label>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <div class="tab-content" id="paypal-tab">
+                                <div class="alternative-payment">
+                                    <i class="fab fa-paypal"></i>
+                                    <h3>Paga con PayPal</h3>
+                                    <p>Serás redirigido a PayPal para completar tu pago de manera segura</p>
+                                    <button type="button" class="btn btn-secondary btn-full">
+                                        <i class="fab fa-paypal"></i>
+                                        Continuar con PayPal
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-content" id="pse-tab">
+                                <div class="alternative-payment">
+                                    <i class="fas fa-university"></i>
+                                    <h3>Paga con PSE</h3>
+                                    <p>Paga directamente desde tu cuenta bancaria</p>
+                                    <div class="form-group">
+                                        <label for="bank">Selecciona tu Banco *</label>
+                                        <select id="bank" required>
+                                            <option value="">Seleccionar banco</option>
+                                            <option value="bancolombia">Bancolombia</option>
+                                            <option value="davivienda">Davivienda</option>
+                                            <option value="bogota">Banco de Bogotá</option>
+                                            <option value="bbva">BBVA</option>
+                                            <option value="popular">Banco Popular</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary btn-full">
+                                        Continuar con PSE
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Order Notes -->
+                    <section class="form-section">
+                        <div class="section-header">
+                            <h2>
+                                <i class="fas fa-sticky-note"></i>
+                                Notas del Pedido
+                            </h2>
+                        </div>
+                        
+                        <div class="form-group">
+                            <textarea 
+                                id="orderNotes" 
+                                placeholder="Instrucciones especiales para la entrega, notas sobre el pedido, etc."
+                                rows="4"
+                            ></textarea>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Right Column - Order Summary -->
+                <aside class="order-summary">
+                    <div class="summary-card">
+                        <h3>Resumen del Pedido</h3>
+                        
+                        <!-- Order Items -->
+                        <div class="order-items">
+                            <div class="order-item">
+                                <div class="item-image">
+                                    <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="El Jardín de los Secretos">
+                                </div>
+                                <div class="item-details">
+                                    <span class="item-title">El Jardín de los Secretos</span>
+                                    <span class="item-author">María González</span>
+                                    <span class="item-quantity">Cantidad: 1</span>
+                                </div>
+                                <span class="item-price">$24.900</span>
+                            </div>
+                            
+                            <div class="order-item">
+                                <div class="item-image">
+                                    <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Cosmos Revisitado">
+                                </div>
+                                <div class="item-details">
+                                    <span class="item-title">Cosmos Revisitado</span>
+                                    <span class="item-author">Carlos Mendoza</span>
+                                    <span class="item-quantity">Cantidad: 1</span>
+                                </div>
+                                <span class="item-price">$31.500</span>
+                            </div>
+                            
+                            <div class="order-item">
+                                <div class="item-image">
+                                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="El Arte de la Persuasión">
+                                </div>
+                                <div class="item-details">
+                                    <span class="item-title">El Arte de la Persuasión</span>
+                                    <span class="item-author">Ana López</span>
+                                    <span class="item-quantity">Cantidad: 2</span>
+                                </div>
+                                <span class="item-price">$57.400</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Summary Details -->
+                        <div class="summary-details">
+                            <div class="summary-row">
+                                <span>Subtotal</span>
+                                <span>$113.800</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Envío</span>
+                                <span class="free-shipping">Gratis</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Descuento</span>
+                                <span class="discount">-$5.200</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total</span>
+                                <span>$108.600</span>
+                            </div>
+                        </div>
+
+                        <!-- Security Features -->
+                        <div class="security-features">
+                            <div class="security-item">
+                                <i class="fas fa-lock"></i>
+                                <span>Pago 100% seguro y encriptado</span>
+                            </div>
+                            <div class="security-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Protegido contra fraudes</span>
+                            </div>
+                            <div class="security-item">
+                                <i class="fas fa-undo-alt"></i>
+                                <span>Garantía de devolución</span>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="terms-section">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="acceptTerms" required>
+                                <span class="checkmark"></span>
+                                Acepto los <a href="#" class="text-link">términos y condiciones</a> y la <a href="#" class="text-link">política de privacidad</a> *
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="newsletter">
+                                <span class="checkmark"></span>
+                                Quiero recibir ofertas especiales y novedades por email
+                            </label>
+                        </div>
+
+                        <!-- Checkout Button -->
+                        <button class="btn btn-primary btn-large btn-full" id="completeOrderBtn">
+                            <i class="fas fa-lock"></i>
+                            Completar Pedido
+                        </button>
+
+                        <!-- Trust Badges -->
+                        <div class="trust-badges">
+                            <img src="https://via.placeholder.com/60x40/2C5530/FFFFFF?text=SSL" alt="SSL Secure">
+                            <img src="https://via.placeholder.com/60x40/4A7C59/FFFFFF?text=PCI" alt="PCI Compliant">
+                            <img src="https://via.placeholder.com/60x40/8B4513/FFFFFF?text=3D" alt="3D Secure">
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> VanseBook. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Procesando tu pedido</h3>
+            <p>Esto puede tomar unos segundos...</p>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal success-modal" id="successModal" style="display: none;">
+        <div class="modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>¡Pedido Confirmado!</h2>
+            <p class="order-number">Número de pedido: <strong>#VS-2024-7890</strong></p>
+            <p class="success-message">Hemos enviado un correo de confirmación a <strong>usuario@email.com</strong></p>
+            
+            <div class="order-details">
+                <div class="detail-item">
+                    <i class="fas fa-shipping-fast"></i>
+                    <div>
+                        <strong>Fecha estimada de entrega</strong>
+                        <span>15 de Enero, 2024</span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <strong>Dirección de envío</strong>
+                        <span>Carrera 45 #72-15, Bogotá</span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-credit-card"></i>
+                    <div>
+                        <strong>Método de pago</strong>
+                        <span>Tarjeta Visa terminada en 3456</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="continueShoppingBtn">
+                    <i class="fas fa-shopping-bag"></i>
+                    Seguir Comprando
+                </button>
+                <button class="btn btn-primary" id="trackOrderBtn">
+                    <i class="fas fa-truck"></i>
+                    Seguir Mi Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/js/pago.js" defer></script>
+</body>
+</html>

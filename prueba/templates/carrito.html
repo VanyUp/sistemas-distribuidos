@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras - VanseBook</title>
+    <link rel="icon" type="image/favicon.ico" href="../static/img/favicon/favicon.ico">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <i class="fas fa-book-open"></i>
+                <span>VanseBook</span>
+            </div>
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" placeholder="Buscar libros..." class="search-input">
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <button class="btn-icon" id="wishlistBtn">
+                    <i class="fas fa-heart"></i>
+                    <span class="icon-badge">0</span>
+                </button>
+                <button class="btn-icon active" id="cartBtn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="icon-badge">0</span>
+                </button>
+                <button class="btn btn-secondary" id="loginBtn">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="cart-main">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="index.html">Catálogo</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Carrito de Compras</span>
+            </nav>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Carrito de Compras</h1>
+                <p>Revisa y gestiona los productos en tu carrito</p>
+            </div>
+
+            <div class="cart-layout">
+                <!-- Cart Items -->
+                <div class="cart-items-section">
+                    <div class="section-header">
+                        <h2>Tus Productos (4)</h2>
+                        <button class="btn-text" id="clearCart">
+                            <i class="fas fa-trash"></i>
+                            Vaciar Carrito
+                        </button>
+                    </div>
+
+                    <!-- Cart Items List -->
+                    <div class="cart-items">
+                        <!-- Item 1 -->
+                        <div class="cart-item">
+                            <div class="item-image">
+                                <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="El Jardín de los Secretos">
+                            </div>
+                            <div class="item-details">
+                                <h3 class="item-title">El Jardín de los Secretos</h3>
+                                <p class="item-author">María González</p>
+                                <div class="item-meta">
+                                    <span class="item-format">Tapa blanda</span>
+                                    <span class="item-stock in-stock">
+                                        <i class="fas fa-check-circle"></i>
+                                        En stock
+                                    </span>
+                                </div>
+                                <div class="item-actions">
+                                    <button class="btn-text move-to-wishlist">
+                                        <i class="fas fa-heart"></i>
+                                        Mover a favoritos
+                                    </button>
+                                    <button class="btn-text remove-item">
+                                        <i class="fas fa-trash"></i>
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="item-controls">
+                                <div class="quantity-selector">
+                                    <button class="quantity-btn" data-action="decrease">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" class="quantity-input" value="1" min="1" max="10">
+                                    <button class="quantity-btn" data-action="increase">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="item-price">
+                                    <span class="current-price">$24.900</span>
+                                    <span class="original-price">$30.000</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="cart-item">
+                            <div class="item-image">
+                                <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Cosmos Revisitado">
+                            </div>
+                            <div class="item-details">
+                                <h3 class="item-title">Cosmos Revisitado</h3>
+                                <p class="item-author">Carlos Mendoza</p>
+                                <div class="item-meta">
+                                    <span class="item-format">Tapa dura</span>
+                                    <span class="item-stock in-stock">
+                                        <i class="fas fa-check-circle"></i>
+                                        En stock
+                                    </span>
+                                </div>
+                                <div class="item-actions">
+                                    <button class="btn-text move-to-wishlist">
+                                        <i class="fas fa-heart"></i>
+                                        Mover a favoritos
+                                    </button>
+                                    <button class="btn-text remove-item">
+                                        <i class="fas fa-trash"></i>
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="item-controls">
+                                <div class="quantity-selector">
+                                    <button class="quantity-btn" data-action="decrease">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" class="quantity-input" value="1" min="1" max="10">
+                                    <button class="quantity-btn" data-action="increase">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="item-price">
+                                    <span class="current-price">$31.500</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div class="cart-item">
+                            <div class="item-image">
+                                <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="El Arte de la Persuasión">
+                            </div>
+                            <div class="item-details">
+                                <h3 class="item-title">El Arte de la Persuasión</h3>
+                                <p class="item-author">Ana López</p>
+                                <div class="item-meta">
+                                    <span class="item-format">Tapa blanda</span>
+                                    <span class="item-stock low-stock">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Últimas unidades
+                                    </span>
+                                </div>
+                                <div class="item-actions">
+                                    <button class="btn-text move-to-wishlist">
+                                        <i class="fas fa-heart"></i>
+                                        Mover a favoritos
+                                    </button>
+                                    <button class="btn-text remove-item">
+                                        <i class="fas fa-trash"></i>
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="item-controls">
+                                <div class="quantity-selector">
+                                    <button class="quantity-btn" data-action="decrease">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" class="quantity-input" value="2" min="1" max="5">
+                                    <button class="quantity-btn" data-action="increase">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="item-price">
+                                    <span class="current-price">$57.400</span>
+                                    <span class="original-price">$60.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Continue Shopping -->
+                    <div class="continue-shopping">
+                        <a href="catalog.html" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            Seguir Comprando
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <aside class="order-summary">
+                    <div class="summary-card">
+                        <h3>Resumen del Pedido</h3>
+                        
+                        <div class="summary-details">
+                            <div class="summary-row">
+                                <span>Subtotal (4 productos)</span>
+                                <span>$171.200</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Envío</span>
+                                <span class="free-shipping">Gratis</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Descuento</span>
+                                <span class="discount">-$5.200</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total</span>
+                                <span>$166.000</span>
+                            </div>
+                        </div>
+
+                        <!-- Shipping Progress -->
+                        <div class="shipping-progress">
+                            <div class="progress-text">
+                                <i class="fas fa-shipping-fast"></i>
+                                <span>¡Faltan $50.000 para envío gratis!</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Checkout Button -->
+                        <button class="btn btn-primary btn-large btn-full" id="checkoutBtn">
+                            <i class="fas fa-lock"></i>
+                            Proceder al Pago
+                        </button>
+
+                        <!-- Security Badges -->
+                        <div class="security-badges">
+                            <div class="badge">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Pago Seguro</span>
+                            </div>
+                            <div class="badge">
+                                <i class="fas fa-undo-alt"></i>
+                                <span>Devoluciones</span>
+                            </div>
+                            <div class="badge">
+                                <i class="fas fa-headset"></i>
+                                <span>Soporte 24/7</span>
+                            </div>
+                        </div>
+
+                        <!-- Promo Code -->
+                        <div class="promo-section">
+                            <h4>
+                                <i class="fas fa-tag"></i>
+                                ¿Tienes un código de descuento?
+                            </h4>
+                            <div class="promo-input">
+                                <input type="text" placeholder="Ingresa tu código" id="promoCode">
+                                <button class="btn btn-secondary" id="applyPromo">Aplicar</button>
+                            </div>
+                        </div>
+
+                        <!-- Recommended Books -->
+                        <div class="recommended-section">
+                            <h4>Los clientes también compran</h4>
+                            <div class="recommended-books">
+                                <div class="recommended-book">
+                                    <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Libro recomendado">
+                                    <div class="book-info">
+                                        <span class="book-title">Habitos Atomicos</span>
+                                        <span class="book-price">$70.000</span>
+                                        <button class="btn btn-small add-recommended">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="recommended-book">
+                                    <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Libro recomendado">
+                                    <div class="book-info">
+                                        <span class="book-title">Psicología Oscura</span>
+                                        <span class="book-price">$60.000</span>
+                                        <button class="btn btn-small add-recommended">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> VanseBook. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Empty Cart State (Hidden by default) -->
+    <div class="empty-cart" id="emptyCart" style="display: none;">
+        <div class="empty-cart-content">
+            <i class="fas fa-shopping-cart"></i>
+            <h2>Tu carrito está vacío</h2>
+            <p>Descubre nuestros libros y encuentra tu próxima lectura favorita</p>
+            <a href="catalog.html" class="btn btn-primary">
+                <i class="fas fa-book-open"></i>
+                Explorar Catálogo
+            </a>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Iniciar Sesión</h2>
+            <form class="auth-form">
+                <input type="email" placeholder="Correo electrónico" required>
+                <input type="password" placeholder="Contraseña" required>
+                <button type="submit" class="btn btn-primary btn-full">Ingresar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../static/js/carrito.js" defer></script>
+</body>
+</html>

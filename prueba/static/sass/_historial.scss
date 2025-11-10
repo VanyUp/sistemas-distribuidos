@@ -1,0 +1,1057 @@
+@use './variables' as v;
+
+/* Header */
+.header {
+    background: v.$surface-color;
+    box-shadow: v.$shadow;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: v.$primary-color;
+}
+
+.nav-brand i {
+    margin-right: 0.5rem;
+    font-size: 1.8rem;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: v.$text-primary;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+}
+
+.nav-menu a:hover {
+    color: v.$primary-color;
+    background: v.$background-color;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.search-container {
+    display: flex;
+    background: v.$background-color;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid v.$border-color;
+}
+
+.search-input {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+    min-width: 250px;
+}
+
+.search-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    color: v.$text-secondary;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.search-btn:hover {
+    color: v.$primary-color;
+}
+
+.btn-icon {
+    position: relative;
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: v.$text-primary;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-icon:hover {
+    background: v.$background-color;
+    color: v.$primary-color;
+}
+
+.icon-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: v.$accent-color;
+    color: v.$text-primary;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+/* User Menu */
+.user-menu {
+    position: relative;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: v.$surface-color;
+    border-radius: 8px;
+    box-shadow: v.$shadow-lg;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    display: none;
+    z-index: 1000;
+}
+
+.user-menu:hover .user-dropdown {
+    display: block;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    color: v.$text-primary;
+    transition: all 0.3s ease;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background: v.$background-color;
+    color: v.$primary-color;
+}
+
+.dropdown-item.active {
+    background: v.$primary-color;
+    color: white;
+}
+
+.dropdown-item.active i {
+    color: white;
+}
+
+.dropdown-item i {
+    color: v.$text-secondary;
+    width: 16px;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: v.$border-color;
+    margin: 0.5rem 0;
+}
+
+.dropdown-item.logout {
+    color: v.$error-color;
+}
+
+.dropdown-item.logout:hover {
+    background: rgba(229, 62, 62, 0.1);
+}
+
+.hamburger {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Main Content */
+.orders-main {
+    padding: 2rem 0;
+    min-height: 80vh;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+}
+
+.breadcrumb a {
+    color: v.$text-secondary;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb a:hover {
+    color: v.$primary-color;
+}
+
+.breadcrumb span {
+    color: v.$text-primary;
+    font-weight: 500;
+}
+
+.breadcrumb i {
+    color: v.$text-light;
+    font-size: 0.7rem;
+}
+
+/* Page Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.header-content h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: v.$text-primary;
+}
+
+.header-content p {
+    color: v.$text-secondary;
+    font-size: 1.1rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: v.$primary-color;
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: v.$primary-light;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: v.$text-primary;
+    border: 2px solid v.$border-color;
+}
+
+.btn-secondary:hover {
+    border-color: v.$primary-color;
+    color: v.$primary-color;
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+/* Orders Overview */
+.orders-overview {
+    margin-bottom: 2rem;
+}
+
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: v.$surface-color;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: v.$shadow;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: v.$primary-color;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.stat-icon.pending {
+    background: v.$warning-color;
+}
+
+.stat-icon.delivered {
+    background: v.$success-color;
+}
+
+.stat-icon.cancelled {
+    background: v.$error-color;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: v.$text-primary;
+    line-height: 1;
+}
+
+.stat-label {
+    color: v.$text-secondary;
+    font-size: 0.9rem;
+}
+
+/* Filters Toolbar */
+.filters-toolbar {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 1.5rem;
+    background: v.$surface-color;
+    border-radius: 12px;
+    box-shadow: v.$shadow;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    font-weight: 500;
+    color: v.$text-primary;
+    font-size: 0.9rem;
+}
+
+.filter-group select {
+    padding: 0.5rem 1rem;
+    border: 2px solid v.$border-color;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    background: v.$surface-color;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: v.$primary-color;
+}
+
+.search-orders {
+    display: flex;
+    background: v.$background-color;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 2px solid v.$border-color;
+    margin-left: auto;
+}
+
+.search-orders input {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+    min-width: 250px;
+}
+
+/* Orders List */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Order Card */
+.order-card {
+    background: v.$surface-color;
+    border-radius: 12px;
+    box-shadow: v.$shadow;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border-left: 4px solid v.$border-color;
+}
+
+.order-card:hover {
+    box-shadow: v.$shadow-lg;
+    transform: translateY(-2px);
+}
+
+.order-card.delivered {
+    border-left-color: v.$success-color;
+}
+
+.order-card.shipped {
+    border-left-color: v.$info-color;
+}
+
+.order-card.processing {
+    border-left-color: v.$warning-color;
+}
+
+.order-card.pending {
+    border-left-color: v.$warning-color;
+}
+
+.order-card.cancelled {
+    border-left-color: v.$error-color;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.5rem;
+    border-bottom: 1px solid v.$border-color;
+    background: v.$background-color;
+}
+
+.order-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.order-number strong {
+    font-size: 1.1rem;
+    color: v.$text-primary;
+}
+
+.order-date {
+    color: v.$text-secondary;
+    font-size: 0.9rem;
+}
+
+.order-total strong {
+    color: v.$text-primary;
+    font-size: 1.1rem;
+}
+
+.items-count {
+    color: v.$text-secondary;
+    font-size: 0.9rem;
+}
+
+.order-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-badge.delivered {
+    background: rgba(56, 161, 105, 0.1);
+    color: v.$success-color;
+}
+
+.status-badge.shipped {
+    background: rgba(49, 130, 206, 0.1);
+    color: v.$info-color;
+}
+
+.status-badge.processing {
+    background: rgba(214, 158, 46, 0.1);
+    color: v.$warning-color;
+}
+
+.status-badge.pending {
+    background: rgba(214, 158, 46, 0.1);
+    color: v.$warning-color;
+}
+
+.status-badge.cancelled {
+    background: rgba(229, 62, 62, 0.1);
+    color: v.$error-color;
+}
+
+.delivery-date {
+    color: v.$text-secondary;
+    font-size: 0.9rem;
+}
+
+/* Order Items */
+.order-items {
+    padding: 1.5rem;
+    border-bottom: 1px solid v.$border-color;
+}
+
+.order-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.order-item:not(:last-child) {
+    border-bottom: 1px solid v.$border-color;
+}
+
+.item-image {
+    width: 60px;
+    height: 80px;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.item-title {
+    font-weight: 600;
+    color: v.$text-primary;
+    font-size: 0.95rem;
+}
+
+.item-author {
+    color: v.$text-secondary;
+    font-size: 0.85rem;
+}
+
+.item-quantity, .item-variant {
+    color: v.$text-light;
+    font-size: 0.8rem;
+}
+
+.item-price {
+    font-weight: 700;
+    color: v.$primary-color;
+    font-size: 0.95rem;
+}
+
+/* Shipping Info */
+.shipping-info {
+    padding: 1rem 1.5rem;
+    background: v.$background-color;
+    border-bottom: 1px solid v.$border-color;
+}
+
+.shipping-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.shipping-header i {
+    color: v.$info-color;
+}
+
+.shipping-details {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+}
+
+.tracking-link {
+    color: v.$primary-color;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.tracking-link:hover {
+    text-decoration: underline;
+}
+
+/* Order Progress */
+.order-progress {
+    padding: 1.5rem;
+    border-bottom: 1px solid v.$border-color;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: v.$border-color;
+    z-index: 1;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: v.$border-color;
+    color: v.$text-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.step.completed .step-icon {
+    background: v.$success-color;
+    color: white;
+}
+
+.step.active .step-icon {
+    background: v.$primary-color;
+    color: white;
+}
+
+.step-label {
+    font-size: 0.8rem;
+    color: v.$text-secondary;
+    text-align: center;
+}
+
+.step.completed .step-label {
+    color: v.$success-color;
+    font-weight: 500;
+}
+
+.step.active .step-label {
+    color: v.$primary-color;
+    font-weight: 500;
+}
+
+/* Payment Pending */
+.payment-pending {
+    padding: 1.5rem;
+    border-bottom: 1px solid v.$border-color;
+    background: rgba(214, 158, 46, 0.05);
+}
+
+.payment-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.payment-alert i {
+    color: v.$warning-color;
+    font-size: 1.25rem;
+    margin-top: 0.1rem;
+}
+
+.alert-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.alert-content strong {
+    color: v.$text-primary;
+}
+
+.alert-content span {
+    color: v.$text-secondary;
+    font-size: 0.9rem;
+}
+
+.payment-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Cancellation Reason */
+.cancellation-reason {
+    padding: 1rem 1.5rem;
+    background: rgba(229, 62, 62, 0.05);
+    border-bottom: 1px solid v.$border-color;
+    color: v.$error-color;
+    font-size: 0.9rem;
+}
+
+/* Order Actions */
+.order-actions {
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.pagination-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid v.$border-color;
+    background: v.$surface-color;
+    color: v.$text-primary;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination-btn:hover:not(.disabled):not(.active) {
+    border-color: v.$primary-color;
+    color: v.$primary-color;
+}
+
+.pagination-btn.active {
+    background: v.$primary-color;
+    color: white;
+    border-color: v.$primary-color;
+}
+
+.pagination-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-ellipsis {
+    padding: 0.5rem;
+    color: v.$text-light;
+}
+
+/* Empty State */
+.empty-orders {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    text-align: center;
+}
+
+.empty-content i {
+    font-size: 4rem;
+    color: v.$text-light;
+    margin-bottom: 1rem;
+}
+
+.empty-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: v.$text-primary;
+}
+
+.empty-content p {
+    color: v.$text-secondary;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: v.$surface-color;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    animation: modalSlideIn 0.3s ease;
+}
+
+.modal-content.large {
+    max-width: 800px;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.close-modal {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: v.$text-secondary;
+}
+
+.close-modal:hover {
+    color: v.$text-primary;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid v.$border-color;
+}
+
+.modal-header h2 {
+    color: v.$text-primary;
+}
+
+.order-status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.order-status-badge.delivered {
+    background: v.$success-color;
+    color: white;
+}
+
+/* Footer */
+.footer {
+    background: v.$primary-color;
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .order-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .order-status {
+        align-items: flex-start;
+    }
+    
+    .filters-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .search-orders {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .search-orders input {
+        min-width: auto;
+        flex: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none;
+    }
+    
+    .hamburger {
+        display: block;
+    }
+    
+    .search-container {
+        display: none;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .header-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .stats-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .order-actions {
+        flex-direction: column;
+    }
+    
+    .order-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .progress-steps {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .progress-steps::before {
+        display: none;
+    }
+    
+    .step {
+        flex-direction: row;
+        gap: 1rem;
+        width: 100%;
+    }
+    
+    .step-label {
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-actions .btn {
+        display: none;
+    }
+    
+    .user-menu .btn {
+        display: flex;
+    }
+    
+    .stats-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .filters-toolbar {
+        padding: 1rem;
+    }
+    
+    .order-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .item-image {
+        align-self: center;
+    }
+    
+    .payment-actions {
+        flex-direction: column;
+    }
+    
+    .modal-content {
+        margin: 10% auto;
+        padding: 1.5rem;
+    }
+}

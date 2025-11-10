@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - VanseBook</title>
+    <link rel="icon" type="image/favicon.ico" href="../static/img/favicon/favicon.ico">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <i class="fas fa-book-open"></i>
+                <span>VanseBook</span>
+            </div>
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" placeholder="Buscar libros..." class="search-input">
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <button class="btn-icon" id="wishlistBtn">
+                    <i class="fas fa-heart"></i>
+                    <span class="icon-badge">0</span>
+                </button>
+                <button class="btn-icon" id="cartBtn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="icon-badge">0</span>
+                </button>
+                <div class="user-menu">
+                    <button class="btn btn-secondary" id="userBtn">
+                        <i class="fas fa-user"></i>
+                        Mi Cuenta
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="profile.html" class="dropdown-item active">
+                            <i class="fas fa-user-edit"></i>
+                            Perfil
+                        </a>
+                        <a href="orders.html" class="dropdown-item">
+                            <i class="fas fa-clipboard-list"></i>
+                            Mis Pedidos
+                        </a>
+                        <a href="addresses.html" class="dropdown-item">
+                            <i class="fas fa-address-book"></i>
+                            Direcciones
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Cerrar Sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="profile-main">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="index.html">Inicio</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Mi Perfil</span>
+            </nav>
+
+            <div class="profile-layout">
+                <!-- Sidebar -->
+                <aside class="profile-sidebar">
+                    <div class="user-card">
+                        <div class="user-avatar">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
+                                alt="Avatar" id="userAvatar">
+                            <button class="avatar-edit" id="editAvatarBtn">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div>
+                        <div class="user-info">
+                            <h2 id="userName">Juan Pérez</h2>
+                            <p class="user-email" id="userEmail">juan.perez@email.com</p>
+                            <p class="user-member">Miembro desde Ene 2023</p>
+                        </div>
+                    </div>
+
+                    <nav class="sidebar-nav">
+                        <a href="#personal-info" class="nav-item active" data-section="personal-info">
+                            <i class="fas fa-user-circle"></i>
+                            Información Personal
+                        </a>
+                        <a href="#security" class="nav-item" data-section="security">
+                            <i class="fas fa-shield-alt"></i>
+                            Seguridad
+                        </a>
+                        <a href="#preferences" class="nav-item" data-section="preferences">
+                            <i class="fas fa-cog"></i>
+                            Preferencias
+                        </a>
+                        <a href="#notifications" class="nav-item" data-section="notifications">
+                            <i class="fas fa-bell"></i>
+                            Notificaciones
+                        </a>
+                        <a href="#reading-stats" class="nav-item" data-section="reading-stats">
+                            <i class="fas fa-chart-bar"></i>
+                            Estadísticas de Lectura
+                        </a>
+                    </nav>
+
+                    <div class="sidebar-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-book"></i>
+                            <div>
+                                <span class="stat-number">24</span>
+                                <span class="stat-label">Libros Comprados</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-star"></i>
+                            <div>
+                                <span class="stat-number">18</span>
+                                <span class="stat-label">Reseñas Escritas</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-trophy"></i>
+                            <div>
+                                <span class="stat-number">Lector Avanzado</span>
+                                <span class="stat-label">Nivel</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Main Content -->
+                <div class="profile-content">
+                    <!-- Personal Information Section -->
+                    <section id="personal-info" class="content-section active">
+                        <div class="section-header">
+                            <h2>Información Personal</h2>
+                            <p>Gestiona tu información personal y preferencias de contacto</p>
+                        </div>
+
+                        <form class="profile-form" id="personalInfoForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">Nombre *</label>
+                                    <input type="text" id="firstName" value="Juan" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Apellido *</label>
+                                    <input type="text" id="lastName" value="Pérez" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Correo Electrónico *</label>
+                                <input type="email" id="email" value="juan.perez@email.com" required>
+                                <span class="field-note">Usaremos este email para contactarte</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">Teléfono</label>
+                                <input type="tel" id="phone" value="+57 300 123 4567">
+                                <span class="field-note">Para notificaciones importantes sobre tus pedidos</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="birthDate">Fecha de Nacimiento</label>
+                                <input type="date" id="birthDate" value="1990-05-15">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gender">Género</label>
+                                <select id="gender">
+                                    <option value="">Seleccionar</option>
+                                    <option value="male" selected>Masculino</option>
+                                    <option value="female">Femenino</option>
+                                    <option value="other">Otro</option>
+                                    <option value="prefer-not">Prefiero no decir</option>
+                                </select>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" id="cancelPersonalInfo">
+                                    Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    Guardar Cambios
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- Security Section -->
+                    <section id="security" class="content-section">
+                        <div class="section-header">
+                            <h2>Seguridad</h2>
+                            <p>Gestiona tu contraseña y configuración de seguridad</p>
+                        </div>
+
+                        <form class="profile-form" id="securityForm">
+                            <div class="security-status">
+                                <div class="status-item secure">
+                                    <i class="fas fa-check-circle"></i>
+                                    <div>
+                                        <strong>Contraseña segura</strong>
+                                        <span>Último cambio: Hace 2 meses</span>
+                                    </div>
+                                </div>
+                                <div class="status-item secure">
+                                    <i class="fas fa-check-circle"></i>
+                                    <div>
+                                        <strong>Verificación en dos pasos</strong>
+                                        <span>Desactivada</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="currentPassword">Contraseña Actual *</label>
+                                <div class="password-input">
+                                    <input type="password" id="currentPassword" required>
+                                    <button type="button" class="toggle-password">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newPassword">Nueva Contraseña *</label>
+                                <div class="password-input">
+                                    <input type="password" id="newPassword" required>
+                                    <button type="button" class="toggle-password">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="password-strength">
+                                    <div class="strength-bar">
+                                        <div class="strength-fill" data-strength="0"></div>
+                                    </div>
+                                    <span class="strength-text">Seguridad de la contraseña</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirmar Nueva Contraseña *</label>
+                                <div class="password-input">
+                                    <input type="password" id="confirmPassword" required>
+                                    <button type="button" class="toggle-password">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" id="cancelSecurity">
+                                    Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-key"></i>
+                                    Cambiar Contraseña
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="security-settings">
+                            <h3>Configuración de Seguridad</h3>
+                            <div class="settings-list">
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <strong>Verificación en dos pasos</strong>
+                                        <span>Añade una capa extra de seguridad a tu cuenta</span>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="twoFactorAuth">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <strong>Sesiones activas</strong>
+                                        <span>Gestiona tus dispositivos conectados</span>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" id="manageSessions">
+                                        Gestionar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Preferences Section -->
+                    <section id="preferences" class="content-section">
+                        <div class="section-header">
+                            <h2>Preferencias</h2>
+                            <p>Personaliza tu experiencia en VanseBook</p>
+                        </div>
+
+                        <form class="profile-form" id="preferencesForm">
+                            <div class="form-group">
+                                <label for="language">Idioma Preferido</label>
+                                <select id="language">
+                                    <option value="es" selected>Español</option>
+                                    <option value="en">English</option>
+                                    <option value="pt">Português</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="currency">Moneda</label>
+                                <select id="currency">
+                                    <option value="COP" selected>Peso Colombiano (COP)</option>
+                                    <option value="USD">Dólar Americano (USD)</option>
+                                    <option value="EUR">Euro (EUR)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="timezone">Zona Horaria</label>
+                                <select id="timezone">
+                                    <option value="America/Bogota" selected>Bogotá (GMT-5)</option>
+                                    <option value="America/New_York">New York (GMT-5)</option>
+                                    <option value="Europe/Madrid">Madrid (GMT+1)</option>
+                                </select>
+                            </div>
+
+                            <div class="preferences-categories">
+                                <h3>Categorías de Interés</h3>
+                                <p>Selecciona tus géneros favoritos para recomendaciones personalizadas</p>
+                                <div class="categories-grid">
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="fiction" checked>
+                                        <span class="checkmark"></span>
+                                        <i class="fas fa-rocket"></i>
+                                        <span>Ciencia Ficción</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="mystery" checked>
+                                        <span class="checkmark"></span>
+                                        <i class="fas fa-user-secret"></i>
+                                        <span>Misterio</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="romance">
+                                        <span class="checkmark"></span>
+                                        <i class="fas fa-heart"></i>
+                                        <span>Romance</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="fantasy" checked>
+                                        <span class="checkmark"></span>
+                                        <i class="fas fa-dragon"></i>
+                                        <span>Fantasía</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="business">
+                                        <span class="checkmark"></span>
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Negocios</span>
+                                    </label>
+                                    <label class="category-checkbox">
+                                        <input type="checkbox" name="categories" value="biography">
+                                        <span class="checkmark"></span>
+                                        <i class="fas fa-user"></i>
+                                        <span>Biografías</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" id="cancelPreferences">
+                                    Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    Guardar Preferencias
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- Notifications Section -->
+                    <section id="notifications" class="content-section">
+                        <div class="section-header">
+                            <h2>Notificaciones</h2>
+                            <p>Controla cómo y cuándo recibes notificaciones</p>
+                        </div>
+
+                        <form class="profile-form" id="notificationsForm">
+                            <div class="notification-settings">
+                                <h3>Preferencias de Notificación</h3>
+
+                                <div class="notification-group">
+                                    <h4>Correo Electrónico</h4>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <strong>Ofertas y promociones</strong>
+                                            <span>Recibe ofertas exclusivas y descuentos</span>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" id="emailPromotions" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <strong>Novedades de autores</strong>
+                                            <span>Notificaciones sobre tus autores favoritos</span>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" id="emailAuthors" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <strong>Estado de pedidos</strong>
+                                            <span>Actualizaciones sobre tus compras</span>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" id="emailOrders" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="notification-group">
+                                    <h4>Notificaciones Push</h4>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <strong>Recordatorios de lectura</strong>
+                                            <span>Sugerencias para continuar leyendo</span>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" id="pushReading" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <strong>Ofertas flash</strong>
+                                            <span>Notificaciones de ofertas por tiempo limitado</span>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" id="pushFlashSales">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="notification-group">
+                                    <h4>SMS</h4>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <strong>Alertas de entrega</strong>
+                                            <span>Notificaciones sobre el estado de envío</span>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" id="smsDelivery">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" id="cancelNotifications">
+                                    Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-bell"></i>
+                                    Guardar Configuración
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- Reading Stats Section -->
+                    <section id="reading-stats" class="content-section">
+                        <div class="section-header">
+                            <h2>Estadísticas de Lectura</h2>
+                            <p>Sigue tu progreso y descubre tus hábitos de lectura</p>
+                        </div>
+
+                        <div class="stats-overview">
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-book-open"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-number">24</span>
+                                        <span class="stat-label">Libros Leídos</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-number">156</span>
+                                        <span class="stat-label">Horas de Lectura</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-fire"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-number">12</span>
+                                        <span class="stat-label">Días Consecutivos</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-number">Lector Avanzado</span>
+                                        <span class="stat-label">Tu Nivel</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="reading-charts">
+                            <div class="chart-section">
+                                <h3>Libros Leídos por Mes</h3>
+                                <div class="chart-placeholder">
+                                    <div class="chart-bars">
+                                        <div class="bar" style="height: 30%">Ene</div>
+                                        <div class="bar" style="height: 50%">Feb</div>
+                                        <div class="bar" style="height: 70%">Mar</div>
+                                        <div class="bar" style="height: 90%">Abr</div>
+                                        <div class="bar" style="height: 60%">May</div>
+                                        <div class="bar" style="height: 80%">Jun</div>
+                                    </div>
+                                    <p class="chart-note">Gráfico interactivo - En una aplicación real se conectaría a
+                                        una biblioteca de gráficos</p>
+                                </div>
+                            </div>
+
+                            <div class="chart-section">
+                                <h3>Géneros Favoritos</h3>
+                                <div class="genres-list">
+                                    <div class="genre-item">
+                                        <span class="genre-name">Ciencia Ficción</span>
+                                        <div class="genre-bar">
+                                            <div class="genre-fill" style="width: 35%"></div>
+                                        </div>
+                                        <span class="genre-percent">35%</span>
+                                    </div>
+                                    <div class="genre-item">
+                                        <span class="genre-name">Fantasía</span>
+                                        <div class="genre-bar">
+                                            <div class="genre-fill" style="width: 25%"></div>
+                                        </div>
+                                        <span class="genre-percent">25%</span>
+                                    </div>
+                                    <div class="genre-item">
+                                        <span class="genre-name">Misterio</span>
+                                        <div class="genre-bar">
+                                            <div class="genre-fill" style="width: 20%"></div>
+                                        </div>
+                                        <span class="genre-percent">20%</span>
+                                    </div>
+                                    <div class="genre-item">
+                                        <span class="genre-name">Biografías</span>
+                                        <div class="genre-bar">
+                                            <div class="genre-fill" style="width: 15%"></div>
+                                        </div>
+                                        <span class="genre-percent">15%</span>
+                                    </div>
+                                    <div class="genre-item">
+                                        <span class="genre-name">Otros</span>
+                                        <div class="genre-bar">
+                                            <div class="genre-fill" style="width: 5%"></div>
+                                        </div>
+                                        <span class="genre-percent">5%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="reading-goals">
+                            <h3>Metas de Lectura 2024</h3>
+                            <div class="goals-list">
+                                <div class="goal-item">
+                                    <div class="goal-info">
+                                        <strong>Libros para leer este año</strong>
+                                        <span>12 de 24 completados</span>
+                                    </div>
+                                    <div class="goal-progress">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 50%"></div>
+                                        </div>
+                                        <span class="progress-text">50%</span>
+                                    </div>
+                                </div>
+                                <div class="goal-item">
+                                    <div class="goal-info">
+                                        <strong>Horas de lectura mensual</strong>
+                                        <span>18 de 20 horas este mes</span>
+                                    </div>
+                                    <div class="goal-progress">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 90%"></div>
+                                        </div>
+                                        <span class="progress-text">90%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> VanseBook. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Avatar Upload Modal -->
+    <div class="modal" id="avatarModal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Cambiar Foto de Perfil</h2>
+            <div class="avatar-upload">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Arrastra una imagen o haz clic para seleccionar</p>
+                    <span>JPG, PNG o GIF (Max. 5MB)</span>
+                    <input type="file" id="avatarFile" accept="image/*" style="display: none;">
+                </div>
+                <div class="avatar-preview" id="avatarPreview" style="display: none;">
+                    <img id="previewImage" src="" alt="Vista previa">
+                </div>
+                <div class="upload-actions">
+                    <button class="btn btn-secondary" id="cancelUpload">Cancelar</button>
+                    <button class="btn btn-primary" id="saveAvatar" disabled>Guardar Foto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/js/perfil.js" defer></script>
+</body>
+
+</html>

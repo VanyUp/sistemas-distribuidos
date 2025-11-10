@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VanseBook - Tu librería online</title>
+    <link rel="icon" type="image/favicon.ico" href="../static/img/favicon/favicon.ico">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <i class="fas fa-book-open"></i>
+                <span>VanseBook</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#categorias">Categorías</a></li>
+                <li><a href="#novedades">Novedades</a></li>
+            </ul>
+            <div class="nav-actions-mobile">
+                <button class="btn btn-secondary" id="loginBtnMobile">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Iniciar Sesión
+                </button>
+                <button class="btn btn-primary" id="registerBtnMobile">
+                    <i class="fas fa-user-plus"></i>
+                    Registrarse
+                </button>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-secondary" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Iniciar Sesión
+                </button>
+                <button class="btn btn-primary" id="registerBtn">
+                    <i class="fas fa-user-plus"></i>
+                    Registrarse
+                </button>
+                <button class="btn-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </button>
+            </div>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Descubre tu próxima <span class="highlight">aventura literaria</span>
+            </h1>
+            <p class="hero-subtitle">
+                Más de 50,000 libros esperando por ti. Encuentra bestsellers, clásicos y nuevas voces en un solo lugar.
+            </p>
+            <div class="hero-search">
+                <input type="text" placeholder="¿Qué libro buscas hoy?" class="search-input">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                alt="Libros">
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <h3>Envío Gratis</h3>
+                <p>En compras mayores a $50.000</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Pago Seguro</h3>
+                <p>Transacciones 100% protegidas</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>Soporte 24/7</h3>
+                <p>Estamos aquí para ayudarte</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-undo-alt"></i>
+                </div>
+                <h3>Devoluciones</h3>
+                <p>30 días para cambiar de opinión</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories" id="categorias">
+        <div class="container">
+            <h2 class="section-title">Explora por Categorías</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <i class="fas fa-rocket"></i>
+                    <span>Ciencia Ficción</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-heart"></i>
+                    <span>Romance</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-user-secret"></i>
+                    <span>Misterio</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Educación</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Negocios</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-child"></i>
+                    <span>Infantil</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Releases Section -->
+    <section class="new-releases" id="novedades">
+        <div class="container">
+            <h2 class="section-title">Novedades Destacadas</h2>
+            <div class="books-grid">
+                <div class="book-card">
+                    <div class="book-image">
+                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                            alt="Libro 1">
+                    </div>
+                    <div class="book-info">
+                        <h3>El Jardín de los Secretos</h3>
+                        <p class="book-author">María González</p>
+                        <div class="book-price">$24.900</div>
+                        <button class="btn btn-primary btn-small">
+                            <i class="fas fa-cart-plus"></i>
+                            Añadir
+                        </button>
+                    </div>
+                </div>
+                <div class="book-card">
+                    <div class="book-image">
+                        <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                            alt="Libro 2">
+                    </div>
+                    <div class="book-info">
+                        <h3>Cosmos Revisitado</h3>
+                        <p class="book-author">Carlos Mendoza</p>
+                        <div class="book-price">$31.500</div>
+                        <button class="btn btn-primary btn-small">
+                            <i class="fas fa-cart-plus"></i>
+                            Añadir
+                        </button>
+                    </div>
+                </div>
+                <div class="book-card">
+                    <div class="book-image">
+                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                            alt="Libro 3">
+                    </div>
+                    <div class="book-info">
+                        <h3>El Arte de la Persuasión</h3>
+                        <p class="book-author">Ana López</p>
+                        <div class="book-price">$28.700</div>
+                        <button class="btn btn-primary btn-small">
+                            <i class="fas fa-cart-plus"></i>
+                            Añadir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> VanseBook. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Iniciar Sesión</h2>
+            <form class="auth-form">
+                <input type="email" placeholder="Correo electrónico" required>
+                <input type="password" placeholder="Contraseña" required>
+                <button type="submit" class="btn btn-primary btn-full">Ingresar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Crear Cuenta</h2>
+            <form class="auth-form">
+                <input type="text" placeholder="Nombre completo" required>
+                <input type="email" placeholder="Correo electrónico" required>
+                <input type="password" placeholder="Contraseña" required>
+                <input type="password" placeholder="Confirmar contraseña" required>
+                <button type="submit" class="btn btn-primary btn-full">Registrarse</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../static/js/index.js" defer></script>
+</body>
+
+</html>
