@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -14,13 +14,8 @@ load_dotenv()
 
 app = FastAPI()
 
-API_KEY = os.getenv("API_KEY")
 
-# Configuración del cliente OpenAI
-openai_client = AsyncOpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key= API_KEY,
-)
+
 
 # Configuración de plantillas y archivos estáticos
 templates = Jinja2Templates(directory="templates")
@@ -37,20 +32,18 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 async def home(request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-# --- Página de registro ---
-@app.get("/register", response_class=HTMLResponse)
-async def get_register(request):
-    return templates.TemplateResponse("registro.html", {"request": request})
 
-# --- Página de login ---
-@app.get("/login", response_class=HTMLResponse)
-async def get_login(request):
-    return templates.TemplateResponse("login.html", {"request": request})
-
-# --- Inicio/Catálogo de libros ---
 @app.get("/catalogo", response_class=HTMLResponse)
-async def get_catalogo(request):
+async def catalogo_page(request: Request):  # ← tipo correcto aquí
     return templates.TemplateResponse("catalogo.html", {"request": request})
+
+@app.get("/api/catalogo")
+def obtener_catalogo():
+    data = supabase.table("libros").select("*").execute()
+    return data.data
+
+
+
 
 # --- Detalles del libro ---
 @app.get("/libro/{id}", response_class=HTMLResponse)
@@ -110,7 +103,7 @@ async def get_admin_reportes(request):
     return templates.TemplateResponse("admin/reportes.html", {"request": request})
 
 
-# =======================
+# ======================= 
 # Interfaces de Servicios
 # =======================
 
