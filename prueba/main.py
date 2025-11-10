@@ -4,14 +4,19 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from models.models import Libro, UsuarioLogin, UsuarioRegistro, Message
 from fastapi import HTTPException
-from models.database import supabase
 from passlib.hash import bcrypt
+from supabase import create_client
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
 app = FastAPI()
+
+url = os.getenv("SUPABASE_URL")
+key = os.getenv("SUPABASE_KEY")
+
+supabase = create_client(url, key)
 
 # Configuración de plantillas y archivos estáticos
 templates = Jinja2Templates(directory="templates")
