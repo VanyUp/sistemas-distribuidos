@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - VanseBook</title>
+    <link rel="icon" type="image/favicon.ico" href="../static/img/favicon/favicon.ico">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="admin-header">
+        <nav class="admin-nav">
+            <div class="nav-brand">
+                <i class="fas fa-book-open"></i>
+                <span>VanseBook <strong>Admin</strong></span>
+            </div>
+            <div class="nav-actions">
+                <div class="admin-search">
+                    <input type="text" placeholder="Buscar en el dashboard..." class="search-input">
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <button class="btn-icon" id="notificationsBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="icon-badge">5</span>
+                </button>
+                <div class="admin-user">
+                    <div class="user-avatar">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                            alt="Admin">
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrador</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Principal</h3>
+                    <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Dashboard
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Gestión</h3>
+                    <a href="#books" class="nav-item" data-section="books">
+                        <i class="fas fa-book"></i>
+                        Libros
+                        <span class="nav-badge">24</span>
+                    </a>
+                    <a href="#orders" class="nav-item" data-section="orders">
+                        <i class="fas fa-shopping-cart"></i>
+                        Pedidos
+                        <span class="nav-badge">12</span>
+                    </a>
+                    <a href="#users" class="nav-item" data-section="users">
+                        <i class="fas fa-users"></i>
+                        Usuarios
+                        <span class="nav-badge">1.2k</span>
+                    </a>
+                    <a href="#suppliers" class="nav-item" data-section="suppliers">
+                        <i class="fas fa-truck"></i>
+                        Proveedores
+                        <span class="nav-badge">8</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Inventario</h3>
+                    <a href="#inventory" class="nav-item" data-section="inventory">
+                        <i class="fas fa-boxes"></i>
+                        Stock
+                    </a>
+                    <a href="#purchases" class="nav-item" data-section="purchases">
+                        <i class="fas fa-shopping-basket"></i>
+                        Compras
+                    </a>
+                    <a href="#categories" class="nav-item" data-section="categories">
+                        <i class="fas fa-tags"></i>
+                        Categorías
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Reportes</h3>
+                    <a href="#reports" class="nav-item" data-section="reports">
+                        <i class="fas fa-chart-bar"></i>
+                        Reportes
+                    </a>
+                    <a href="#analytics" class="nav-item" data-section="analytics">
+                        <i class="fas fa-chart-line"></i>
+                        Analytics
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Sistema</h3>
+                    <a href="#settings" class="nav-item" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        Configuración
+                    </a>
+                    <a href="#backup" class="nav-item" data-section="backup">
+                        <i class="fas fa-database"></i>
+                        Backup
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="system-status">
+                    <div class="status-item online">
+                        <i class="fas fa-circle"></i>
+                        <span>Sistema Online</span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-server"></i>
+                        <span>85% CPU</span>
+                    </div>
+                </div>
+                <button class="btn btn-secondary btn-full" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Cerrar Sesión
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="section-header">
+                    <h1>Dashboard Principal</h1>
+                    <div class="header-actions">
+                        <div class="date-filter">
+                            <select id="dashboardRange">
+                                <option value="today">Hoy</option>
+                                <option value="week" selected>Esta Semana</option>
+                                <option value="month">Este Mes</option>
+                                <option value="quarter">Este Trimestre</option>
+                                <option value="year">Este Año</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="refreshDashboard">
+                            <i class="fas fa-sync-alt"></i>
+                            Actualizar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Overview -->
+                <div class="stats-overview">
+                    <div class="stat-card revenue">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value">$2.845.600</span>
+                            <span class="stat-label">Ingresos Totales</span>
+                            <span class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                12.5% vs semana anterior
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card orders">
+                        <div class="stat-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value">156</span>
+                            <span class="stat-label">Pedidos Totales</span>
+                            <span class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                8.3% vs semana anterior
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card users">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value">1.248</span>
+                            <span class="stat-label">Usuarios Registrados</span>
+                            <span class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                5.2% vs semana anterior
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card books">
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value">2.456</span>
+                            <span class="stat-label">Libros en Stock</span>
+                            <span class="stat-trend negative">
+                                <i class="fas fa-arrow-down"></i>
+                                2.1% vs semana anterior
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Ventas por Día</h3>
+                            <div class="chart-legend">
+                                <span class="legend-item">
+                                    <i class="fas fa-circle" style="color: #2C5530;"></i>
+                                    Ventas
+                                </span>
+                                <span class="legend-item">
+                                    <i class="fas fa-circle" style="color: #D4A574;"></i>
+                                    Pedidos
+                                </span>
+                            </div>
+                        </div>
+                        <div class="chart-placeholder">
+                            <div class="chart-bars-complex">
+                                <div class="bar-group">
+                                    <div class="bar sales" style="height: 60%"></div>
+                                    <div class="bar orders" style="height: 45%"></div>
+                                    <span>Lun</span>
+                                </div>
+                                <div class="bar-group">
+                                    <div class="bar sales" style="height: 75%"></div>
+                                    <div class="bar orders" style="height: 55%"></div>
+                                    <span>Mar</span>
+                                </div>
+                                <div class="bar-group">
+                                    <div class="bar sales" style="height: 90%"></div>
+                                    <div class="bar orders" style="height: 70%"></div>
+                                    <span>Mié</span>
+                                </div>
+                                <div class="bar-group">
+                                    <div class="bar sales" style="height: 85%"></div>
+                                    <div class="bar orders" style="height: 65%"></div>
+                                    <span>Jue</span>
+                                </div>
+                                <div class="bar-group">
+                                    <div class="bar sales" style="height: 95%"></div>
+                                    <div class="bar orders" style="height: 80%"></div>
+                                    <span>Vie</span>
+                                </div>
+                                <div class="bar-group">
+                                    <div class="bar sales" style="height: 70%"></div>
+                                    <div class="bar orders" style="height: 50%"></div>
+                                    <span>Sáb</span>
+                                </div>
+                                <div class="bar-group">
+                                    <div class="bar sales" style="height: 50%"></div>
+                                    <div class="bar orders" style="height: 35%"></div>
+                                    <span>Dom</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Categorías Más Vendidas</h3>
+                        </div>
+                        <div class="chart-placeholder">
+                            <div class="pie-chart-simulation">
+                                <div class="pie-slice" data-percent="35" data-color="#2C5530"
+                                    data-label="Ciencia Ficción"></div>
+                                <div class="pie-slice" data-percent="25" data-color="#4A7C59" data-label="Fantasía">
+                                </div>
+                                <div class="pie-slice" data-percent="20" data-color="#8B4513" data-label="Misterio">
+                                </div>
+                                <div class="pie-slice" data-percent="15" data-color="#D4A574" data-label="Romance">
+                                </div>
+                                <div class="pie-slice" data-percent="5" data-color="#A0AEC0" data-label="Otros"></div>
+                            </div>
+                            <div class="pie-legend"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-section">
+                    <div class="section-header">
+                        <h3>Actividad Reciente</h3>
+                        <a href="#orders" class="btn-text view-all">
+                            Ver Todo
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon success">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Nuevo pedido #VS-2024-8012</strong> de María González</p>
+                                <span class="activity-time">Hace 5 minutos</span>
+                            </div>
+                            <div class="activity-amount">$89.900</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Stock bajo</strong> en "El Jardín de los Secretos"</p>
+                                <span class="activity-time">Hace 15 minutos</span>
+                            </div>
+                            <div class="activity-stock">Quedan 3 unidades</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon info">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Nuevo usuario registrado:</strong> Carlos Mendoza</p>
+                                <span class="activity-time">Hace 25 minutos</span>
+                            </div>
+                            <div class="activity-badge">Premium</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon success">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Pedido #VS-2024-8010 enviado</strong> a Juan Pérez</p>
+                                <span class="activity-time">Hace 1 hora</span>
+                            </div>
+                            <div class="activity-tracking">ST-789123</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3>Acciones Rápidas</h3>
+                    <div class="actions-grid">
+                        <button class="action-card" data-action="add-book">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Agregar Libro</span>
+                        </button>
+                        <button class="action-card" data-action="manage-orders">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>Gestionar Pedidos</span>
+                        </button>
+                        <button class="action-card" data-action="view-reports">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>Ver Reportes</span>
+                        </button>
+                        <button class="action-card" data-action="manage-users">
+                            <i class="fas fa-user-cog"></i>
+                            <span>Gestionar Usuarios</span>
+                        </button>
+                        <button class="action-card" data-action="check-inventory">
+                            <i class="fas fa-boxes"></i>
+                            <span>Revisar Inventario</span>
+                        </button>
+                        <button class="action-card" data-action="supplier-orders">
+                            <i class="fas fa-truck-loading"></i>
+                            <span>Pedir a Proveedores</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Books Management Section -->
+            <section id="books" class="content-section">
+                <div class="section-header">
+                    <h1>Gestión de Libros</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="addBookBtn">
+                            <i class="fas fa-plus"></i>
+                            Agregar Libro
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Books Filters -->
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <input type="text" placeholder="Buscar libros..." class="search-input" id="bookSearch">
+                    </div>
+                    <div class="filter-group">
+                        <select id="bookCategory">
+                            <option value="">Todas las categorías</option>
+                            <option value="fiction">Ciencia Ficción</option>
+                            <option value="fantasy">Fantasía</option>
+                            <option value="mystery">Misterio</option>
+                            <option value="romance">Romance</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select id="bookStatus">
+                            <option value="">Todos los estados</option>
+                            <option value="in-stock">En Stock</option>
+                            <option value="low-stock">Stock Bajo</option>
+                            <option value="out-of-stock">Sin Stock</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-secondary" id="exportBooks">
+                        <i class="fas fa-download"></i>
+                        Exportar
+                    </button>
+                </div>
+
+                <!-- Books Table -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="selectAllBooks">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </th>
+                                <th>Libro</th>
+                                <th>Autor</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Estado</th>
+                                <th>Ventas</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" class="book-checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div class="book-info">
+                                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=80"
+                                            alt="El Jardín de los Secretos">
+                                        <div>
+                                            <strong>El Jardín de los Secretos</strong>
+                                            <span>ISBN: 978-1234567890</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>María González</td>
+                                <td>
+                                    <span class="category-tag fiction">Ciencia Ficción</span>
+                                </td>
+                                <td>$24.900</td>
+                                <td>
+                                    <div class="stock-info">
+                                        <span class="stock-value">15</span>
+                                        <div class="stock-bar">
+                                            <div class="stock-fill medium"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status-badge success">En Stock</span>
+                                </td>
+                                <td>128</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon small" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon small" title="Ver Detalles">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon small danger" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Más filas de libros... -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Table Footer -->
+                <div class="table-footer">
+                    <div class="table-info">
+                        Mostrando 1-10 de 2,456 libros
+                    </div>
+                    <div class="pagination">
+                        <button class="pagination-btn disabled">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn">2</button>
+                        <button class="pagination-btn">3</button>
+                        <span class="pagination-ellipsis">...</span>
+                        <button class="pagination-btn">246</button>
+                        <button class="pagination-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Orders Management Section -->
+            <section id="orders" class="content-section">
+                <div class="section-header">
+                    <h1>Gestión de Pedidos</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="processOrders">
+                            <i class="fas fa-cog"></i>
+                            Procesar Lote
+                        </button>
+                    </div>
+                </div>
+                <!-- Contenido de pedidos... -->
+            </section>
+
+            <!-- Users Management Section -->
+            <section id="users" class="content-section">
+                <div class="section-header">
+                    <h1>Gestión de Usuarios</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="addUser">
+                            <i class="fas fa-user-plus"></i>
+                            Agregar Usuario
+                        </button>
+                    </div>
+                </div>
+                <!-- Contenido de usuarios... -->
+            </section>
+
+            <!-- Más secciones... -->
+
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="addBookModal" style="display: none;">
+        <div class="modal-content large">
+            <span class="close-modal">&times;</span>
+            <h2>Agregar Nuevo Libro</h2>
+            <!-- Formulario de agregar libro... -->
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Procesando...</h3>
+        </div>
+    </div>
+
+    <script src="../static/js/admin.js"></script>
+</body>
+
+</html>
