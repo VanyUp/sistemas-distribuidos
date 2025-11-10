@@ -83,7 +83,7 @@ async def home(request: Request):
     return templates.TemplateResponse("admin/dashboard.html", {"request": request})
 
 # --- Login de administradores ---
-@app.get("/admin/login", response_class=HTMLResponse)
+@app.get("/admin", response_class=HTMLResponse)
 async def admin_login(request: Request):
     return templates.TemplateResponse("admin/login.html", {"request": request})
 
