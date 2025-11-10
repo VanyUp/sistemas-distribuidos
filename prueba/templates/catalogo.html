@@ -15,276 +15,186 @@
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="header">
-        <nav class="nav">
-            <div class="nav-brand">
-                <i class="fas fa-book-open"></i>
-                <span>VanseBook</span>
-            </div>
-            <div class="nav-actions">
-                <div class="search-container">
-                    <input type="text" placeholder="Buscar libros..." class="search-input">
-                    <button class="search-btn">
-                        <i class="fas fa-search"></i>
-                    </button>
+    <div class="catalogo-container">
+        <!-- Header -->
+        <header class="header">
+            <nav class="nav">
+                <div class="nav-brand">
+                    <i class="fas fa-book-open"></i>
+                    <span>VanseBook</span>
                 </div>
-                <button class="btn-icon" id="wishlistBtn">
-                    <i class="fas fa-heart"></i>
-                    <span class="icon-badge">0</span>
-                </button>
-                <button class="btn-icon" id="cartBtn">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="icon-badge">0</span>
-                </button>
-                <button class="btn btn-secondary" id="loginBtn">
-                    <i class="fas fa-user"></i>
-                </button>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Main Content -->
-    <main class="catalog-main">
-        <div class="container">
-            <!-- Breadcrumb -->
-            <nav class="breadcrumb">
-                <span>Catálogo de Libros</span>
-            </nav>
-
-            <!-- Page Header -->
-            <div class="page-header">
-                <h1>Catálogo de Libros</h1>
-                <p>Descubre nuestra amplia colección de más de 50,000 títulos</p>
-            </div>
-
-            <div class="catalog-layout">
-                <!-- Sidebar Filters -->
-                <aside class="filters-sidebar">
-                    <div class="filters-header">
-                        <h3>Filtros</h3>
-                        <button class="btn-text" id="clearFilters">
-                            <i class="fas fa-times"></i>
-                            Limpiar
+                <div class="nav-actions">
+                    <div class="search-container">
+                        <input type="text" placeholder="Buscar libros..." class="search-input">
+                        <button class="search-btn">
+                            <i class="fas fa-search"></i>
                         </button>
                     </div>
-
-                    <!-- Categorías -->
-                    <div class="filter-group">
-                        <h4 class="filter-title">
-                            <i class="fas fa-folder"></i>
-                            Categorías
-                        </h4>
-                        <div class="filter-options">
-                            <label class="filter-checkbox">
-                                <input type="checkbox" name="category" value="ficcion">
-                                <span class="checkmark"></span>
-                                Ficción
-                                <span class="filter-count">(1,234)</span>
-                            </label>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" name="category" value="ciencia-ficcion">
-                                <span class="checkmark"></span>
-                                Ciencia Ficción
-                                <span class="filter-count">(567)</span>
-                            </label>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" name="category" value="romance">
-                                <span class="checkmark"></span>
-                                Romance
-                                <span class="filter-count">(891)</span>
-                            </label>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" name="category" value="misterio">
-                                <span class="checkmark"></span>
-                                Misterio
-                                <span class="filter-count">(345)</span>
-                            </label>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" name="category" value="fantasia">
-                                <span class="checkmark"></span>
-                                Fantasía
-                                <span class="filter-count">(678)</span>
-                            </label>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" name="category" value="negocios">
-                                <span class="checkmark"></span>
-                                Negocios
-                                <span class="filter-count">(234)</span>
-                            </label>
+                    <button class="btn-icon" id="wishlistBtn">
+                        <i class="fas fa-heart"></i>
+                        <span class="icon-badge">0</span>
+                    </button>
+                    <button class="btn-icon" id="cartBtn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="icon-badge">0</span>
+                    </button>
+                    <div class="user-menu">
+                        <button class="btn btn-secondary" id="userBtn">
+                            <i class="fas fa-user"></i>
+                            Mi Cuenta
+                        </button>
+                        <div class="user-dropdown">
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="fas fa-user-edit"></i>
+                                Perfil
+                            </a>
+                            <a href="orders.html" class="dropdown-item">
+                                <i class="fas fa-clipboard-list"></i>
+                                Mis Pedidos
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item logout">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Cerrar Sesión
+                            </a>
                         </div>
                     </div>
+                </div>
+            </nav>
+        </header>
 
-                    <!-- Precio -->
-                    <div class="filter-group">
-                        <h4 class="filter-title">
-                            <i class="fas fa-tag"></i>
-                            Rango de Precio
-                        </h4>
-                        <div class="price-range">
-                            <div class="price-inputs">
-                                <input type="number" placeholder="Mín" class="price-input" id="minPrice">
-                                <span>-</span>
-                                <input type="number" placeholder="Máx" class="price-input" id="maxPrice">
-                            </div>
-                            <button class="btn btn-primary btn-small" id="applyPrice">Aplicar</button>
-                        </div>
-                    </div>
+        <!-- Main Content -->
+        <main class="catalog-main">
+            <div class="container">
+                <!-- Breadcrumb -->
+                <nav class="breadcrumb">
+                    <span>Catálogo de Libros</span>
+                </nav>
 
-                    <!-- Formato -->
-                    <div class="filter-group">
-                        <h4 class="filter-title">
-                            <i class="fas fa-book"></i>
-                            Formato
-                        </h4>
-                        <div class="filter-options">
-                            <label class="filter-radio">
-                                <input type="radio" name="format" value="all" checked>
-                                <span class="radiomark"></span>
-                                Todos los formatos
-                            </label>
-                            <label class="filter-radio">
-                                <input type="radio" name="format" value="physical">
-                                <span class="radiomark"></span>
-                                Físico
-                            </label>
-                            <label class="filter-radio">
-                                <input type="radio" name="format" value="digital">
-                                <span class="radiomark"></span>
-                                Digital
-                            </label>
-                        </div>
-                    </div>
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Catálogo de Libros</h1>
+                    <p>Descubre nuestra amplia colección de más de 50,000 títulos</p>
+                </div>
 
-                    <!-- Calificación -->
-                    <div class="filter-group">
-                        <h4 class="filter-title">
-                            <i class="fas fa-star"></i>
-                            Calificación
-                        </h4>
-                        <div class="rating-filters">
-                            <label class="rating-filter">
-                                <input type="checkbox" name="rating" value="5">
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                                <span class="rating-count">(1,234)</span>
-                            </label>
-                            <label class="rating-filter">
-                                <input type="checkbox" name="rating" value="4">
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </div>
-                                <span class="rating-count">(2,567)</span>
-                            </label>
-                            <label class="rating-filter">
-                                <input type="checkbox" name="rating" value="3">
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </div>
-                                <span class="rating-count">(3,891)</span>
-                            </label>
-                        </div>
-                    </div>
-                </aside>
-
-                <!-- Main Content Area -->
-                <div class="catalog-content">
-                    <!-- Toolbar -->
-                    <div class="catalog-toolbar">
-                        <div class="toolbar-left">
-                            <span class="results-count">Mostrando 1-12 de 2,458 resultados</span>
-                        </div>
-                        <div class="toolbar-right">
-                            <div class="sort-select">
-                                <label for="sort">Ordenar por:</label>
-                                <select id="sort">
-                                    <option value="relevance">Relevancia</option>
-                                    <option value="price-low">Precio: Menor a Mayor</option>
-                                    <option value="price-high">Precio: Mayor a Menor</option>
-                                    <option value="rating">Mejor Calificados</option>
-                                    <option value="newest">Más Recientes</option>
-                                    <option value="bestsellers">Más Vendidos</option>
-                                </select>
-                            </div>
-                            <div class="view-toggle">
-                                <button class="view-btn active" data-view="grid">
-                                    <i class="fas fa-th"></i>
-                                </button>
-                                <button class="view-btn" data-view="list">
-                                    <i class="fas fa-list"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Books Grid -->
-                    <div class="books-grid" id="booksGrid">
-                        <!-- Libro 1 -->
-                        <div class="book-card">
-                            <div class="book-badge">Nuevo</div>
-                            <button class="wishlist-btn">
-                                <i class="far fa-heart"></i>
+                <div class="catalog-layout">
+                    <!-- Sidebar Filters -->
+                    <aside class="filters-sidebar">
+                        <div class="filters-header">
+                            <h3>Filtros</h3>
+                            <button class="btn-text" id="clearFilters">
+                                <i class="fas fa-times"></i>
+                                Limpiar
                             </button>
-                            <div class="book-image">
-                                <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                                    alt="El Jardín de los Secretos">
+                        </div>
+
+                        <!-- Categorías -->
+                        <div class="filter-group">
+                            <h4 class="filter-title">
+                                <i class="fas fa-folder"></i>
+                                Categorías
+                            </h4>
+                            <div class="filter-options">
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" name="category" value="ficcion">
+                                    <span class="checkmark"></span>
+                                    Ficción
+                                    <span class="filter-count">(1,234)</span>
+                                </label>
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" name="category" value="ciencia-ficcion">
+                                    <span class="checkmark"></span>
+                                    Ciencia Ficción
+                                    <span class="filter-count">(567)</span>
+                                </label>
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" name="category" value="romance">
+                                    <span class="checkmark"></span>
+                                    Romance
+                                    <span class="filter-count">(891)</span>
+                                </label>
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" name="category" value="misterio">
+                                    <span class="checkmark"></span>
+                                    Misterio
+                                    <span class="filter-count">(345)</span>
+                                </label>
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" name="category" value="fantasia">
+                                    <span class="checkmark"></span>
+                                    Fantasía
+                                    <span class="filter-count">(678)</span>
+                                </label>
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" name="category" value="negocios">
+                                    <span class="checkmark"></span>
+                                    Negocios
+                                    <span class="filter-count">(234)</span>
+                                </label>
                             </div>
-                            <div class="book-info">
-                                <h3 class="book-title">El Jardín de los Secretos</h3>
-                                <p class="book-author">María González</p>
-                                <div class="book-rating">
+                        </div>
+
+                        <!-- Precio -->
+                        <div class="filter-group">
+                            <h4 class="filter-title">
+                                <i class="fas fa-tag"></i>
+                                Rango de Precio
+                            </h4>
+                            <div class="price-range">
+                                <div class="price-inputs">
+                                    <input type="number" placeholder="Mín" class="price-input" id="minPrice">
+                                    <span>-</span>
+                                    <input type="number" placeholder="Máx" class="price-input" id="maxPrice">
+                                </div>
+                                <button class="btn btn-primary btn-small" id="applyPrice">Aplicar</button>
+                            </div>
+                        </div>
+
+                        <!-- Formato -->
+                        <div class="filter-group">
+                            <h4 class="filter-title">
+                                <i class="fas fa-book"></i>
+                                Formato
+                            </h4>
+                            <div class="filter-options">
+                                <label class="filter-radio">
+                                    <input type="radio" name="format" value="all" checked>
+                                    <span class="radiomark"></span>
+                                    Todos los formatos
+                                </label>
+                                <label class="filter-radio">
+                                    <input type="radio" name="format" value="physical">
+                                    <span class="radiomark"></span>
+                                    Físico
+                                </label>
+                                <label class="filter-radio">
+                                    <input type="radio" name="format" value="digital">
+                                    <span class="radiomark"></span>
+                                    Digital
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Calificación -->
+                        <div class="filter-group">
+                            <h4 class="filter-title">
+                                <i class="fas fa-star"></i>
+                                Calificación
+                            </h4>
+                            <div class="rating-filters">
+                                <label class="rating-filter">
+                                    <input type="checkbox" name="rating" value="5">
                                     <div class="stars">
                                         <i class="fas fa-star"></i>
                                         <i class="fas fa-star"></i>
                                         <i class="fas fa-star"></i>
                                         <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
+                                        <i class="fas fa-star"></i>
                                     </div>
-                                    <span class="rating-value">4.5</span>
-                                    <span class="reviews">(128)</span>
-                                </div>
-                                <div class="book-meta">
-                                    <span class="book-format">Tapa blanda</span>
-                                    <span class="book-pages">• 320 páginas</span>
-                                </div>
-                                <div class="book-price">
-                                    <span class="current-price">$24.900</span>
-                                    <span class="original-price">$29.900</span>
-                                </div>
-                                <button class="btn btn-primary btn-full add-to-cart">
-                                    <i class="fas fa-cart-plus"></i>
-                                    Añadir al Carrito
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Libro 2 -->
-                        <div class="book-card">
-                            <div class="book-badge bestseller">Más Vendido</div>
-                            <button class="wishlist-btn">
-                                <i class="far fa-heart"></i>
-                            </button>
-                            <div class="book-image">
-                                <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                                    alt="Cosmos Revisitado">
-                            </div>
-                            <div class="book-info">
-                                <h3 class="book-title">Cosmos Revisitado</h3>
-                                <p class="book-author">Carlos Mendoza</p>
-                                <div class="book-rating">
+                                    <span class="rating-count">(1,234)</span>
+                                </label>
+                                <label class="rating-filter">
+                                    <input type="checkbox" name="rating" value="4">
                                     <div class="stars">
                                         <i class="fas fa-star"></i>
                                         <i class="fas fa-star"></i>
@@ -292,65 +202,175 @@
                                         <i class="fas fa-star"></i>
                                         <i class="far fa-star"></i>
                                     </div>
-                                    <span class="rating-value">4.0</span>
-                                    <span class="reviews">(89)</span>
+                                    <span class="rating-count">(2,567)</span>
+                                </label>
+                                <label class="rating-filter">
+                                    <input type="checkbox" name="rating" value="3">
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span class="rating-count">(3,891)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Main Content Area -->
+                    <div class="catalog-content">
+                        <!-- Toolbar -->
+                        <div class="catalog-toolbar">
+                            <div class="toolbar-left">
+                                <span class="results-count">Mostrando 1-12 de 2,458 resultados</span>
+                            </div>
+                            <div class="toolbar-right">
+                                <div class="sort-select">
+                                    <label for="sort">Ordenar por:</label>
+                                    <select id="sort">
+                                        <option value="relevance">Relevancia</option>
+                                        <option value="price-low">Precio: Menor a Mayor</option>
+                                        <option value="price-high">Precio: Mayor a Menor</option>
+                                        <option value="rating">Mejor Calificados</option>
+                                        <option value="newest">Más Recientes</option>
+                                        <option value="bestsellers">Más Vendidos</option>
+                                    </select>
                                 </div>
-                                <div class="book-meta">
-                                    <span class="book-format">Tapa dura</span>
-                                    <span class="book-pages">• 450 páginas</span>
+                                <div class="view-toggle">
+                                    <button class="view-btn active" data-view="grid">
+                                        <i class="fas fa-th"></i>
+                                    </button>
+                                    <button class="view-btn" data-view="list">
+                                        <i class="fas fa-list"></i>
+                                    </button>
                                 </div>
-                                <div class="book-price">
-                                    <span class="current-price">$31.500</span>
-                                </div>
-                                <button class="btn btn-primary btn-full add-to-cart">
-                                    <i class="fas fa-cart-plus"></i>
-                                    Añadir al Carrito
-                                </button>
                             </div>
                         </div>
 
-                        <!-- Más libros... (repetir estructura para 10 libros más) -->
+                        <!-- Books Grid -->
+                        <div class="books-grid" id="booksGrid">
+                            <!-- Libro 1 -->
+                            <div class="book-card">
+                                <div class="book-badge">Nuevo</div>
+                                <button class="wishlist-btn">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                <div class="book-image">
+                                    <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                                        alt="El Jardín de los Secretos">
+                                </div>
+                                <div class="book-info">
+                                    <h3 class="book-title">El Jardín de los Secretos</h3>
+                                    <p class="book-author">María González</p>
+                                    <div class="book-rating">
+                                        <div class="stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                        <span class="rating-value">4.5</span>
+                                        <span class="reviews">(128)</span>
+                                    </div>
+                                    <div class="book-meta">
+                                        <span class="book-format">Tapa blanda</span>
+                                        <span class="book-pages">• 320 páginas</span>
+                                    </div>
+                                    <div class="book-price">
+                                        <span class="current-price">$24.900</span>
+                                        <span class="original-price">$29.900</span>
+                                    </div>
+                                    <button class="btn btn-primary btn-full add-to-cart">
+                                        <i class="fas fa-cart-plus"></i>
+                                        Añadir al Carrito
+                                    </button>
+                                </div>
+                            </div>
 
-                    </div>
+                            <!-- Libro 2 -->
+                            <div class="book-card">
+                                <div class="book-badge bestseller">Más Vendido</div>
+                                <button class="wishlist-btn">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                <div class="book-image">
+                                    <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                                        alt="Cosmos Revisitado">
+                                </div>
+                                <div class="book-info">
+                                    <h3 class="book-title">Cosmos Revisitado</h3>
+                                    <p class="book-author">Carlos Mendoza</p>
+                                    <div class="book-rating">
+                                        <div class="stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <span class="rating-value">4.0</span>
+                                        <span class="reviews">(89)</span>
+                                    </div>
+                                    <div class="book-meta">
+                                        <span class="book-format">Tapa dura</span>
+                                        <span class="book-pages">• 450 páginas</span>
+                                    </div>
+                                    <div class="book-price">
+                                        <span class="current-price">$31.500</span>
+                                    </div>
+                                    <button class="btn btn-primary btn-full add-to-cart">
+                                        <i class="fas fa-cart-plus"></i>
+                                        Añadir al Carrito
+                                    </button>
+                                </div>
+                            </div>
 
-                    <!-- Pagination -->
-                    <div class="pagination">
-                        <button class="pagination-btn disabled">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button class="pagination-btn active">1</button>
-                        <button class="pagination-btn">2</button>
-                        <button class="pagination-btn">3</button>
-                        <button class="pagination-btn">4</button>
-                        <button class="pagination-btn">5</button>
-                        <span class="pagination-ellipsis">...</span>
-                        <button class="pagination-btn">12</button>
-                        <button class="pagination-btn">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
+                            <!-- Más libros... (repetir estructura para 10 libros más) -->
+
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="pagination">
+                            <button class="pagination-btn disabled">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="pagination-btn active">1</button>
+                            <button class="pagination-btn">2</button>
+                            <button class="pagination-btn">3</button>
+                            <button class="pagination-btn">4</button>
+                            <button class="pagination-btn">5</button>
+                            <span class="pagination-ellipsis">...</span>
+                            <button class="pagination-btn">12</button>
+                            <button class="pagination-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; <span id="currentYear"></span> VanseBook. Todos los derechos reservados.</p>
-        </div>
-    </footer>
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; <span id="currentYear"></span> VanseBook. Todos los derechos reservados.</p>
+            </div>
+        </footer>
 
-    <!-- Modals -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Iniciar Sesión</h2>
-            <form class="auth-form">
-                <input type="email" placeholder="Correo electrónico" required>
-                <input type="password" placeholder="Contraseña" required>
-                <button type="submit" class="btn btn-primary btn-full">Ingresar</button>
-            </form>
+        <!-- Modals -->
+        <div class="modal" id="loginModal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Iniciar Sesión</h2>
+                <form class="auth-form">
+                    <input type="email" placeholder="Correo electrónico" required>
+                    <input type="password" placeholder="Contraseña" required>
+                    <button type="submit" class="btn btn-primary btn-full">Ingresar</button>
+                </form>
+            </div>
         </div>
     </div>
 
