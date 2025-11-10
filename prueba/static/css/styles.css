@@ -4714,6 +4714,114 @@
   }
 }
 
+/* ----- Modal base ----- */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  padding: 30px 40px;
+  position: relative;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  animation: modalFade 0.3s ease;
+}
+
+/* Animación suave */
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* Botón cerrar */
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.5rem;
+  color: #444;
+  cursor: pointer;
+}
+
+.close-modal:hover {
+  color: #000;
+}
+
+/* ----- Título ----- */
+.modal-content h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* ----- Formulario ----- */
+#addBookForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#addBookForm label {
+  font-weight: 500;
+  color: #333;
+  margin-top: 5px;
+}
+
+#addBookForm input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+#addBookForm input:focus {
+  border-color: #007bff;
+}
+
+/* Botón principal */
+#addBookForm button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 10px;
+}
+
+#addBookForm button:hover {
+  background-color: #0056b3;
+}
+
+/* Mensaje de estado */
+#formMessage {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .admin-container {
   /* Admin Header */
   /* Admin Layout */
@@ -5692,6 +5800,21 @@
   100% {
     transform: rotate(360deg);
   }
+}
+.admin-container .form-usercreate input,
+.admin-container .form-usercreate select {
+  border: 2px solid #E2E8F0;
+  font-family: "Poppins", sans-serif;
+}
+.admin-container .form-usercreate input:focus,
+.admin-container .form-usercreate select:focus {
+  border-color: #3c2c55;
+}
+.admin-container .btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 @media (max-width: 1200px) {
   .admin-container .charts-row {

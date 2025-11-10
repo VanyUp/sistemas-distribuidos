@@ -1,5 +1,110 @@
+document.getElementById("addBookForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const data = {
+        nombre: document.getElementById("nombre").value,
+        autor: document.getElementById("autor").value,
+        portada: document.getElementById("portada").value,
+        cantidad_hojas: parseInt(document.getElementById("cantidad_hojas").value),
+        stock: parseInt(document.getElementById("stock").value),
+        precio: parseFloat(document.getElementById("precio").value),
+    };
+
+    const message = document.getElementById("formMessage");
+
+    try {
+        const response = await fetch("/agregarLibro", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            message.textContent = "✅ Libro agregado correctamente.";
+            message.style.color = "green";
+            document.getElementById("addBookForm").reset();
+        } else {
+            message.textContent = `❌ Error: ${result.detail || "No se pudo guardar el libro."}`;
+            message.style.color = "red";
+        }
+    } catch (error) {
+        message.textContent = "❌ Error de conexión con el servidor.";
+        message.style.color = "red";
+    }
+});
+
+// Cargar libros desde FastAPI y mostrarlos en la tabla
+async function cargarLibros() {
+    try {
+        const response = await fetch('/libros'); // Endpoint correcto
+        if (!response.ok) throw new Error("Error al cargar libros");
+
+        const libros = await response.json();
+        mostrarLibros(libros);
+    } catch (error) {
+        console.error("Error cargando catálogo:", error);
+    }
+}
+
+function mostrarLibros(libros) {
+    const tbody = document.querySelector('.data-table tbody');
+    if (!tbody) return console.error("No se encontró el <tbody> de la tabla");
+
+    tbody.innerHTML = ""; // Limpiar tabla
+
+    libros.forEach(libro => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="book-checkbox" />
+                    <span class="checkmark"></span>
+                </label>
+            </td>
+            <td>
+                <div class="book-info">
+                    <img src="${libro.portada}" alt="${libro.nombre}" style="width:50px;height:auto; margin-right:10px;" />
+                    <div>
+                        <strong>${libro.nombre}</strong><br>
+                        <span>ISBN: ${libro.id}</span>
+                    </div>
+                </div>
+            </td>
+            <td>${libro.autor}</td>
+            <td>Desconocida</td>
+            <td>$${libro.precio}</td>
+            <td>${libro.stock}</td>
+            <td>${libro.stock > 0 ? 'En Stock' : 'Agotado'}</td>
+            <td>0</td>
+            <td>
+                <button class="btn-icon small edit-btn" data-id="${libro.id}">Editar</button>
+                <button class="btn-icon small delete-btn" data-id="${libro.id}">Eliminar</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    asignarEventosAcciones();
+}
+
+
+
+// Llamar cuando la página carga
+document.addEventListener('DOMContentLoaded', () => {
+    cargarLibros();
+});
+
+
+
+
+
+
+
+
 // Inicialización cuando el DOM está listo
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('Admin dashboard script cargado');
 
     // Elementos del DOM
@@ -23,21 +128,21 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeNavigation() {
         // Navegación entre secciones
         navItems.forEach(item => {
-            item.addEventListener('click', function(e) {
+            item.addEventListener('click', function (e) {
                 e.preventDefault();
-                
+
                 const targetSection = this.dataset.section;
-                
+
                 // Remover active de todos los items
                 navItems.forEach(nav => nav.classList.remove('active'));
                 contentSections.forEach(section => section.classList.remove('active'));
-                
+
                 // Agregar active al item clickeado
                 this.classList.add('active');
-                
+
                 // Mostrar sección correspondiente
                 document.getElementById(targetSection).classList.add('active');
-                
+
                 // Actualizar título de la página
                 updatePageTitle(this.textContent.trim());
             });
@@ -46,14 +151,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function initializeDashboard() {
         // Actualizar dashboard
-        refreshBtn.addEventListener('click', function() {
+        refreshBtn.addEventListener('click', function () {
             refreshDashboard();
         });
 
         // Filtro de fecha
         const dateFilter = document.getElementById('dashboardRange');
         if (dateFilter) {
-            dateFilter.addEventListener('change', function() {
+            dateFilter.addEventListener('change', function () {
                 updateDashboardData(this.value);
             });
         }
@@ -65,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeBooksManagement() {
         // Select all books checkbox
         if (selectAllBooks) {
-            selectAllBooks.addEventListener('change', function() {
+            selectAllBooks.addEventListener('change', function () {
                 const isChecked = this.checked;
                 bookCheckboxes.forEach(checkbox => {
                     checkbox.checked = isChecked;
@@ -80,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (bookSearch) {
             let searchTimeout;
-            bookSearch.addEventListener('input', function() {
+            bookSearch.addEventListener('input', function () {
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
                     filterBooks();
@@ -99,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function initializeEventListeners() {
         // Logout
-        logoutBtn.addEventListener('click', function() {
+        logoutBtn.addEventListener('click', function () {
             showConfirmationModal(
                 'Cerrar Sesión',
                 '¿Estás seguro de que quieres cerrar sesión?',
@@ -115,26 +220,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Agregar libro
-        addBookBtn.addEventListener('click', function() {
+        addBookBtn.addEventListener('click', function () {
             openAddBookModal();
         });
 
         // Cerrar modal
-        closeModal.addEventListener('click', function() {
+        closeModal.addEventListener('click', function () {
             addBookModal.style.display = 'none';
             document.body.style.overflow = 'auto';
         });
 
         // Acciones rápidas
         quickActions.forEach(action => {
-            action.addEventListener('click', function() {
+            action.addEventListener('click', function () {
                 const actionType = this.dataset.action;
                 handleQuickAction(actionType);
             });
         });
 
         // Cerrar modal al hacer clic fuera
-        window.addEventListener('click', function(event) {
+        window.addEventListener('click', function (event) {
             if (event.target === addBookModal) {
                 addBookModal.style.display = 'none';
                 document.body.style.overflow = 'auto';
@@ -144,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Notificaciones
         const notificationsBtn = document.getElementById('notificationsBtn');
         if (notificationsBtn) {
-            notificationsBtn.addEventListener('click', function() {
+            notificationsBtn.addEventListener('click', function () {
                 showNotificationsPanel();
             });
         }
@@ -156,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function refreshDashboard() {
         showLoading('Actualizando dashboard...');
-        
+
         // Simular actualización de datos
         setTimeout(() => {
             loadDashboardData();
@@ -168,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function loadDashboardData() {
         // En una aplicación real, aquí se harían peticiones AJAX
         console.log('Cargando datos del dashboard...');
-        
+
         // Simular actualización de estadísticas
         updateStatsCards();
         updateCharts();
@@ -177,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateDashboardData(range) {
         showLoading(`Cargando datos para ${range}...`);
-        
+
         // Simular cambio de rango de fecha
         setTimeout(() => {
             // Actualizar estadísticas basadas en el rango seleccionado
@@ -205,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         const multiplier = multipliers[range] || multipliers.week;
-        
+
         return {
             revenue: Math.round(baseStats.revenue * multiplier.revenue),
             orders: Math.round(baseStats.orders * multiplier.orders),
@@ -245,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Simular filtrado
         showLoading('Filtrando libros...');
-        
+
         setTimeout(() => {
             // En una aplicación real, aquí se filtrarían los datos
             console.log('Filtrando libros:', { searchTerm, category, status });
@@ -259,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleQuickAction(action) {
-        switch(action) {
+        switch (action) {
             case 'add-book':
                 openAddBookModal();
                 break;
@@ -284,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.querySelector('[data-section="suppliers"]').click();
                 break;
         }
-        
+
         showFeedback(`Acción: ${getActionName(action)}`, 'info');
     }
 
@@ -325,19 +430,19 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.style.overflow = 'hidden';
 
         // Event listeners
-        document.getElementById('cancelConfirm').addEventListener('click', function() {
+        document.getElementById('cancelConfirm').addEventListener('click', function () {
             document.body.removeChild(modal);
             document.body.style.overflow = 'auto';
         });
 
-        document.getElementById('confirmAction').addEventListener('click', function() {
+        document.getElementById('confirmAction').addEventListener('click', function () {
             document.body.removeChild(modal);
             document.body.style.overflow = 'auto';
             onConfirm();
         });
 
         // Cerrar al hacer clic fuera
-        modal.addEventListener('click', function(e) {
+        modal.addEventListener('click', function (e) {
             if (e.target === modal) {
                 document.body.removeChild(modal);
                 document.body.style.overflow = 'auto';
@@ -371,7 +476,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
             ${message}
         `;
-        
+
         // Estilos del feedback
         feedback.style.cssText = `
             position: fixed;
@@ -389,9 +494,9 @@ document.addEventListener('DOMContentLoaded', function() {
             gap: 0.5rem;
             max-width: 400px;
         `;
-        
+
         document.body.appendChild(feedback);
-        
+
         // Remover después de 4 segundos
         setTimeout(() => {
             feedback.style.animation = 'slideOutRight 0.3s ease';
@@ -410,6 +515,96 @@ document.addEventListener('DOMContentLoaded', function() {
         showLoading: showLoading,
         hideLoading: hideLoading
     };
+
+    // Cargar usuarios
+    async function loadUsers() {
+        const res = await fetch("/admin/usuarios");
+        const users = await res.json();
+
+        const tbody = document.getElementById("usersTableBody");
+        tbody.innerHTML = "";
+
+        users.forEach(user => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+            <td>${user.username}</td>
+            <td>${user.email}</td>
+            <td>${user.rol}</td>
+            <td>${new Date(user.created_at).toLocaleDateString()}</td>
+            <td>
+                <button class="btn-icon small danger" data-delete="${user.id}">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+
+            tbody.appendChild(row);
+        });
+    }
+
+    // Crear usuario
+    document.getElementById("createUserForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+
+        const response = await fetch("/admin/usuarios/create", {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+        const msg = document.getElementById("formMessage");
+
+        if (response.ok) {
+            msg.style.color = "green";
+            msg.textContent = "✅ Usuario creado con éxito";
+            e.target.reset();
+            setTimeout(closeAddUserModal, 1200);
+            // Si tienes tabla de usuarios → aquí recargas
+            // loadUsers();
+        } else {
+            msg.style.color = "red";
+            msg.textContent = "❌ " + result.detail;
+        }
+    });
+
+    // Cambiar rol
+    document.addEventListener("change", async (e) => {
+        if (e.target.classList.contains("role-select")) {
+            await fetch(`/admin/usuarios/${e.target.dataset.id}/rol`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ rol: e.target.value })
+            });
+        }
+    });
+
+    // Eliminar usuario
+    document.addEventListener("click", async (e) => {
+        if (e.target.closest("[data-delete]")) {
+            const id = e.target.closest("[data-delete]").dataset.delete;
+            await fetch(`/admin/usuarios/${id}`, { method: "DELETE" });
+            loadUsers();
+        }
+    });
+
+    // Inicializar
+    loadUsers();
+
+    window.openAddUserModal = function () {
+        document.getElementById("addUserModal").style.display = "flex";
+    }
+
+    window.closeAddUserModal = function () {
+        document.getElementById("addUserModal").style.display = "none";
+    }
+
+    window.addEventListener("click", (e) => {
+        const modal = document.getElementById("addUserModal");
+        if (e.target === modal) closeAddUserModal();
+    });
 });
 
 // Agregar estilos de animación para feedback

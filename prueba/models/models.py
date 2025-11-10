@@ -20,3 +20,11 @@ class UsuarioRegistro(BaseModel):
 
 class Message(BaseModel):
     text: str
+
+class Libro(BaseModel):
+    nombre: str
+    autor: str
+    portada: str
+    cantidad_hojas: int
+    stock: int
+    precio: float
