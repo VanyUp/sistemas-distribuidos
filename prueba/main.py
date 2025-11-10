@@ -1,21 +1,31 @@
 from fastapi import FastAPI, Request
+<<<<<<< HEAD
 from fastapi.responses import HTMLResponse, JSONResponse
+=======
+from fastapi.responses import HTMLResponse, RedirectResponse
+>>>>>>> ff7aef1d88e38013a33b42c1cf053a923ed4605c
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from models.models import Libro, UsuarioLogin, UsuarioRegistro, Message
 from fastapi import HTTPException
-from models.database import supabase
 from passlib.hash import bcrypt
+from supabase import create_client
 from dotenv import load_dotenv
 import os
-from openai import AsyncOpenAI
 
 load_dotenv()
 
 app = FastAPI()
 
+<<<<<<< HEAD
 
 
+=======
+url = os.getenv("SUPABASE_URL")
+key = os.getenv("SUPABASE_KEY")
+
+supabase = create_client(url, key)
+>>>>>>> ff7aef1d88e38013a33b42c1cf053a923ed4605c
 
 # Configuración de plantillas y archivos estáticos
 templates = Jinja2Templates(directory="templates")
@@ -29,10 +39,14 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # --- Página principal ---
 @app.get("/", response_class=HTMLResponse)
-async def home(request):
+async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+<<<<<<< HEAD
 
+=======
+# --- Inicio/Catálogo de libros ---
+>>>>>>> ff7aef1d88e38013a33b42c1cf053a923ed4605c
 @app.get("/catalogo", response_class=HTMLResponse)
 async def catalogo_page(request: Request):  # ← tipo correcto aquí
     return templates.TemplateResponse("catalogo.html", {"request": request})
@@ -73,39 +87,64 @@ async def get_perfil(request):
 # ===== Módulo de administración =====
 
 # --- Dashboard ---
-@app.get("/admin", response_class=HTMLResponse)
-async def get_admin_dashboard(request):
+@app.get("/admin/dashboard", response_class=HTMLResponse)
+async def home(request: Request):
+    session = request.cookies.get("admin_session")
+    if not session:
+        return RedirectResponse("/admin/login")
+    
     return templates.TemplateResponse("admin/dashboard.html", {"request": request})
 
-# --- Gestión de usuarios ---
-@app.get("/admin/usuarios", response_class=HTMLResponse)
-async def get_admin_usuarios(request):
-    return templates.TemplateResponse("admin/usuarios.html", {"request": request})
-
-# --- Gestión de libros ---
-@app.get("/admin/libros", response_class=HTMLResponse)
-async def get_admin_libros(request):
-    return templates.TemplateResponse("admin/libros.html", {"request": request})
-
-# --- Gestión de pedidos ---
-@app.get("/admin/pedidos", response_class=HTMLResponse)
-async def get_admin_pedidos(request):
-    return templates.TemplateResponse("admin/pedidos.html", {"request": request})
-
-# --- Gestión de prooveedores/compras ---
-@app.get("/admin/proveedores", response_class=HTMLResponse)
-async def get_admin_proveedores(request):
-    return templates.TemplateResponse("admin/proveedores.html", {"request": request})
-
-# --- Reportes y estadísticas ---
-@app.get("/admin/reportes", response_class=HTMLResponse)
-async def get_admin_reportes(request):
-    return templates.TemplateResponse("admin/reportes.html", {"request": request})
+# --- Login de administradores ---
+@app.get("/admin/login", response_class=HTMLResponse)
+async def admin_login(request: Request):
+    return templates.TemplateResponse("admin/login.html", {"request": request})
 
 
 # ======================= 
 # Interfaces de Servicios
 # =======================
+
+# --- Registro de administradores ---
+@app.post("/admins/register")
+def registrar_usuario(usuario: UsuarioRegistro):
+    try:
+        existente = supabase.table("admins").select("*").eq("email", usuario.email).execute()
+        if existente.data:
+            raise HTTPException(status_code=400, detail="El admin ya existe")
+
+        hashed = bcrypt.hash(usuario.password)
+
+        nuevo = {
+            "username": usuario.username,
+            "email": usuario.email,
+            "hashed_password": hashed
+        }
+
+        res = supabase.table("admins").insert(nuevo).execute()
+        print(res)
+        return {"mensaje": "Admin registrado correctamente", "debug": res}
+    except Exception as e:
+        print("❌ Error:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+    
+# --- Login de administradores ---
+@app.post("/admins/login")
+def login_usuario(usuario: UsuarioLogin):
+    res = supabase.table("admins").select("*").eq("email", usuario.email).execute()
+
+    if not res.data:
+        raise HTTPException(status_code=404, detail="Admin no encontrado")
+
+    usuario_db = res.data[0]
+
+    if not bcrypt.verify(usuario.password, usuario_db["hashed_password"]):
+        raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+
+    # Guardamos sesión en cookie
+    response = RedirectResponse(url="/admin/dashboard", status_code=303)
+    response.set_cookie(key="admin_session", value=usuario_db["id"], httponly=True)
+    return response
 
 # --- Registro ---
 @app.post("/usuarios/register")
@@ -140,10 +179,12 @@ def login_usuario(usuario: UsuarioLogin):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
     usuario_db = res.data[0]
+
     if not bcrypt.verify(usuario.password, usuario_db["hashed_password"]):
         raise HTTPException(status_code=401, detail="Contraseña incorrecta")
 
-    return {"mensaje": f"Bienvenido {usuario_db['username']}"}
+    response = {"mensaje": f"Bienvenido {usuario_db['username']}"}
+    return response
 
 
 # --- Gestión de Libros ---
@@ -168,25 +209,6 @@ def actualizar_libro(id: int, libro: Libro):
 def eliminar_libro(id: int):
     response = supabase.table("libros").delete().eq("id", id).execute()
     return {"deleted": len(response.data)}
-
-# --- Chat con OpenAI ---
-@app.post("/api/chat")
-async def chat(message: Message):   
-    try:
-        response = await openai_client.chat.completions.create(
-            model="gpt-oss-120b",
-            messages=[
-                {"role": "system", "content": "Eres un asistente bibliotecario, puedes dar recomendaciones de cualquier genero que te pregunten. Humor Gen Z."},
-                {"role": "user", "content": message.text},
-            ]
-        )
-        return {"reply": response.choices[0].message.content}
-    
-    except Exception as e:
-        print("❌ Error en backend:", e)
-        return {"reply": f"⚠️ Error en el servidor: {str(e)}"}
-    
-loop = None  # 👈 variable global para guardar el loop principal
 
 
 # =========================
