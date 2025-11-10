@@ -1,9 +1,5 @@
 from fastapi import FastAPI, Request
-<<<<<<< HEAD
-from fastapi.responses import HTMLResponse, JSONResponse
-=======
 from fastapi.responses import HTMLResponse, RedirectResponse
->>>>>>> ff7aef1d88e38013a33b42c1cf053a923ed4605c
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from models.models import Libro, UsuarioLogin, UsuarioRegistro, Message
@@ -17,15 +13,10 @@ load_dotenv()
 
 app = FastAPI()
 
-<<<<<<< HEAD
-
-
-=======
 url = os.getenv("SUPABASE_URL")
 key = os.getenv("SUPABASE_KEY")
 
 supabase = create_client(url, key)
->>>>>>> ff7aef1d88e38013a33b42c1cf053a923ed4605c
 
 # Configuración de plantillas y archivos estáticos
 templates = Jinja2Templates(directory="templates")
@@ -42,11 +33,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-<<<<<<< HEAD
-
-=======
 # --- Inicio/Catálogo de libros ---
->>>>>>> ff7aef1d88e38013a33b42c1cf053a923ed4605c
 @app.get("/catalogo", response_class=HTMLResponse)
 async def catalogo_page(request: Request):  # ← tipo correcto aquí
     return templates.TemplateResponse("catalogo.html", {"request": request})
