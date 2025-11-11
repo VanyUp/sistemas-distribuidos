@@ -7,6 +7,46 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
+    function showFeedback(message, type = 'success') {
+        // Crear elemento de feedback
+        const feedback = document.createElement('div');
+        feedback.className = `feedback-message ${type}`;
+        feedback.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            ${message}
+        `;
+
+        // Estilos del feedback
+        feedback.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: ${type === 'success' ? 'var(--success-color)' : type === 'error' ? 'var(--error-color)' : 'var(--primary-color)'};
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            max-width: 400px;
+        `;
+
+        document.body.appendChild(feedback);
+
+        // Remover después de 4 segundos
+        setTimeout(() => {
+            feedback.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => {
+                if (feedback.parentNode) {
+                    feedback.parentNode.removeChild(feedback);
+                }
+            }, 300);
+        }, 4000);
+    }
+
     // Aplicar código promocional
     const applyPromoBtn = document.getElementById('applyPromo');
     applyPromoBtn.addEventListener('click', function () {
@@ -61,6 +101,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Deshabilitar input de promo
         document.getElementById('promoCode').disabled = true;
         document.getElementById('applyPromo').disabled = true;
+
+        localStorage.setItem("descuento", Math.round(discount).toString());
     }
 
     const catalogoBtn = document.querySelector(".catalogo-href");
@@ -143,6 +185,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         // Actualizamos resumen
+        const descuentoGuardado = parseInt(localStorage.getItem("descuento")) || 0;
         const total = subtotal; // puedes sumar envío o descuento si aplica
         summaryContainer.innerHTML = `
             <div class="summary-row">
@@ -155,7 +198,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             </div>
             <div class="summary-row">
                 <span>Descuento</span>
-                <span class="discount">-$0</span>
+                <span class="discount">-$${descuentoGuardado.toLocaleString()}</span>
             </div>
             <div class="summary-row total">
                 <span>Total</span>
@@ -183,4 +226,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (err) {
         console.error("Error cargando carrito:", err);
     }
+
+    const checkoutBtn = document.getElementById("checkoutBtn");
+    checkoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/pago";
+    });
 });

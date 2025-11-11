@@ -7,6 +7,8 @@ from fastapi import HTTPException
 from passlib.hash import bcrypt
 from supabase import create_client
 from dotenv import load_dotenv
+from datetime import datetime
+import random
 import httpx
 import time
 import os
@@ -111,6 +113,7 @@ async def admin_login(request: Request):
 # Interfaces de Servicios
 # =======================
 
+
 @app.post("/perfil/guardar")
 async def guardar_perfil(
     usuario_id: int = Form(...),
@@ -148,23 +151,37 @@ async def guardar_perfil(
     except Exception as e:
         print("❌ Error guardando perfil:", e)
         raise HTTPException(status_code=500, detail="No se pudo guardar la información")
-    
+
 
 @app.get("/perfil/datos")
 async def obtener_perfil(usuario_id: int):
     try:
         # Obtener datos del usuario
-        usuario = supabase.table("usuarios").select("*").eq("id", usuario_id).single().execute()
+        usuario = (
+            supabase.table("usuarios")
+            .select("*")
+            .eq("id", usuario_id)
+            .single()
+            .execute()
+        )
 
         # Obtener datos adicionales del cliente (si existen)
-        cliente = supabase.table("clientes").select("*").eq("usuario_id", usuario_id).single().execute()
+        cliente = (
+            supabase.table("clientes")
+            .select("*")
+            .eq("usuario_id", usuario_id)
+            .single()
+            .execute()
+        )
 
         return {
             "email": usuario.data.get("email"),
             "nombre": cliente.data.get("nombre") if cliente.data else "",
             "apellido": cliente.data.get("apellido") if cliente.data else "",
             "telefono": cliente.data.get("telefono") if cliente.data else "",
-            "fecha_nacimiento": cliente.data.get("fecha_nacimiento") if cliente.data else "",
+            "fecha_nacimiento": (
+                cliente.data.get("fecha_nacimiento") if cliente.data else ""
+            ),
             "genero": cliente.data.get("genero") if cliente.data else "",
             "created_at": usuario.data.get("created_at"),
         }
@@ -486,8 +503,13 @@ def eliminar_item_carrito(item_id: int):
 
 # crear pedido desde el carrito
 @app.post("/pedidos/crear")
-def crear_pedido(data: dict):
+def crear_pedido_detallado(data: dict):
     user_id = data.get("user_id")
+    direccion = data.get("direccion")
+    envio = data.get("envio")
+    pago_info = data.get("pago")
+    nota = data.get("nota", "")
+
     if not user_id:
         raise HTTPException(status_code=400, detail="Falta el ID del usuario")
 
@@ -500,7 +522,7 @@ def crear_pedido(data: dict):
 
     carrito_id = carrito.data["id"]
 
-    # 2️⃣ Obtener los items del carrito
+    # 2️⃣ Obtener items del carrito
     carrito_items = (
         supabase.table("carrito_items")
         .select("*")
@@ -510,15 +532,19 @@ def crear_pedido(data: dict):
     if not carrito_items.data:
         raise HTTPException(status_code=400, detail="El carrito está vacío")
 
-    # 3️⃣ Crear pedido
-    pedido = (
-        supabase.table("pedidos")
-        .insert({"user_id": user_id, "estado": "pendiente"})
-        .execute()
-    )
-    pedido_id = pedido.data[0]["id"]
+    codigo_pedido = f"VS-{datetime.now().year}-{random.randint(1000,9999)}"
 
-    # 4️⃣ Insertar los items del pedido
+    # 3️⃣ Insertar pedido
+    pedido_data = {
+        "user_id": data["user_id"],
+        "total": data["total"],
+        "codigo_pedido": codigo_pedido,
+        "estado": "pending",
+    }
+    pedido_res = supabase.table("pedidos").insert(pedido_data).execute()
+    pedido_id = pedido_res.data[0]["id"]
+
+    # 4️⃣ Insertar items
     for item in carrito_items.data:
         supabase.table("pedido_items").insert(
             {
@@ -529,7 +555,25 @@ def crear_pedido(data: dict):
             }
         ).execute()
 
-    # 5️⃣ Vaciar el carrito después de crear el pedido
+    # 5️⃣ Guardar dirección
+    if direccion:
+        direccion_data = direccion.copy()
+        direccion_data["pedido_id"] = pedido_id
+        supabase.table("direcciones_envio").insert(direccion_data).execute()
+
+    # 6️⃣ Guardar método de pago
+    if pago_info:
+        pago_data = pago_info.copy()
+        pago_data["pedido_id"] = pedido_id
+        supabase.table("pagos").insert(pago_data).execute()
+
+    # 7️⃣ Guardar info de envío (opcional)
+    if envio:
+        envio_data = envio.copy()
+        envio_data["pedido_id"] = pedido_id
+        supabase.table("envios").insert(envio_data).execute()
+
+    # 8️⃣ Vaciar carrito
     supabase.table("carrito_items").delete().eq("carrito_id", carrito_id).execute()
 
-    return {"mensaje": "Pedido creado correctamente", "pedido_id": pedido_id}
+    return {"mensaje": "Pedido creado correctamente", "pedido_id": pedido_id, "codigo_pedido": codigo_pedido}
