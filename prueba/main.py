@@ -7,6 +7,8 @@ from fastapi import HTTPException
 from passlib.hash import bcrypt
 from supabase import create_client
 from dotenv import load_dotenv
+import httpx
+import time
 import os
 
 load_dotenv()
@@ -54,12 +56,6 @@ async def catalogo_page(request: Request):  # ← tipo correcto aquí
     return templates.TemplateResponse("catalogo.html", {"request": request})
 
 
-@app.get("/api/catalogo")
-def obtener_catalogo():
-    data = supabase.table("libros").select("*").execute()
-    return data.data
-
-
 # --- Detalles del libro ---
 @app.get("/libro/{id}", response_class=HTMLResponse)
 async def get_libro(request, id: int):
@@ -76,19 +72,19 @@ async def get_carrito(request: Request):
 
 # --- Pago y confirmación ---
 @app.get("/pago", response_class=HTMLResponse)
-async def get_pago(request):
+async def get_pago(request: Request):
     return templates.TemplateResponse("pago.html", {"request": request})
 
 
 # --- Historial de pedidos ---
 @app.get("/historial", response_class=HTMLResponse)
-async def get_historial(request):
+async def get_historial(request: Request):
     return templates.TemplateResponse("historial.html", {"request": request})
 
 
 # --- Perfil de usuario ---
 @app.get("/perfil", response_class=HTMLResponse)
-async def get_perfil(request):
+async def get_perfil(request: Request):
     return templates.TemplateResponse("perfil.html", {"request": request})
 
 
@@ -114,6 +110,74 @@ async def admin_login(request: Request):
 # =======================
 # Interfaces de Servicios
 # =======================
+
+@app.post("/perfil/guardar")
+async def guardar_perfil(
+    usuario_id: int = Form(...),
+    nombre: str = Form(...),
+    apellido: str = Form(...),
+    telefono: str = Form(None),
+    fecha_nacimiento: str = Form(None),
+    genero: str = Form(None),
+):
+    try:
+        existente = (
+            supabase.table("clientes")
+            .select("*")
+            .eq("usuario_id", usuario_id)
+            .execute()
+        )
+
+        datos = {
+            "usuario_id": usuario_id,
+            "nombre": nombre,
+            "apellido": apellido,
+            "telefono": telefono,
+            "fecha_nacimiento": fecha_nacimiento,
+            "genero": genero,
+        }
+
+        if existente.data:
+            cliente_id = existente.data[0]["id"]
+            supabase.table("clientes").update(datos).eq("id", cliente_id).execute()
+        else:
+            supabase.table("clientes").insert(datos).execute()
+
+        return {"mensaje": "✅ Datos guardados correctamente"}
+
+    except Exception as e:
+        print("❌ Error guardando perfil:", e)
+        raise HTTPException(status_code=500, detail="No se pudo guardar la información")
+    
+
+@app.get("/perfil/datos")
+async def obtener_perfil(usuario_id: int):
+    try:
+        # Obtener datos del usuario
+        usuario = supabase.table("usuarios").select("*").eq("id", usuario_id).single().execute()
+
+        # Obtener datos adicionales del cliente (si existen)
+        cliente = supabase.table("clientes").select("*").eq("usuario_id", usuario_id).single().execute()
+
+        return {
+            "email": usuario.data.get("email"),
+            "nombre": cliente.data.get("nombre") if cliente.data else "",
+            "apellido": cliente.data.get("apellido") if cliente.data else "",
+            "telefono": cliente.data.get("telefono") if cliente.data else "",
+            "fecha_nacimiento": cliente.data.get("fecha_nacimiento") if cliente.data else "",
+            "genero": cliente.data.get("genero") if cliente.data else "",
+            "created_at": usuario.data.get("created_at"),
+        }
+
+    except Exception as e:
+        print("❌ Error obteniendo perfil:", e)
+        raise HTTPException(status_code=500, detail="No se pudo obtener el perfil")
+
+
+@app.get("/api/catalogo")
+def obtener_catalogo():
+    data = supabase.table("libros").select("*").execute()
+    return data.data
 
 
 # --- Registro de administradores ---
@@ -189,6 +253,7 @@ def registrar_usuario(usuario: UsuarioRegistro):
 
 # --- Login ---
 
+
 # --- Login ---
 @app.post("/usuarios/login")
 def login_usuario(usuario: UsuarioLogin):
@@ -206,9 +271,8 @@ def login_usuario(usuario: UsuarioLogin):
     return {
         "mensaje": f"Bienvenido {usuario_db['username']}",
         "user_id": usuario_db["id"],
-        "username": usuario_db["username"]
+        "username": usuario_db["username"],
     }
-
 
 
 # --- Gestión de Libros ---
@@ -244,8 +308,6 @@ def editarLibro(id: int, libro: Libro):
 def eliminarLibro(id: int):
     response = supabase.table("libros").delete().eq("id", id).execute()
     return {"deleted": len(response.data)}
-
-
 
 
 # =========================
@@ -302,6 +364,7 @@ def eliminar_usuario(user_id: int):
 # Carrito de compras (por usuario)
 # =========================
 
+
 # agregar item al carrito
 @app.post("/carrito/agregar")
 def agregar_al_carrito(item: dict):
@@ -319,32 +382,37 @@ def agregar_al_carrito(item: dict):
         carrito_id = nuevo.data[0]["id"]
 
     # 2️⃣ Verificar si el libro ya está en carrito_items
-    existente = supabase.table("carrito_items") \
-        .select("*") \
-        .eq("carrito_id", carrito_id) \
-        .eq("libro_id", libro_id) \
+    existente = (
+        supabase.table("carrito_items")
+        .select("*")
+        .eq("carrito_id", carrito_id)
+        .eq("libro_id", libro_id)
         .execute()
+    )
 
     if existente.data:
         # 3️⃣ Si ya está, actualizar cantidad
         item_id = existente.data[0]["id"]
         nueva_cantidad = existente.data[0]["cantidad"] + cantidad
-        supabase.table("carrito_items") \
-            .update({"cantidad": nueva_cantidad}) \
-            .eq("id", item_id) \
-            .execute()
+        supabase.table("carrito_items").update({"cantidad": nueva_cantidad}).eq(
+            "id", item_id
+        ).execute()
     else:
         # 4️⃣ Insertar nuevo libro al carrito
         # Puedes traer el precio desde libros o pasarlo desde el front
-        libro_data = supabase.table("libros").select("precio").eq("id", libro_id).execute()
+        libro_data = (
+            supabase.table("libros").select("precio").eq("id", libro_id).execute()
+        )
         precio_unitario = libro_data.data[0]["precio"] if libro_data.data else 0
 
-        supabase.table("carrito_items").insert({
-            "carrito_id": carrito_id,
-            "libro_id": libro_id,
-            "cantidad": cantidad,
-            "precio_unitario": precio_unitario
-        }).execute()
+        supabase.table("carrito_items").insert(
+            {
+                "carrito_id": carrito_id,
+                "libro_id": libro_id,
+                "cantidad": cantidad,
+                "precio_unitario": precio_unitario,
+            }
+        ).execute()
 
     return {"message": "Producto agregado correctamente"}
 
@@ -381,7 +449,7 @@ def obtener_carrito(user_id: int):
         libros_ids = [i["libro_id"] for i in items.data]
         libros_data = (
             supabase.table("libros")
-            .select("id, nombre, precio, portada")
+            .select("id, nombre, precio, portada, autor")
             .in_("id", libros_ids)
             .execute()
         )
@@ -393,7 +461,8 @@ def obtener_carrito(user_id: int):
             i["libros"] = {
                 "titulo": libro.get("nombre", ""),
                 "precio": libro.get("precio", 0),
-                "portada": libro.get("portada", "")
+                "portada": libro.get("portada", ""),
+                "autor": libro.get("autor", ""),
             }
 
         return items.data
@@ -406,8 +475,6 @@ def obtener_carrito(user_id: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-
-
 # eliminar item del carrito
 @app.delete("/carrito/{item_id}")
 def eliminar_item_carrito(item_id: int):
@@ -417,7 +484,7 @@ def eliminar_item_carrito(item_id: int):
     return {"mensaje": "Libro eliminado del carrito"}
 
 
-#crear pedido desde el carrito
+# crear pedido desde el carrito
 @app.post("/pedidos/crear")
 def crear_pedido(data: dict):
     user_id = data.get("user_id")
@@ -425,7 +492,9 @@ def crear_pedido(data: dict):
         raise HTTPException(status_code=400, detail="Falta el ID del usuario")
 
     # 1️⃣ Obtener carrito del usuario
-    carrito = supabase.table("carrito").select("id").eq("user_id", user_id).single().execute()
+    carrito = (
+        supabase.table("carrito").select("id").eq("user_id", user_id).single().execute()
+    )
     if not carrito.data:
         raise HTTPException(status_code=400, detail="El usuario no tiene carrito")
 
@@ -451,16 +520,16 @@ def crear_pedido(data: dict):
 
     # 4️⃣ Insertar los items del pedido
     for item in carrito_items.data:
-        supabase.table("pedido_items").insert({
-            "pedido_id": pedido_id,
-            "libro_id": item["libro_id"],
-            "cantidad": item["cantidad"],
-            "precio_unitario": item["precio_unitario"],
-        }).execute()
+        supabase.table("pedido_items").insert(
+            {
+                "pedido_id": pedido_id,
+                "libro_id": item["libro_id"],
+                "cantidad": item["cantidad"],
+                "precio_unitario": item["precio_unitario"],
+            }
+        ).execute()
 
     # 5️⃣ Vaciar el carrito después de crear el pedido
     supabase.table("carrito_items").delete().eq("carrito_id", carrito_id).execute()
 
     return {"mensaje": "Pedido creado correctamente", "pedido_id": pedido_id}
-
-

@@ -23,6 +23,19 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeForms();
     initializeEventListeners();
 
+    const profileBtn = document.querySelector(".profile-settings");
+    profileBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/perfil";
+    });
+
+    const logoutBtn = document.querySelector(".logout");
+    logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/";
+        localStorage.removeItem("user_id");
+    });
+
     // Funciones de inicialización
     function initializeForms() {
         // Formatear número de tarjeta

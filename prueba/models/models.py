@@ -1,13 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
 
-class Libro(BaseModel):
-    nombre: str
-    autor: str
-    cantidad_hojas: int
-    stock: int
-    precio: float
-
-
 class UsuarioLogin(BaseModel):
     email: EmailStr
     password: str
@@ -28,3 +20,11 @@ class Libro(BaseModel):
     cantidad_hojas: int
     stock: int
     precio: float
+
+class Cliente(BaseModel):
+    usuario_id: int
+    nombre: str
+    apellido: str
+    telefono: str | None = None
+    fecha_nacimiento: str | None = None
+    genero: str | None = None

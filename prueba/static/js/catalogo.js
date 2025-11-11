@@ -1,3 +1,38 @@
+document.addEventListener('DOMContentLoaded', async function () {
+    cargarLibros();
+    await actualizarContadorCarrito();
+
+    const profileBtn = document.querySelector(".profile-settings");
+    profileBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/perfil";
+    });
+
+    const logoutBtn = document.querySelector(".logout");
+    logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/";
+        localStorage.removeItem("user_id");
+    });
+
+    // Cerrar el mini carrito
+    document.addEventListener("click", e => {
+        const modal = document.getElementById("miniCartModal");
+        if (e.target.id === "closeMiniCart" || e.target.id === "miniCartModal") {
+            modal.classList.remove("visible");
+            setTimeout(() => modal.style.display = "none", 300);
+        }
+    });
+
+    // Abrir al hacer click en el icono del carrito
+    const cartBtn = document.getElementById("cartBtn");
+    if (cartBtn) {
+        cartBtn.addEventListener("click", async () => {
+            await mostrarMiniCarrito();
+        });
+    }
+});
+
 // ===============================
 // Cargar y mostrar libros
 // ===============================
@@ -122,31 +157,6 @@ async function mostrarMiniCarrito() {
         console.error("Error al cargar mini carrito:", error);
     }
 }
-
-// ===============================
-// Eventos globales
-// ===============================
-document.addEventListener('DOMContentLoaded', async function() {
-    cargarLibros();
-    await actualizarContadorCarrito();
-
-    // Cerrar el mini carrito
-    document.addEventListener("click", e => {
-        const modal = document.getElementById("miniCartModal");
-        if (e.target.id === "closeMiniCart" || e.target.id === "miniCartModal") {
-            modal.classList.remove("visible");
-            setTimeout(() => modal.style.display = "none", 300);
-        }
-    });
-
-    // Abrir al hacer click en el icono del carrito
-    const cartBtn = document.getElementById("cartBtn");
-    if (cartBtn) {
-        cartBtn.addEventListener("click", async () => {
-            await mostrarMiniCarrito();
-        });
-    }
-});
 
 // ===============================
 // Feedback visual

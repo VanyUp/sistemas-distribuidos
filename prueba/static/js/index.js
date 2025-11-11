@@ -180,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 submitBtn.disabled = true;
 
                 setTimeout(() => {
-                    alert('¡Formulario enviado con éxito!');
                     this.reset();
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;

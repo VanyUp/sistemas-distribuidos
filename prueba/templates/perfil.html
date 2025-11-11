@@ -30,10 +30,6 @@
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
-                    <button class="btn-icon" id="wishlistBtn">
-                        <i class="fas fa-heart"></i>
-                        <span class="icon-badge">0</span>
-                    </button>
                     <button class="btn-icon" id="cartBtn">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="icon-badge">0</span>
@@ -44,16 +40,12 @@
                             Mi Cuenta
                         </button>
                         <div class="user-dropdown">
-                            <a href="profile.html" class="dropdown-item active">
+                            <a href="" class="dropdown-item active">
                                 <i class="fas fa-user-edit"></i>
                                 Perfil
                             </a>
-                            <a href="orders.html" class="dropdown-item">
-                                <i class="fas fa-clipboard-list"></i>
-                                Mis Pedidos
-                            </a>
                             <div class="dropdown-divider"></div>
-                            <a href="index.html" class="dropdown-item logout">
+                            <a href="#" class="dropdown-item logout">
                                 <i class="fas fa-sign-out-alt"></i>
                                 Cerrar Sesión
                             </a>
@@ -71,7 +63,7 @@
             <div class="container">
                 <!-- Breadcrumb -->
                 <nav class="breadcrumb">
-                    <a href="index.html">Inicio</a>
+                    <a href="#" class="catalogo-href">Cátalogo</a>
                     <i class="fas fa-chevron-right"></i>
                     <span>Mi Perfil</span>
                 </nav>
@@ -155,34 +147,34 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="firstName">Nombre *</label>
-                                        <input type="text" id="firstName" value="Juan" required>
+                                        <input type="text" id="firstName" name="nombre" value="" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="lastName">Apellido *</label>
-                                        <input type="text" id="lastName" value="Pérez" required>
+                                        <input type="text" id="lastName" name="apellido" value="" required>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="email">Correo Electrónico *</label>
-                                    <input type="email" id="email" value="juan.perez@email.com" required>
+                                    <label for="email">Correo Electrónico</label>
+                                    <input type="email" id="email" placeholder="" readonly>
                                     <span class="field-note">Usaremos este email para contactarte</span>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="phone">Teléfono</label>
-                                    <input type="tel" id="phone" value="+57 300 123 4567">
+                                    <input type="tel" id="phone" name="telefono" value="">
                                     <span class="field-note">Para notificaciones importantes sobre tus pedidos</span>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="birthDate">Fecha de Nacimiento</label>
-                                    <input type="date" id="birthDate" value="1990-05-15">
+                                    <input type="date" id="birthDate" name="fecha_nacimiento" value="">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="gender">Género</label>
-                                    <select id="gender">
+                                    <select id="gender" name="genero">
                                         <option value="">Seleccionar</option>
                                         <option value="male" selected>Masculino</option>
                                         <option value="female">Femenino</option>

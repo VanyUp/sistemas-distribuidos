@@ -1,197 +1,3 @@
-document.getElementById("addBookForm").addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const data = {
-        nombre: document.getElementById("nombre").value,
-        autor: document.getElementById("autor").value,
-        portada: document.getElementById("portada").value,
-        cantidad_hojas: parseInt(document.getElementById("cantidad_hojas").value),
-        stock: parseInt(document.getElementById("stock").value),
-        precio: parseFloat(document.getElementById("precio").value),
-    };
-
-    const message = document.getElementById("formMessage");
-
-    try {
-        const response = await fetch("/agregarLibro", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            message.textContent = "✅ Libro agregado correctamente.";
-            message.style.color = "green";
-            document.getElementById("addBookForm").reset();
-        } else {
-            message.textContent = `❌ Error: ${result.detail || "No se pudo guardar el libro."}`;
-            message.style.color = "red";
-        }
-    } catch (error) {
-        message.textContent = "❌ Error de conexión con el servidor.";
-        message.style.color = "red";
-    }
-});
-
-// Cargar libros desde FastAPI y mostrarlos en la tabla
-async function cargarLibros() {
-    try {
-        const response = await fetch('/libros'); // Endpoint correcto
-        if (!response.ok) throw new Error("Error al cargar libros");
-
-        const libros = await response.json();
-        mostrarLibros(libros);
-    } catch (error) {
-        console.error("Error cargando catálogo:", error);
-    }
-}
-
-
-// ✅ Función que muestra los libros en la tabla
-function mostrarLibros(libros) {
-  const tbody = document.querySelector('.data-table tbody');
-  if (!tbody) return console.error("No se encontró el <tbody> de la tabla");
-
-  tbody.innerHTML = ""; // Limpiar tabla
-
-  libros.forEach(libro => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>
-        <label class="checkbox-label">
-          <input type="checkbox" class="book-checkbox" />
-          <span class="checkmark"></span>
-        </label>
-      </td>
-      <td>
-        <div class="book-info">
-          <img src="${libro.portada}" alt="${libro.nombre}" style="width:50px;height:auto; margin-right:10px;" />
-          <div>
-            <strong>${libro.nombre}</strong><br>
-            <span>ISBN: ${libro.id}</span>
-          </div>
-        </div>
-      </td>
-      <td>${libro.autor}</td>
-      <td>Desconocida</td>
-      <td>$${libro.precio}</td>
-      <td>${libro.stock}</td>
-      <td>${libro.stock > 0 ? 'En Stock' : 'Agotado'}</td>
-      <td>0</td>
-      <td>
-        <button class="btn-icon small edit-btn" data-id="${libro.id}">Editar</button>
-        <button class="btn-icon small delete-btn" data-id="${libro.id}">Eliminar</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-// ✅ Escuchar clics en los botones Editar y Eliminar
-document.addEventListener("click", async (e) => {
-  // 🗑️ ELIMINAR LIBRO
-  if (e.target.classList.contains("delete-btn")) {
-    const id = e.target.dataset.id;
-
-    if (confirm("¿Seguro que quieres eliminar este libro?")) {
-      try {
-        const response = await fetch(`http://127.0.0.1:8000/libros/${id}`, {
-          method: "DELETE",
-        });
-        const data = await response.json();
-
-        if (data.deleted > 0) {
-          alert("Libro eliminado correctamente");
-          obtenerLibros(); // Recarga la lista
-        } else {
-          alert("Error al eliminar el libro");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        alert("Error al conectar con el servidor");
-      }
-    }
-  }
-
-  // ✏️ EDITAR LIBRO
-  if (e.target.classList.contains("edit-btn")) {
-    const id = e.target.dataset.id;
-
-    try {
-      // Obtener datos actuales del libro
-      const res = await fetch(`http://127.0.0.1:8000/libros/${id}`);
-      const libro = await res.json();
-
-      // Pedir nuevos valores (usa prompt para simplicidad)
-      const nuevoNombre = prompt("Nuevo nombre:", libro.nombre);
-      const nuevoAutor = prompt("Nuevo autor:", libro.autor);
-      const nuevaPortada = prompt("Nueva portada (URL):", libro.portada);
-      const nuevaCantidadHojas = prompt("Nueva cantidad de hojas:", libro.cantidad_hojas);
-      const nuevoPrecio = prompt("Nuevo precio:", libro.precio);
-      const nuevoStock = prompt("Nuevo stock:", libro.stock);
-
-      if (nuevoNombre && nuevoAutor && nuevaPortada && nuevaCantidadHojas && nuevoPrecio && nuevoStock) {
-        const response = await fetch(`http://127.0.0.1:8000/libros/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nombre: nuevoNombre,
-            autor: nuevoAutor,
-            portada: nuevaPortada,
-            cantidad_hojas: parseInt(nuevaCantidadHojas),
-            precio: parseFloat(nuevoPrecio),
-            stock: parseInt(nuevoStock),
-        
-          }),
-        });
-
-        if (response.ok) {
-          alert("Libro actualizado correctamente");
-          obtenerLibros(); // Recarga la lista
-        } else {
-          alert("Error al actualizar el libro");
-        }
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Error al conectar con el servidor");
-    }
-  }
-});
-
-// ✅ Función para obtener y mostrar los libros
-async function obtenerLibros() {
-  try {
-    const res = await fetch("http://127.0.0.1:8000/libros");
-    const data = await res.json();
-    mostrarLibros(data);
-  } catch (error) {
-    console.error("Error al obtener libros:", error);
-  }
-}
-
-// Cargar libros al iniciar
-obtenerLibros();
-
-
-
-
-// Llamar cuando la página carga
-document.addEventListener('DOMContentLoaded', () => {
-    cargarLibros();
-});
-
-
-
-
-
-
-
-
 // Inicialización cuando el DOM está listo
 document.addEventListener('DOMContentLoaded', function () {
     console.log('Admin dashboard script cargado');
@@ -200,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const navItems = document.querySelectorAll('.nav-item');
     const contentSections = document.querySelectorAll('.content-section');
     const refreshBtn = document.getElementById('refreshDashboard');
-    const logoutBtn = document.getElementById('logoutBtn');
     const addBookBtn = document.getElementById('addBookBtn');
     const addBookModal = document.getElementById('addBookModal');
     const closeModal = document.querySelector('.close-modal');
@@ -213,6 +18,14 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeDashboard();
     initializeBooksManagement();
     initializeEventListeners();
+    cargarLibros();
+    obtenerLibros();
+
+    const logoutBtn = document.querySelector(".logout");
+    logoutBtn.addEventListener("click", () => {
+        window.location.href = "/";
+        localStorage.removeItem("user_id");
+    });
 
     function initializeNavigation() {
         // Navegación entre secciones
@@ -292,22 +105,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function initializeEventListeners() {
-        // Logout
-        logoutBtn.addEventListener('click', function () {
-            showConfirmationModal(
-                'Cerrar Sesión',
-                '¿Estás seguro de que quieres cerrar sesión?',
-                'Cerrar Sesión',
-                () => {
-                    // Simular logout
-                    showLoading('Cerrando sesión...');
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1500);
-                }
-            );
-        });
-
         // Agregar libro
         addBookBtn.addEventListener('click', function () {
             openAddBookModal();
@@ -631,6 +428,182 @@ document.addEventListener('DOMContentLoaded', function () {
             tbody.appendChild(row);
         });
     }
+
+    // Cargar libros desde FastAPI y mostrarlos en la tabla
+    async function cargarLibros() {
+        try {
+            const response = await fetch('/libros'); // Endpoint correcto
+            if (!response.ok) throw new Error("Error al cargar libros");
+
+            const libros = await response.json();
+            mostrarLibros(libros);
+        } catch (error) {
+            console.error("Error cargando catálogo:", error);
+        }
+    }
+
+
+    // ✅ Función que muestra los libros en la tabla
+    function mostrarLibros(libros) {
+        const tbody = document.querySelector('.data-table tbody');
+        if (!tbody) return console.error("No se encontró el <tbody> de la tabla");
+
+        tbody.innerHTML = ""; // Limpiar tabla
+
+        libros.forEach(libro => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                    <td>
+                        <label class="checkbox-label">
+                        <input type="checkbox" class="book-checkbox" />
+                        <span class="checkmark"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="book-info">
+                        <img src="${libro.portada}" alt="${libro.nombre}" style="width:50px;height:auto; margin-right:10px;" />
+                        <div>
+                            <strong>${libro.nombre}</strong><br>
+                            <span>ISBN: ${libro.id}</span>
+                        </div>
+                        </div>
+                    </td>
+                    <td>${libro.autor}</td>
+                    <td>Desconocida</td>
+                    <td>$${libro.precio}</td>
+                    <td>${libro.stock}</td>
+                    <td>${libro.stock > 0 ? 'En Stock' : 'Agotado'}</td>
+                    <td>0</td>
+                    <td>
+                        <button class="btn-icon small edit-btn" data-id="${libro.id}">Editar</button>
+                        <button class="btn-icon small delete-btn" data-id="${libro.id}">Eliminar</button>
+                    </td>
+                        `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // ✅ Escuchar clics en los botones Editar y Eliminar
+    document.addEventListener("click", async (e) => {
+        // 🗑️ ELIMINAR LIBRO
+        if (e.target.classList.contains("delete-btn")) {
+            const id = e.target.dataset.id;
+
+            if (confirm("¿Seguro que quieres eliminar este libro?")) {
+                try {
+                    const response = await fetch(`http://127.0.0.1:8000/libros/${id}`, {
+                        method: "DELETE",
+                    });
+                    const data = await response.json();
+
+                    if (data.deleted > 0) {
+                        alert("Libro eliminado correctamente");
+                        obtenerLibros(); // Recarga la lista
+                    } else {
+                        alert("Error al eliminar el libro");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Error al conectar con el servidor");
+                }
+            }
+        }
+
+        // ✏️ EDITAR LIBRO
+        if (e.target.classList.contains("edit-btn")) {
+            const id = e.target.dataset.id;
+
+            try {
+                // Obtener datos actuales del libro
+                const res = await fetch(`http://127.0.0.1:8000/libros/${id}`);
+                const libro = await res.json();
+
+                // Pedir nuevos valores (usa prompt para simplicidad)
+                const nuevoNombre = prompt("Nuevo nombre:", libro.nombre);
+                const nuevoAutor = prompt("Nuevo autor:", libro.autor);
+                const nuevaPortada = prompt("Nueva portada (URL):", libro.portada);
+                const nuevaCantidadHojas = prompt("Nueva cantidad de hojas:", libro.cantidad_hojas);
+                const nuevoPrecio = prompt("Nuevo precio:", libro.precio);
+                const nuevoStock = prompt("Nuevo stock:", libro.stock);
+
+                if (nuevoNombre && nuevoAutor && nuevaPortada && nuevaCantidadHojas && nuevoPrecio && nuevoStock) {
+                    const response = await fetch(`http://127.0.0.1:8000/libros/${id}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            nombre: nuevoNombre,
+                            autor: nuevoAutor,
+                            portada: nuevaPortada,
+                            cantidad_hojas: parseInt(nuevaCantidadHojas),
+                            precio: parseFloat(nuevoPrecio),
+                            stock: parseInt(nuevoStock),
+
+                        }),
+                    });
+
+                    if (response.ok) {
+                        alert("Libro actualizado correctamente");
+                        obtenerLibros(); // Recarga la lista
+                    } else {
+                        alert("Error al actualizar el libro");
+                    }
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Error al conectar con el servidor");
+            }
+        }
+    });
+
+    // ✅ Función para obtener y mostrar los libros
+    async function obtenerLibros() {
+        try {
+            const res = await fetch("http://127.0.0.1:8000/libros");
+            const data = await res.json();
+            mostrarLibros(data);
+        } catch (error) {
+            console.error("Error al obtener libros:", error);
+        }
+    }
+
+    document.getElementById("addBookForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const data = {
+            nombre: document.getElementById("nombre").value,
+            autor: document.getElementById("autor").value,
+            portada: document.getElementById("portada").value,
+            cantidad_hojas: parseInt(document.getElementById("cantidad_hojas").value),
+            stock: parseInt(document.getElementById("stock").value),
+            precio: parseFloat(document.getElementById("precio").value),
+        };
+
+        const message = document.getElementById("formMessage");
+
+        try {
+            const response = await fetch("/agregarLibro", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                message.textContent = "✅ Libro agregado correctamente.";
+                message.style.color = "green";
+                document.getElementById("addBookForm").reset();
+            } else {
+                message.textContent = `❌ Error: ${result.detail || "No se pudo guardar el libro."}`;
+                message.style.color = "red";
+            }
+        } catch (error) {
+            message.textContent = "❌ Error de conexión con el servidor.";
+            message.style.color = "red";
+        }
+    });
 
     // Crear usuario
     document.getElementById("createUserForm").addEventListener("submit", async (e) => {

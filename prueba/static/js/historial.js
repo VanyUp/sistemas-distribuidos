@@ -1,8 +1,8 @@
 // Inicialización cuando el DOM está listo
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Establecer año actual en el footer
     document.getElementById('currentYear').textContent = new Date().getFullYear();
-    
+
     // Elementos del DOM
     const orderCards = document.querySelectorAll('.order-card');
     const viewDetailsButtons = document.querySelectorAll('.view-details');
@@ -24,10 +24,23 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeEventListeners();
     initializeFilters();
 
+    const profileBtn = document.querySelector(".profile-settings");
+    profileBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/perfil";
+    });
+
+    const logoutBtn = document.querySelector(".logout");
+    logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/";
+        localStorage.removeItem("user_id");
+    });
+
     function initializeEventListeners() {
         // Ver detalles del pedido
         viewDetailsButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const orderCard = this.closest('.order-card');
                 const orderNumber = orderCard.querySelector('.order-number strong').textContent;
                 showOrderDetails(orderNumber, orderCard);
@@ -36,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Seguir envío
         trackOrderButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const orderCard = this.closest('.order-card');
                 const orderNumber = orderCard.querySelector('.order-number strong').textContent;
                 trackOrder(orderNumber);
@@ -45,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Descargar factura
         downloadInvoiceButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const orderCard = this.closest('.order-card');
                 const orderNumber = orderCard.querySelector('.order-number strong').textContent;
                 downloadInvoice(orderNumber);
@@ -54,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Volver a comprar
         reorderButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const orderCard = this.closest('.order-card');
                 reorderItems(orderCard);
             });
@@ -62,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Cancelar pedido
         cancelOrderButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const orderCard = this.closest('.order-card');
                 const orderNumber = orderCard.querySelector('.order-number strong').textContent;
                 cancelOrder(orderNumber, orderCard);
@@ -71,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Completar pago
         completePaymentButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const orderCard = this.closest('.order-card');
                 const orderNumber = orderCard.querySelector('.order-number strong').textContent;
                 completePayment(orderNumber, orderCard);
@@ -80,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Contactar soporte
         contactSupportButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const orderCard = this.closest('.order-card');
                 const orderNumber = orderCard.querySelector('.order-number strong').textContent;
                 contactSupport(orderNumber);
@@ -88,18 +101,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Descargar todas las facturas
-        downloadInvoiceBtn.addEventListener('click', function() {
+        downloadInvoiceBtn.addEventListener('click', function () {
             downloadAllInvoices();
         });
 
         // Cerrar modal
-        closeModal.addEventListener('click', function() {
+        closeModal.addEventListener('click', function () {
             orderDetailsModal.style.display = 'none';
             document.body.style.overflow = 'auto';
         });
 
         // Cerrar modal al hacer clic fuera
-        window.addEventListener('click', function(event) {
+        window.addEventListener('click', function (event) {
             if (event.target === orderDetailsModal) {
                 orderDetailsModal.style.display = 'none';
                 document.body.style.overflow = 'auto';
@@ -109,18 +122,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function initializeFilters() {
         // Filtro por estado
-        statusFilter.addEventListener('change', function() {
+        statusFilter.addEventListener('change', function () {
             filterOrders();
         });
 
         // Filtro por fecha
-        dateFilter.addEventListener('change', function() {
+        dateFilter.addEventListener('change', function () {
             filterOrders();
         });
 
         // Búsqueda
         let searchTimeout;
-        orderSearch.addEventListener('input', function() {
+        orderSearch.addEventListener('input', function () {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
                 filterOrders();
@@ -158,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (shouldShow) {
                 card.style.display = 'block';
                 visibleOrders++;
-                
+
                 // Animación de aparición
                 card.style.opacity = '0';
                 card.style.transform = 'translateY(20px)';
@@ -404,13 +417,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function generateProductsHTML(orderCard) {
         const items = orderCard.querySelectorAll('.order-item');
         let html = '';
-        
+
         items.forEach(item => {
             const title = item.querySelector('.item-title').textContent;
             const author = item.querySelector('.item-author').textContent;
             const quantity = item.querySelector('.item-quantity').textContent;
             const price = item.querySelector('.item-price').textContent;
-            
+
             html += `
                 <div class="product-item">
                     <div class="product-info">
@@ -422,7 +435,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
         });
-        
+
         return html;
     }
 
@@ -445,16 +458,16 @@ document.addEventListener('DOMContentLoaded', function() {
     function reorderItems(orderCard) {
         const items = orderCard.querySelectorAll('.order-item');
         let itemCount = 0;
-        
+
         items.forEach(item => {
             const title = item.querySelector('.item-title').textContent;
             itemCount++;
             // En una aplicación real, aquí se añadirían los items al carrito
             console.log(`Añadiendo al carrito: ${title}`);
         });
-        
+
         showFeedback(`${itemCount} productos añadidos al carrito`, 'success');
-        
+
         // Redirigir al carrito después de un delay
         setTimeout(() => {
             window.location.href = 'cart.html';
@@ -466,43 +479,43 @@ document.addEventListener('DOMContentLoaded', function() {
             // Simular cancelación
             orderCard.classList.add('cancelled');
             orderCard.classList.remove('pending', 'processing');
-            
+
             const statusBadge = orderCard.querySelector('.status-badge');
             statusBadge.className = 'status-badge cancelled';
             statusBadge.innerHTML = '<i class="fas fa-times-circle"></i> Cancelado';
-            
+
             const deliveryDate = orderCard.querySelector('.delivery-date');
             if (deliveryDate) {
                 deliveryDate.textContent = `Cancelado el ${new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}`;
             }
-            
+
             showFeedback(`Pedido ${orderNumber} cancelado correctamente`, 'success');
         }
     }
 
     function completePayment(orderNumber, orderCard) {
         showFeedback(`Procesando pago para ${orderNumber}...`, 'info');
-        
+
         // Simular procesamiento de pago
         setTimeout(() => {
             orderCard.classList.remove('pending');
             orderCard.classList.add('processing');
-            
+
             const statusBadge = orderCard.querySelector('.status-badge');
             statusBadge.className = 'status-badge processing';
             statusBadge.innerHTML = '<i class="fas fa-cog"></i> Procesando';
-            
+
             const deliveryDate = orderCard.querySelector('.delivery-date');
             if (deliveryDate) {
                 deliveryDate.textContent = 'Preparando tu pedido';
             }
-            
+
             // Remover sección de pago pendiente
             const paymentSection = orderCard.querySelector('.payment-pending');
             if (paymentSection) {
                 paymentSection.remove();
             }
-            
+
             showFeedback(`Pago para ${orderNumber} completado exitosamente`, 'success');
         }, 2000);
     }
@@ -528,7 +541,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
             ${message}
         `;
-        
+
         // Estilos del feedback
         feedback.style.cssText = `
             position: fixed;
@@ -546,9 +559,9 @@ document.addEventListener('DOMContentLoaded', function() {
             gap: 0.5rem;
             max-width: 400px;
         `;
-        
+
         document.body.appendChild(feedback);
-        
+
         // Remover después de 4 segundos
         setTimeout(() => {
             feedback.style.animation = 'slideOutRight 0.3s ease';
@@ -563,12 +576,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Menú hamburguesa para móviles
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
-    
+
     if (hamburger) {
-        hamburger.addEventListener('click', function() {
+        hamburger.addEventListener('click', function () {
             this.classList.toggle('active');
             navMenu.classList.toggle('active');
-            
+
             const icon = this.querySelector('i');
             if (navMenu.classList.contains('active')) {
                 icon.classList.remove('fa-bars');
@@ -584,7 +597,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Cerrar menú al hacer clic en un enlace
     document.querySelectorAll('.nav-menu a').forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function () {
             if (navMenu.classList.contains('active')) {
                 hamburger.click();
             }

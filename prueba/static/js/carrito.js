@@ -7,6 +7,81 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
+    // Aplicar código promocional
+    const applyPromoBtn = document.getElementById('applyPromo');
+    applyPromoBtn.addEventListener('click', function () {
+        const promoCode = document.getElementById('promoCode').value.trim();
+
+        if (!promoCode) {
+            showFeedback('Por favor ingresa un código de descuento', 'error');
+            return;
+        }
+
+        // Simular validación de código
+        const validCodes = {
+            'VANSE10': 0.1,
+            'LIBRO15': 0.15,
+            'BIENVENIDO20': 0.2
+        };
+
+        if (validCodes[promoCode.toUpperCase()]) {
+            const discount = validCodes[promoCode.toUpperCase()];
+            applyDiscount(discount, promoCode.toUpperCase());
+            showFeedback(`¡Código ${promoCode.toUpperCase()} aplicado! ${discount * 100}% de descuento`);
+        } else {
+            showFeedback('Código de descuento inválido', 'error');
+        }
+    });
+
+    function applyDiscount(discountPercentage, promoCode) {
+        const subtotalElement = document.querySelector('.summary-row:first-child span:last-child');
+        const subtotalText = subtotalElement.textContent;
+        const subtotal = parseFloat(subtotalText.replace('$', '').replace('.', '').replace(',', '.'));
+
+        const discount = subtotal * discountPercentage;
+        const total = subtotal - discount;
+
+        // Actualizar o crear fila de descuento
+        let discountRow = document.querySelector('.summary-row .discount');
+        if (!discountRow) {
+            const subtotalRow = document.querySelector('.summary-row:first-child');
+            discountRow = document.createElement('div');
+            discountRow.className = 'summary-row';
+            discountRow.innerHTML = `
+                <span>Descuento (${promoCode})</span>
+                <span class="discount">-$${Math.round(discount).toLocaleString()}</span>
+            `;
+            subtotalRow.parentNode.insertBefore(discountRow, subtotalRow.nextSibling);
+        } else {
+            discountRow.textContent = `-$${Math.round(discount).toLocaleString()}`;
+        }
+
+        document.querySelector('.summary-row.total span:last-child').textContent = `$${Math.round(total).toLocaleString()}`;
+
+        // Deshabilitar input de promo
+        document.getElementById('promoCode').disabled = true;
+        document.getElementById('applyPromo').disabled = true;
+    }
+
+    const catalogoBtn = document.querySelector(".catalogo-href");
+    catalogoBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/catalogo";
+    });
+
+    const profileBtn = document.querySelector(".profile-settings");
+    profileBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/perfil";
+    });
+
+    const logoutBtn = document.querySelector(".logout");
+    logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/";
+        localStorage.removeItem("user_id");
+    });
+
     const itemsContainer = document.querySelector(".cart-items");
     const summaryContainer = document.querySelector(".summary-details");
     const emptyCart = document.getElementById("emptyCart");
@@ -32,21 +107,36 @@ document.addEventListener("DOMContentLoaded", async () => {
             subtotal += totalItem;
 
             const div = document.createElement("div");
-            div.classList.add("cart-item");
+            div.classList.add("cart-items");
             div.innerHTML = `
-                <div class="cart-item-info">
-                    <img src="${libro.portada || '../static/img/default-book.jpg'}" alt="${libro.titulo}">
-                    <div>
-                        <h4>${libro.titulo}</h4>
-                        <p>$${libro.precio.toLocaleString()}</p>
+                <div class="cart-item">
+                    <div class="item-image">
+                        <img src="${libro.portada || '../static/img/default-book.jpg'}" alt="${libro.titulo}">
                     </div>
-                </div>
-                <div class="cart-item-actions">
-                    <span class="cantidad">${item.cantidad}</span>
-                    <span class="subtotal">$${totalItem.toLocaleString()}</span>
-                    <button class="btn-delete" data-id="${item.id}">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <div class="item-details">
+                        <h3 class="item-title">${libro.titulo}</h3>
+                        <p class="item-author">${libro.autor}</p>
+                        <div class="item-meta">
+                            <span class="item-stock in-stock">
+                                <i class="fas fa-check-circle"></i>
+                                En stock
+                            </span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-text remove-item" data-id="${item.id}">
+                                <i class="fas fa-trash"></i>
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="item-controls">
+                        <div class="quantity-selector">
+                            <input type="number" class="quantity-input" value="${item.cantidad}" min="1" max="10">
+                        </div>
+                        <div class="item-price">
+                            <span class="current-price">$${totalItem.toLocaleString()}</span>
+                        </div>
+                    </div>
                 </div>
             `;
             itemsContainer.appendChild(div);
@@ -62,6 +152,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div class="summary-row">
                 <span>Envío</span>
                 <span class="free-shipping">Gratis</span>
+            </div>
+            <div class="summary-row">
+                <span>Descuento</span>
+                <span class="discount">-$0</span>
             </div>
             <div class="summary-row total">
                 <span>Total</span>

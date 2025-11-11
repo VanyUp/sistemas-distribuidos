@@ -1,10 +1,10 @@
 // Inicialización cuando el DOM está listo
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function () {
     console.log('Perfil.js cargado correctamente');
 
     // Establecer año actual en el footer
     document.getElementById('currentYear').textContent = new Date().getFullYear();
-    
+
     // Elementos del DOM
     const navItems = document.querySelectorAll('.nav-item');
     const contentSections = document.querySelectorAll('.content-section');
@@ -28,25 +28,75 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeForms();
     initializeAvatarUpload();
     initializePasswordStrength();
+    actualizarContadorCarrito();
+
+    const usuario_id = localStorage.getItem("user_id");
+    if (!usuario_id) return;
+
+    const res = await fetch(`/perfil/datos?usuario_id=${usuario_id}`);
+    const data = await res.json();
+
+    // Mostrar nombre completo
+    document.getElementById("userName").textContent = `${data.nombre} ${data.apellido}`;
+
+    // Mostrar email desde usuarios
+    document.getElementById("userEmail").textContent = data.email;
+
+    // Actualizar campos del formulario también (opcional)
+    document.getElementById("firstName").value = data.nombre || "";
+    document.getElementById("lastName").value = data.apellido || "";
+    document.getElementById("email").placeholder = data.email || "";
+    document.getElementById("phone").value = data.telefono || "";
+    document.getElementById("birthDate").value = data.fecha_nacimiento || "";
+    document.getElementById("gender").value = data.genero || "";
+
+    const catalogoBtn = document.querySelector('.catalogo-href');
+    catalogoBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = "/catalogo";
+    });
+
+    const logoutBtn = document.querySelector(".logout");
+    logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/";
+        localStorage.removeItem("user_id");
+    });
+
+    async function actualizarContadorCarrito() {
+        const userId = localStorage.getItem("user_id");
+        const badge = document.querySelector('#cartBtn .icon-badge');
+        if (!badge || !userId) return;
+
+        try {
+            const res = await fetch(`/carrito/${userId}`);
+            const items = await res.json();
+            const total = items.reduce((sum, i) => sum + i.cantidad, 0);
+            badge.textContent = total;
+            badge.style.display = total > 0 ? 'flex' : 'none';
+        } catch (err) {
+            console.warn("No se pudo actualizar el contador del carrito");
+        }
+    }
 
     function initializeNavigation() {
         // Navegación entre secciones
         navItems.forEach(item => {
-            item.addEventListener('click', function(e) {
+            item.addEventListener('click', function (e) {
                 e.preventDefault();
-                
+
                 const targetSection = this.dataset.section;
-                
+
                 // Remover active de todos los items
                 navItems.forEach(nav => nav.classList.remove('active'));
                 contentSections.forEach(section => section.classList.remove('active'));
-                
+
                 // Agregar active al item clickeado
                 this.classList.add('active');
-                
+
                 // Mostrar sección correspondiente
                 document.getElementById(targetSection).classList.add('active');
-                
+
                 // Scroll to top de la sección
                 document.getElementById(targetSection).scrollIntoView({ behavior: 'smooth' });
             });
@@ -56,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeForms() {
         // Manejar envío de formularios
         forms.forEach(form => {
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 e.preventDefault();
                 handleFormSubmit(this);
             });
@@ -64,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Botones de cancelar
         document.querySelectorAll('[id^="cancel"]').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const form = this.closest('form');
                 resetForm(form);
             });
@@ -72,10 +122,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Toggle de contraseñas
         togglePasswordButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const input = this.parentElement.querySelector('input');
                 const icon = this.querySelector('i');
-                
+
                 if (input.type === 'password') {
                     input.type = 'text';
                     icon.classList.remove('fa-eye');
@@ -91,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function initializeAvatarUpload() {
         // Abrir modal de avatar
-        editAvatarBtn.addEventListener('click', function() {
+        editAvatarBtn.addEventListener('click', function () {
             avatarModal.style.display = 'block';
             document.body.style.overflow = 'hidden';
         });
@@ -101,34 +151,34 @@ document.addEventListener('DOMContentLoaded', function() {
         cancelUploadBtn.addEventListener('click', closeAvatarModal);
 
         // Cerrar modal al hacer clic fuera
-        window.addEventListener('click', function(event) {
+        window.addEventListener('click', function (event) {
             if (event.target === avatarModal) {
                 closeAvatarModal();
             }
         });
 
         // Manejar área de upload
-        uploadArea.addEventListener('click', function() {
+        uploadArea.addEventListener('click', function () {
             avatarFile.click();
         });
 
-        uploadArea.addEventListener('dragover', function(e) {
+        uploadArea.addEventListener('dragover', function (e) {
             e.preventDefault();
             this.style.borderColor = 'var(--primary-color)';
             this.style.background = 'var(--background-color)';
         });
 
-        uploadArea.addEventListener('dragleave', function(e) {
+        uploadArea.addEventListener('dragleave', function (e) {
             e.preventDefault();
             this.style.borderColor = 'var(--border-color)';
             this.style.background = 'transparent';
         });
 
-        uploadArea.addEventListener('drop', function(e) {
+        uploadArea.addEventListener('drop', function (e) {
             e.preventDefault();
             this.style.borderColor = 'var(--border-color)';
             this.style.background = 'transparent';
-            
+
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 handleImageSelection(files[0]);
@@ -136,21 +186,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Manejar selección de archivo
-        avatarFile.addEventListener('change', function(e) {
+        avatarFile.addEventListener('change', function (e) {
             if (this.files.length > 0) {
                 handleImageSelection(this.files[0]);
             }
         });
 
         // Guardar avatar
-        saveAvatarBtn.addEventListener('click', function() {
+        saveAvatarBtn.addEventListener('click', function () {
             saveAvatar();
         });
     }
 
     function initializePasswordStrength() {
         if (newPasswordInput && strengthFill && strengthText) {
-            newPasswordInput.addEventListener('input', function() {
+            newPasswordInput.addEventListener('input', function () {
                 updatePasswordStrength(this.value);
             });
         }
@@ -160,33 +210,33 @@ document.addEventListener('DOMContentLoaded', function() {
         const formId = form.id;
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
-        
+
         // Mostrar estado de carga
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
         submitBtn.disabled = true;
-        
+
         // Simular envío al servidor
         setTimeout(() => {
             // En una aplicación real, aquí se enviarían los datos al servidor
             console.log(`Enviando formulario: ${formId}`, getFormData(form));
-            
+
             // Mostrar feedback de éxito
             showFeedback('Cambios guardados correctamente', 'success');
-            
+
             // Restaurar botón
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
-            
+
             // Marcar formulario como no modificado
             form.classList.remove('modified');
-            
+
         }, 2000);
     }
 
     function getFormData(form) {
         const formData = {};
         const inputs = form.querySelectorAll('input, select, textarea');
-        
+
         inputs.forEach(input => {
             if (input.type === 'checkbox') {
                 formData[input.name] = input.checked;
@@ -198,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 formData[input.id] = input.value;
             }
         });
-        
+
         return formData;
     }
 
@@ -230,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Mostrar vista previa
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             previewImage.src = e.target.result;
             uploadArea.style.display = 'none';
             avatarPreview.style.display = 'block';
@@ -250,35 +300,35 @@ document.addEventListener('DOMContentLoaded', function() {
         // Simular upload al servidor
         saveAvatarBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo...';
         saveAvatarBtn.disabled = true;
-        
+
         setTimeout(() => {
             // En una aplicación real, aquí se subiría la imagen al servidor
             const newAvatarUrl = previewImage.src;
-            
+
             // Actualizar avatar en la interfaz
             document.getElementById('userAvatar').src = newAvatarUrl;
-            
+
             // Cerrar modal y mostrar feedback
             closeAvatarModal();
             showFeedback('Foto de perfil actualizada correctamente', 'success');
-            
+
         }, 1500);
     }
 
     function updatePasswordStrength(password) {
         let strength = 0;
         let feedback = '';
-        
+
         if (password.length >= 8) strength++;
         if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
         if (password.match(/\d/)) strength++;
         if (password.match(/[^a-zA-Z\d]/)) strength++;
-        
+
         // Actualizar barra de fuerza
         strengthFill.setAttribute('data-strength', strength);
-        
+
         // Actualizar texto
-        switch(strength) {
+        switch (strength) {
             case 0:
                 feedback = 'Muy débil';
                 break;
@@ -295,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 feedback = 'Muy fuerte';
                 break;
         }
-        
+
         strengthText.textContent = feedback;
     }
 
@@ -307,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
             ${message}
         `;
-        
+
         // Estilos del feedback
         feedback.style.cssText = `
             position: fixed;
@@ -325,9 +375,9 @@ document.addEventListener('DOMContentLoaded', function() {
             gap: 0.5rem;
             max-width: 400px;
         `;
-        
+
         document.body.appendChild(feedback);
-        
+
         // Remover después de 4 segundos
         setTimeout(() => {
             feedback.style.animation = 'slideOutRight 0.3s ease';
@@ -344,13 +394,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const inputs = form.querySelectorAll('input, select, textarea');
         const submitBtn = form.querySelector('button[type="submit"]');
         const cancelBtn = form.querySelector('[id^="cancel"]');
-        
+
         inputs.forEach(input => {
-            input.addEventListener('input', function() {
+            input.addEventListener('input', function () {
                 form.classList.add('modified');
             });
-            
-            input.addEventListener('change', function() {
+
+            input.addEventListener('change', function () {
                 form.classList.add('modified');
             });
         });
@@ -359,12 +409,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Menú hamburguesa para móviles
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
-    
+
     if (hamburger) {
-        hamburger.addEventListener('click', function() {
+        hamburger.addEventListener('click', function () {
             this.classList.toggle('active');
             navMenu.classList.toggle('active');
-            
+
             const icon = this.querySelector('i');
             if (navMenu.classList.contains('active')) {
                 icon.classList.remove('fa-bars');
@@ -380,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Cerrar menú al hacer clic en un enlace
     document.querySelectorAll('.nav-menu a').forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function () {
             if (navMenu.classList.contains('active')) {
                 hamburger.click();
             }
@@ -388,10 +438,41 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Gestión de sesiones (ejemplo)
-    document.getElementById('manageSessions')?.addEventListener('click', function() {
+    document.getElementById('manageSessions')?.addEventListener('click', function () {
         showFeedback('Redirigiendo a gestión de sesiones...', 'info');
         // En una aplicación real, aquí se redirigiría a la página de sesiones
     });
+
+    document.getElementById("personalInfoForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const usuario_id = localStorage.getItem("user_id"); // 👈 ya lo tienes por login
+
+        if (!usuario_id) {
+            alert("Debes iniciar sesión primero.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("usuario_id", usuario_id);
+        formData.append("nombre", document.getElementById("firstName").value);
+        formData.append("apellido", document.getElementById("lastName").value);
+        formData.append("telefono", document.getElementById("phone").value);
+        formData.append("fecha_nacimiento", document.getElementById("birthDate").value);
+        formData.append("genero", document.getElementById("gender").value);
+
+        const res = await fetch("/perfil/guardar", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (res.ok) {
+            alert("✅ Datos guardados correctamente");
+        } else {
+            alert("❌ No se pudo guardar la información");
+        }
+    });
+
 });
 
 // Agregar estilos de animación para feedback

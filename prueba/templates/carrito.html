@@ -30,10 +30,6 @@
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
-                    <button class="btn-icon" id="wishlistBtn">
-                        <i class="fas fa-heart"></i>
-                        <span class="icon-badge">0</span>
-                    </button>
                     <button class="btn-icon active" id="cartBtn">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="icon-badge">0</span>
@@ -44,16 +40,12 @@
                             Mi Cuenta
                         </button>
                         <div class="user-dropdown">
-                            <a href="profile.html" class="dropdown-item">
+                            <a href="#" class="dropdown-item profile-settings">
                                 <i class="fas fa-user-edit"></i>
                                 Perfil
                             </a>
-                            <a href="orders.html" class="dropdown-item">
-                                <i class="fas fa-clipboard-list"></i>
-                                Mis Pedidos
-                            </a>
                             <div class="dropdown-divider"></div>
-                            <a href="index.html" class="dropdown-item logout">
+                            <a href="#" class="dropdown-item logout">
                                 <i class="fas fa-sign-out-alt"></i>
                                 Cerrar Sesión
                             </a>
@@ -68,7 +60,7 @@
             <div class="container">
                 <!-- Breadcrumb -->
                 <nav class="breadcrumb">
-                    <a href="index.html">Catálogo</a>
+                    <a href="#" class="catalogo-href">Catálogo</a>
                     <i class="fas fa-chevron-right"></i>
                     <span>Carrito de Compras</span>
                 </nav>
@@ -126,17 +118,6 @@
                                 </div>
                             </div>
 
-                            <!-- Shipping Progress -->
-                            <div class="shipping-progress">
-                                <div class="progress-text">
-                                    <i class="fas fa-shipping-fast"></i>
-                                    <span>¡Faltan $50.000 para envío gratis!</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 70%"></div>
-                                </div>
-                            </div>
-
                             <!-- Checkout Button -->
                             <button class="btn btn-primary btn-large btn-full" id="checkoutBtn">
                                 <i class="fas fa-lock"></i>
@@ -168,35 +149,6 @@
                                 <div class="promo-input">
                                     <input type="text" placeholder="Ingresa tu código" id="promoCode">
                                     <button class="btn btn-secondary" id="applyPromo">Aplicar</button>
-                                </div>
-                            </div>
-
-                            <!-- Recommended Books -->
-                            <div class="recommended-section">
-                                <h4>Los clientes también compran</h4>
-                                <div class="recommended-books">
-                                    <div class="recommended-book">
-                                        <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
-                                            alt="Libro recomendado">
-                                        <div class="book-info">
-                                            <span class="book-title">Habitos Atomicos</span>
-                                            <span class="book-price">$70.000</span>
-                                            <button class="btn btn-small add-recommended">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="recommended-book">
-                                        <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
-                                            alt="Libro recomendado">
-                                        <div class="book-info">
-                                            <span class="book-title">Psicología Oscura</span>
-                                            <span class="book-price">$60.000</span>
-                                            <button class="btn btn-small add-recommended">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
