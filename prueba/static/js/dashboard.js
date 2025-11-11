@@ -48,46 +48,135 @@ async function cargarLibros() {
     }
 }
 
+
+// ✅ Función que muestra los libros en la tabla
 function mostrarLibros(libros) {
-    const tbody = document.querySelector('.data-table tbody');
-    if (!tbody) return console.error("No se encontró el <tbody> de la tabla");
+  const tbody = document.querySelector('.data-table tbody');
+  if (!tbody) return console.error("No se encontró el <tbody> de la tabla");
 
-    tbody.innerHTML = ""; // Limpiar tabla
+  tbody.innerHTML = ""; // Limpiar tabla
 
-    libros.forEach(libro => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>
-                <label class="checkbox-label">
-                    <input type="checkbox" class="book-checkbox" />
-                    <span class="checkmark"></span>
-                </label>
-            </td>
-            <td>
-                <div class="book-info">
-                    <img src="${libro.portada}" alt="${libro.nombre}" style="width:50px;height:auto; margin-right:10px;" />
-                    <div>
-                        <strong>${libro.nombre}</strong><br>
-                        <span>ISBN: ${libro.id}</span>
-                    </div>
-                </div>
-            </td>
-            <td>${libro.autor}</td>
-            <td>Desconocida</td>
-            <td>$${libro.precio}</td>
-            <td>${libro.stock}</td>
-            <td>${libro.stock > 0 ? 'En Stock' : 'Agotado'}</td>
-            <td>0</td>
-            <td>
-                <button class="btn-icon small edit-btn" data-id="${libro.id}">Editar</button>
-                <button class="btn-icon small delete-btn" data-id="${libro.id}">Eliminar</button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-
-    asignarEventosAcciones();
+  libros.forEach(libro => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <label class="checkbox-label">
+          <input type="checkbox" class="book-checkbox" />
+          <span class="checkmark"></span>
+        </label>
+      </td>
+      <td>
+        <div class="book-info">
+          <img src="${libro.portada}" alt="${libro.nombre}" style="width:50px;height:auto; margin-right:10px;" />
+          <div>
+            <strong>${libro.nombre}</strong><br>
+            <span>ISBN: ${libro.id}</span>
+          </div>
+        </div>
+      </td>
+      <td>${libro.autor}</td>
+      <td>Desconocida</td>
+      <td>$${libro.precio}</td>
+      <td>${libro.stock}</td>
+      <td>${libro.stock > 0 ? 'En Stock' : 'Agotado'}</td>
+      <td>0</td>
+      <td>
+        <button class="btn-icon small edit-btn" data-id="${libro.id}">Editar</button>
+        <button class="btn-icon small delete-btn" data-id="${libro.id}">Eliminar</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
+
+// ✅ Escuchar clics en los botones Editar y Eliminar
+document.addEventListener("click", async (e) => {
+  // 🗑️ ELIMINAR LIBRO
+  if (e.target.classList.contains("delete-btn")) {
+    const id = e.target.dataset.id;
+
+    if (confirm("¿Seguro que quieres eliminar este libro?")) {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/libros/${id}`, {
+          method: "DELETE",
+        });
+        const data = await response.json();
+
+        if (data.deleted > 0) {
+          alert("Libro eliminado correctamente");
+          obtenerLibros(); // Recarga la lista
+        } else {
+          alert("Error al eliminar el libro");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Error al conectar con el servidor");
+      }
+    }
+  }
+
+  // ✏️ EDITAR LIBRO
+  if (e.target.classList.contains("edit-btn")) {
+    const id = e.target.dataset.id;
+
+    try {
+      // Obtener datos actuales del libro
+      const res = await fetch(`http://127.0.0.1:8000/libros/${id}`);
+      const libro = await res.json();
+
+      // Pedir nuevos valores (usa prompt para simplicidad)
+      const nuevoNombre = prompt("Nuevo nombre:", libro.nombre);
+      const nuevoAutor = prompt("Nuevo autor:", libro.autor);
+      const nuevaPortada = prompt("Nueva portada (URL):", libro.portada);
+      const nuevaCantidadHojas = prompt("Nueva cantidad de hojas:", libro.cantidad_hojas);
+      const nuevoPrecio = prompt("Nuevo precio:", libro.precio);
+      const nuevoStock = prompt("Nuevo stock:", libro.stock);
+
+      if (nuevoNombre && nuevoAutor && nuevaPortada && nuevaCantidadHojas && nuevoPrecio && nuevoStock) {
+        const response = await fetch(`http://127.0.0.1:8000/libros/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nombre: nuevoNombre,
+            autor: nuevoAutor,
+            portada: nuevaPortada,
+            cantidad_hojas: parseInt(nuevaCantidadHojas),
+            precio: parseFloat(nuevoPrecio),
+            stock: parseInt(nuevoStock),
+        
+          }),
+        });
+
+        if (response.ok) {
+          alert("Libro actualizado correctamente");
+          obtenerLibros(); // Recarga la lista
+        } else {
+          alert("Error al actualizar el libro");
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error al conectar con el servidor");
+    }
+  }
+});
+
+// ✅ Función para obtener y mostrar los libros
+async function obtenerLibros() {
+  try {
+    const res = await fetch("http://127.0.0.1:8000/libros");
+    const data = await res.json();
+    mostrarLibros(data);
+  } catch (error) {
+    console.error("Error al obtener libros:", error);
+  }
+}
+
+// Cargar libros al iniciar
+obtenerLibros();
+
 
 
 

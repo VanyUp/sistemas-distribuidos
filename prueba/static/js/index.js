@@ -232,9 +232,9 @@ document.addEventListener('DOMContentLoaded', function () {
             searchInput.focus();
         }
     });
-
     // --- LOGIN USUARIO ---
     const loginForm = document.getElementById("loginForm");
+
     if (loginForm) {
         loginForm.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -246,23 +246,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 const res = await fetch("/usuarios/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ email, password }),
                 });
 
-                if (!res.ok) {
-                    const error = await res.json();
-                    alert(error.detail || "Error al iniciar sesión");
-                    return;
+                const data = await res.json(); // ✅ correcto
+                console.log("Respuesta del backend:", data);
+
+                if (res.ok) {
+                    // ✅ Guardamos datos en localStorage
+                    localStorage.setItem("user_id", data.user_id);
+                    localStorage.setItem("username", data.username);
+
+                    alert(`Bienvenido, ${data.username}!`);
+                    window.location.href = "/catalogo";
+                } else {
+                    alert(data.detail || "Error al iniciar sesión");
                 }
-
-                window.location.href = "/catalogo";
-
             } catch (err) {
-                console.error(err);
-                alert("Error en el servidor");
+                console.error("❌ Error en el servidor:", err);
+                alert("Error al conectar con el servidor");
             }
         });
     }
+
 
 
     // --- REGISTRO USUARIO ---

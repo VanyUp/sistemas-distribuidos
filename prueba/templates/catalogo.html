@@ -54,7 +54,7 @@
                             </a>
                             <div class="dropdown-divider"></div>
                             <a href="index.html" class="dropdown-item logout">
-                                <i class="fas fa-sign-out-alt"></i> 
+                                <i class="fas fa-sign-out-alt"></i>
                                 Cerrar Sesión
                             </a>
                         </div>
@@ -281,20 +281,72 @@
                 <p>&copy; <span id="currentYear"></span> VanseBook. Todos los derechos reservados.</p>
             </div>
         </footer>
+    </div>
 
-        <!-- Modals -->
-        <div class="modal" id="loginModal">
-            <div class="modal-content">
-                <span class="close-modal">&times;</span>
-                <h2>Iniciar Sesión</h2>
-                <form class="auth-form">
-                    <input type="email" placeholder="Correo electrónico" required>
-                    <input type="password" placeholder="Contraseña" required>
-                    <button type="submit" class="btn btn-primary btn-full">Ingresar</button>
-                </form>
+    <!-- Mini Carrito Modal -->
+    <div id="miniCartModal" class="mini-cart-modal">
+        <div class="mini-cart-container">
+            <div class="mini-cart-header">
+                <h3>Tu Carrito</h3>
+                <button id="closeMiniCart" class="close-btn">&times;</button>
+            </div>
+            <div id="miniCartContent" class="mini-cart-content"></div>
+            <div class="mini-cart-footer">
+                <a href="/carrito" class="btn btn-primary btn-full">Ver Carrito Completo</a>
             </div>
         </div>
     </div>
+
+    <style>
+        .mini-cart-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+            transition: opacity 0.3s ease;
+        }
+
+        .mini-cart-modal.visible {
+            opacity: 1;
+        }
+
+        .mini-cart-container {
+            background: white;
+            width: 350px;
+            max-height: 70vh;
+            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+        }
+
+        .mini-cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .mini-cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    </style>
 
 
 

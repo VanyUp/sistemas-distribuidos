@@ -70,7 +70,7 @@ async def get_libro(request, id: int):
 
 # --- Carrito de compras ---
 @app.get("/carrito", response_class=HTMLResponse)
-async def get_carrito(request):
+async def get_carrito(request: Request):
     return templates.TemplateResponse("carrito.html", {"request": request})
 
 
@@ -188,6 +188,8 @@ def registrar_usuario(usuario: UsuarioRegistro):
 
 
 # --- Login ---
+
+# --- Login ---
 @app.post("/usuarios/login")
 def login_usuario(usuario: UsuarioLogin):
     res = supabase.table("usuarios").select("*").eq("email", usuario.email).execute()
@@ -200,8 +202,13 @@ def login_usuario(usuario: UsuarioLogin):
     if not bcrypt.verify(usuario.password, usuario_db["hashed_password"]):
         raise HTTPException(status_code=401, detail="Contraseña incorrecta")
 
-    response = {"mensaje": f"Bienvenido {usuario_db['username']}"}
-    return response
+    # ✅ devolvemos id y username
+    return {
+        "mensaje": f"Bienvenido {usuario_db['username']}",
+        "user_id": usuario_db["id"],
+        "username": usuario_db["username"]
+    }
+
 
 
 # --- Gestión de Libros ---
@@ -237,6 +244,8 @@ def editarLibro(id: int, libro: Libro):
 def eliminarLibro(id: int):
     response = supabase.table("libros").delete().eq("id", id).execute()
     return {"deleted": len(response.data)}
+
+
 
 
 # =========================
@@ -287,3 +296,171 @@ def eliminar_usuario(user_id: int):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
     return {"message": "Usuario eliminado"}
+
+
+# =========================
+# Carrito de compras (por usuario)
+# =========================
+
+# agregar item al carrito
+@app.post("/carrito/agregar")
+def agregar_al_carrito(item: dict):
+    user_id = item.get("user_id")
+    libro_id = item.get("libro_id")
+    cantidad = item.get("cantidad", 1)
+
+    # 1️⃣ Buscar si el usuario ya tiene un carrito
+    carrito_res = supabase.table("carrito").select("*").eq("user_id", user_id).execute()
+    if carrito_res.data:
+        carrito_id = carrito_res.data[0]["id"]
+    else:
+        # Si no existe, se crea uno nuevo
+        nuevo = supabase.table("carrito").insert({"user_id": user_id}).execute()
+        carrito_id = nuevo.data[0]["id"]
+
+    # 2️⃣ Verificar si el libro ya está en carrito_items
+    existente = supabase.table("carrito_items") \
+        .select("*") \
+        .eq("carrito_id", carrito_id) \
+        .eq("libro_id", libro_id) \
+        .execute()
+
+    if existente.data:
+        # 3️⃣ Si ya está, actualizar cantidad
+        item_id = existente.data[0]["id"]
+        nueva_cantidad = existente.data[0]["cantidad"] + cantidad
+        supabase.table("carrito_items") \
+            .update({"cantidad": nueva_cantidad}) \
+            .eq("id", item_id) \
+            .execute()
+    else:
+        # 4️⃣ Insertar nuevo libro al carrito
+        # Puedes traer el precio desde libros o pasarlo desde el front
+        libro_data = supabase.table("libros").select("precio").eq("id", libro_id).execute()
+        precio_unitario = libro_data.data[0]["precio"] if libro_data.data else 0
+
+        supabase.table("carrito_items").insert({
+            "carrito_id": carrito_id,
+            "libro_id": libro_id,
+            "cantidad": cantidad,
+            "precio_unitario": precio_unitario
+        }).execute()
+
+    return {"message": "Producto agregado correctamente"}
+
+
+# obtener items del carrito por user_id
+@app.get("/carrito/{user_id}")
+def obtener_carrito(user_id: int):
+    try:
+        # 1️⃣ Buscar el carrito del usuario
+        carrito = (
+            supabase.table("carrito")
+            .select("id")
+            .eq("user_id", user_id)
+            .single()
+            .execute()
+        )
+
+        if not carrito.data:
+            return []
+
+        carrito_id = carrito.data["id"]
+
+        # 2️⃣ Traer los items del carrito
+        items = (
+            supabase.table("carrito_items")
+            .select("id, cantidad, precio_unitario, libro_id")
+            .eq("carrito_id", carrito_id)
+            .execute()
+        )
+
+        if not items.data:
+            return []
+
+        libros_ids = [i["libro_id"] for i in items.data]
+        libros_data = (
+            supabase.table("libros")
+            .select("id, nombre, precio, portada")
+            .in_("id", libros_ids)
+            .execute()
+        )
+
+        libros_map = {l["id"]: l for l in libros_data.data}
+
+        for i in items.data:
+            libro = libros_map.get(i["libro_id"], {})
+            i["libros"] = {
+                "titulo": libro.get("nombre", ""),
+                "precio": libro.get("precio", 0),
+                "portada": libro.get("portada", "")
+            }
+
+        return items.data
+
+    except httpx.RemoteProtocolError:
+        time.sleep(1)
+        return obtener_carrito(user_id)
+    except Exception as e:
+        print("Error en obtener_carrito:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+# eliminar item del carrito
+@app.delete("/carrito/{item_id}")
+def eliminar_item_carrito(item_id: int):
+    res = supabase.table("carrito_items").delete().eq("id", item_id).execute()
+    if not res.data:
+        raise HTTPException(status_code=404, detail="Item no encontrado")
+    return {"mensaje": "Libro eliminado del carrito"}
+
+
+#crear pedido desde el carrito
+@app.post("/pedidos/crear")
+def crear_pedido(data: dict):
+    user_id = data.get("user_id")
+    if not user_id:
+        raise HTTPException(status_code=400, detail="Falta el ID del usuario")
+
+    # 1️⃣ Obtener carrito del usuario
+    carrito = supabase.table("carrito").select("id").eq("user_id", user_id).single().execute()
+    if not carrito.data:
+        raise HTTPException(status_code=400, detail="El usuario no tiene carrito")
+
+    carrito_id = carrito.data["id"]
+
+    # 2️⃣ Obtener los items del carrito
+    carrito_items = (
+        supabase.table("carrito_items")
+        .select("*")
+        .eq("carrito_id", carrito_id)
+        .execute()
+    )
+    if not carrito_items.data:
+        raise HTTPException(status_code=400, detail="El carrito está vacío")
+
+    # 3️⃣ Crear pedido
+    pedido = (
+        supabase.table("pedidos")
+        .insert({"user_id": user_id, "estado": "pendiente"})
+        .execute()
+    )
+    pedido_id = pedido.data[0]["id"]
+
+    # 4️⃣ Insertar los items del pedido
+    for item in carrito_items.data:
+        supabase.table("pedido_items").insert({
+            "pedido_id": pedido_id,
+            "libro_id": item["libro_id"],
+            "cantidad": item["cantidad"],
+            "precio_unitario": item["precio_unitario"],
+        }).execute()
+
+    # 5️⃣ Vaciar el carrito después de crear el pedido
+    supabase.table("carrito_items").delete().eq("carrito_id", carrito_id).execute()
+
+    return {"mensaje": "Pedido creado correctamente", "pedido_id": pedido_id}
+
+
