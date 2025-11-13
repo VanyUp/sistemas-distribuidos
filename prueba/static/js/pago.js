@@ -399,11 +399,37 @@ document.addEventListener('DOMContentLoaded', async function () {
             shippingData.card_type = getCardType(cardNumber);
         }
 
+        const pedidoData = {
+            user_id: shippingData.user_id,
+            total: shippingData.total,
+            nota: shippingData.notes || "",
+            direccion: {
+                nombre: `${shippingData.firstName} ${shippingData.lastName}`,
+                email: shippingData.email,
+                telefono: shippingData.phone,
+                direccion: shippingData.address,
+                ciudad: shippingData.city,
+                estado: shippingData.state,
+                codigo_postal: shippingData.zipCode,
+                pais: shippingData.country
+            },
+            envio: {
+                metodo: shippingData.shipping_method,
+                estado_envio: "pendiente"
+            },
+            pago: {
+                metodo: shippingData.payment_method,
+                tarjeta: shippingData.card_type || null,
+                ultimos4: shippingData.card_last4 || null,
+                estado_pago: "completado"
+            }
+        };
+
         try {
             const res = await fetch('/pedidos/crear', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(shippingData)
+                body: JSON.stringify(pedidoData)
             });
 
             const data = await res.json();

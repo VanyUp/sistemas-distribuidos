@@ -1,16 +1,13 @@
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from models.models import Libro, UsuarioLogin, UsuarioRegistro
-from fastapi import HTTPException
 from passlib.hash import bcrypt
 from supabase import create_client
 from dotenv import load_dotenv
 from datetime import datetime
-import random
-import httpx
-import time
+import random, time, httpx
 import os
 
 load_dotenv()
@@ -501,81 +498,165 @@ def eliminar_item_carrito(item_id: int):
 
 # crear pedido desde el carrito
 @app.post("/pedidos/crear")
-def crear_pedido_detallado(data: dict):
-    user_id = data.get("user_id")
-    direccion = data.get("direccion")
-    envio = data.get("envio")
-    pago_info = data.get("pago")
-    nota = data.get("nota", "")
+async def crear_pedido_detallado(request: Request):
+    try:
+        data = await request.json()
+        print("📦 Datos recibidos:", data)
 
-    if not user_id:
-        raise HTTPException(status_code=400, detail="Falta el ID del usuario")
+        user_id = data.get("user_id")
+        total = data.get("total")
+        direccion = data.get("direccion")
+        envio = data.get("envio")
+        pago = data.get("pago")
+        nota = data.get("nota", "")
 
-    # 1️⃣ Obtener carrito del usuario
-    carrito = (
-        supabase.table("carrito").select("id").eq("user_id", user_id).single().execute()
-    )
-    if not carrito.data:
-        raise HTTPException(status_code=400, detail="El usuario no tiene carrito")
+        if not user_id:
+            raise HTTPException(status_code=400, detail="Falta el ID del usuario")
 
-    carrito_id = carrito.data["id"]
+        # 1️⃣ Obtener carrito del usuario
+        carrito = (
+            supabase.table("carrito")
+            .select("id")
+            .eq("user_id", user_id)
+            .single()
+            .execute()
+        )
+        if not carrito.data:
+            raise HTTPException(status_code=400, detail="El usuario no tiene carrito")
 
-    # 2️⃣ Obtener items del carrito
-    carrito_items = (
-        supabase.table("carrito_items")
-        .select("*")
-        .eq("carrito_id", carrito_id)
-        .execute()
-    )
-    if not carrito_items.data:
-        raise HTTPException(status_code=400, detail="El carrito está vacío")
+        carrito_id = carrito.data["id"]
 
-    codigo_pedido = f"VS-{datetime.now().year}-{random.randint(1000,9999)}"
+        # 2️⃣ Obtener items del carrito
+        carrito_items = (
+            supabase.table("carrito_items")
+            .select("libro_id, cantidad, precio_unitario")
+            .eq("carrito_id", carrito_id)
+            .execute()
+        )
+        if not carrito_items.data:
+            raise HTTPException(status_code=400, detail="El carrito está vacío")
 
-    # 3️⃣ Insertar pedido
-    pedido_data = {
-        "user_id": data["user_id"],
-        "total": data["total"],
-        "codigo_pedido": codigo_pedido,
-        "estado": "pending",
-    }
-    pedido_res = supabase.table("pedidos").insert(pedido_data).execute()
-    pedido_id = pedido_res.data[0]["id"]
+        # 3️⃣ Crear pedido
+        codigo_pedido = f"VS-{datetime.now().year}-{random.randint(1000,9999)}"
+        pedido_data = {
+            "user_id": user_id,
+            "total": total,
+            "codigo_pedido": codigo_pedido,
+            "estado": "pending",
+            "nota": nota,
+        }
 
-    # 4️⃣ Insertar items
-    for item in carrito_items.data:
-        supabase.table("pedido_items").insert(
-            {
-                "pedido_id": pedido_id,
-                "libro_id": item["libro_id"],
-                "cantidad": item["cantidad"],
-                "precio_unitario": item["precio_unitario"],
+        pedido_res = supabase.table("pedidos").insert(pedido_data).execute()
+        pedido_id = pedido_res.data[0]["id"]
+
+        # 4️⃣ Insertar items del pedido
+        for item in carrito_items.data:
+            supabase.table("pedido_items").insert(
+                {
+                    "pedido_id": pedido_id,
+                    "libro_id": item["libro_id"],
+                    "cantidad": item["cantidad"],
+                    "precio_unitario": item["precio_unitario"],
+                }
+            ).execute()
+
+            # Actualizar stock del libro
+            supabase.rpc(
+                "decrementar_stock",
+                {
+                    "libro_id_param": item["libro_id"],
+                    "cantidad_param": item["cantidad"],
+                },
+            ).execute()
+
+        # 5️⃣ Guardar dirección
+        if direccion:
+            direccion_data = {
+                "user_id": user_id,
+                "nombre": direccion.get("nombre", ""),
+                "apellido": (
+                    direccion.get("nombre", "").split()[-1]
+                    if " " in direccion.get("nombre", "")
+                    else ""
+                ),
+                "email": direccion.get("email", ""),
+                "telefono": direccion.get("telefono", ""),
+                "direccion": direccion.get("direccion", ""),
+                "ciudad": direccion.get("ciudad", ""),
+                "departamento": direccion.get("estado", ""),
+                "codigo_postal": direccion.get("codigo_postal", ""),
+                "pais": direccion.get("pais", "Colombia"),
+                "guardar": False,
             }
-        ).execute()
+            supabase.table("direcciones_envio").insert(direccion_data).execute()
 
-    # 5️⃣ Guardar dirección
-    if direccion:
-        direccion_data = direccion.copy()
-        direccion_data["pedido_id"] = pedido_id
-        supabase.table("direcciones_envio").insert(direccion_data).execute()
+        # 6️⃣ Guardar método de pago
+        if pago:
+            metodo = pago.get("metodo", "")
+            if metodo == "card":
+                metodo = "tarjeta"  # 🔄 traducción
+            elif metodo == "paypal":
+                metodo = "paypal"
+            elif metodo == "pse":
+                metodo = "pse"
 
-    # 6️⃣ Guardar método de pago
-    if pago_info:
-        pago_data = pago_info.copy()
-        pago_data["pedido_id"] = pedido_id
-        supabase.table("pagos").insert(pago_data).execute()
+            pago_data = {
+                "pedido_id": pedido_id,
+                "metodo": metodo,
+                "referencia": f"REF-{random.randint(100000,999999)}",
+                "ultimos_digitos": pago.get("ultimos4"),
+                "banco": pago.get("tarjeta"),
+                "estado": pago.get("estado_pago", "procesando")
+            }
+            supabase.table("pagos").insert(pago_data).execute()
 
-    # 7️⃣ Guardar info de envío (opcional)
-    if envio:
-        envio_data = envio.copy()
-        envio_data["pedido_id"] = pedido_id
-        supabase.table("envios").insert(envio_data).execute()
+        # 7️⃣ Guardar info de envío
+        if envio:
+            envio_data = {
+                "pedido_id": pedido_id,
+                "transportadora": envio.get("metodo", "Standard"),
+                "numero_guia": f"ENV-{random.randint(10000,99999)}",
+                "fecha_envio": datetime.now().isoformat(),
+                "url_tracking": f"https://tracking.example.com/{codigo_pedido}",
+            }
+            supabase.table("envios").insert(envio_data).execute()
 
-    # 8️⃣ Vaciar carrito
-    supabase.table("carrito_items").delete().eq("carrito_id", carrito_id).execute()
+        # 8️⃣ Vaciar carrito
+        supabase.table("carrito_items").delete().eq("carrito_id", carrito_id).execute()
 
-    return {
-        "mensaje": "Pedido creado correctamente",
-        "pedido_id": pedido_id,
-        "codigo_pedido": codigo_pedido,
-    }
+        return {
+            "mensaje": "Pedido creado correctamente",
+            "pedido_id": pedido_id,
+            "codigo_pedido": codigo_pedido,
+        }
+
+    except Exception as e:
+        print("❌ Error al crear pedido:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# vaciar carrito completamente
+@app.post("/carrito/{user_id}/vaciar")
+def vaciar_carrito(user_id: int):
+    try:
+        # Buscar el carrito del usuario
+        carrito = (
+            supabase.table("carrito")
+            .select("id")
+            .eq("user_id", user_id)
+            .single()
+            .execute()
+        )
+
+        if not carrito.data:
+            raise HTTPException(status_code=404, detail="Carrito no encontrado")
+
+        carrito_id = carrito.data["id"]
+
+        # Eliminar todos los items del carrito
+        supabase.table("carrito_items").delete().eq("carrito_id", carrito_id).execute()
+
+        return {"mensaje": "Carrito vaciado correctamente"}
+    except Exception as e:
+        print("❌ Error al vaciar carrito:", e)
+        raise HTTPException(status_code=500, detail=str(e))
