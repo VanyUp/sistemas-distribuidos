@@ -440,17 +440,14 @@ def obtener_carrito(user_id: int):
     try:
         # 1️⃣ Buscar el carrito del usuario
         carrito = (
-            supabase.table("carrito")
-            .select("id")
-            .eq("user_id", user_id)
-            .single()
-            .execute()
+            supabase.table("carrito").select("id").eq("user_id", user_id).execute()
         )
 
-        if not carrito.data:
+        if not carrito.data or len(carrito.data) == 0:
+            # Si el usuario no tiene carrito, devolver lista vacía
             return []
 
-        carrito_id = carrito.data["id"]
+        carrito_id = carrito.data[0]["id"]
 
         # 2️⃣ Traer los items del carrito
         items = (
@@ -460,9 +457,10 @@ def obtener_carrito(user_id: int):
             .execute()
         )
 
-        if not items.data:
+        if not items.data or len(items.data) == 0:
             return []
 
+        # 3️⃣ Obtener los libros asociados
         libros_ids = [i["libro_id"] for i in items.data]
         libros_data = (
             supabase.table("libros")
@@ -576,4 +574,8 @@ def crear_pedido_detallado(data: dict):
     # 8️⃣ Vaciar carrito
     supabase.table("carrito_items").delete().eq("carrito_id", carrito_id).execute()
 
-    return {"mensaje": "Pedido creado correctamente", "pedido_id": pedido_id, "codigo_pedido": codigo_pedido}
+    return {
+        "mensaje": "Pedido creado correctamente",
+        "pedido_id": pedido_id,
+        "codigo_pedido": codigo_pedido,
+    }

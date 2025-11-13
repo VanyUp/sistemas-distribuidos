@@ -21,8 +21,9 @@ document.addEventListener('DOMContentLoaded', function () {
     cargarLibros();
     obtenerLibros();
 
-    const logoutBtn = document.querySelector(".logout");
-    logoutBtn.addEventListener("click", () => {
+    const logoutBtn = document.getElementById("logoutBtn");
+    logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
         window.location.href = "/";
         localStorage.removeItem("user_id");
     });
@@ -475,8 +476,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td>${libro.stock > 0 ? 'En Stock' : 'Agotado'}</td>
                     <td>0</td>
                     <td>
-                        <button class="btn-icon small edit-btn" data-id="${libro.id}">Editar</button>
-                        <button class="btn-icon small delete-btn" data-id="${libro.id}">Eliminar</button>
+                        <button class="btn-icon small edit-btn" data-id="${libro.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-icon small delete-btn" data-id="${libro.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </td>
                         `;
             tbody.appendChild(tr);
@@ -625,7 +630,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.target.reset();
             setTimeout(closeAddUserModal, 1200);
             // Si tienes tabla de usuarios → aquí recargas
-            // loadUsers();
+            loadUsers();
         } else {
             msg.style.color = "red";
             msg.textContent = "❌ " + result.detail;
@@ -652,7 +657,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Inicializar
+    // Inicializar carga de usuarios
     loadUsers();
 
     window.openAddUserModal = function () {

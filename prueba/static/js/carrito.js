@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
+    localStorage.removeItem("descuento");
     const userId = localStorage.getItem("user_id");
 
     if (!userId) {

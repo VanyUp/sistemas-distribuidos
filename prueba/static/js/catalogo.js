@@ -81,14 +81,35 @@ function mostrarLibros(libros) {
                 return;
             }
 
-            const libroId = e.currentTarget.dataset.id;
+            const libroId = parseInt(e.currentTarget.dataset.id);
+            const libro = libros.find(l => l.id === libroId); // Obtener info del libro (incluye stock)
+            if (!libro) {
+                showFeedback("No se encontró el libro en el catálogo", "error");
+                return;
+            }
+
             try {
+                // Obtener los items actuales del carrito del usuario
+                const carritoRes = await fetch(`/carrito/${userId}`);
+                const carritoItems = await carritoRes.json();
+
+                // Buscar si ya tiene este libro en el carrito
+                const existente = carritoItems.find(i => i.libro_id === libroId);
+                const cantidadActual = existente ? existente.cantidad : 0;
+
+                // Verificar si al agregar una unidad se supera el stock
+                if (cantidadActual + 1 > libro.stock) {
+                    showFeedback(`Solo hay ${libro.stock} unidades disponibles de "${libro.nombre}"`, "error");
+                    return;
+                }
+
+                // Agregar el libro
                 const response = await fetch('/carrito/agregar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         user_id: parseInt(userId),
-                        libro_id: parseInt(libroId),
+                        libro_id: libroId,
                         cantidad: 1
                     })
                 });
@@ -97,10 +118,10 @@ function mostrarLibros(libros) {
                 if (response.ok) {
                     showFeedback("Libro agregado al carrito", "success");
                     await actualizarContadorCarrito();
-                    await mostrarMiniCarrito();
                 } else {
                     showFeedback(data.detail || "Error al agregar al carrito", "error");
                 }
+
             } catch (err) {
                 console.error("Error al agregar al carrito:", err);
                 showFeedback("No se pudo agregar el libro al carrito", "error");
